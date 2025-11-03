@@ -101,6 +101,7 @@ import com.zrp200.rkpd2.actors.hero.spells.Smite;
 import com.zrp200.rkpd2.actors.mobs.AbyssalSpawner;
 import com.zrp200.rkpd2.actors.mobs.Ech;
 import com.zrp200.rkpd2.actors.mobs.Elemental;
+import com.zrp200.rkpd2.actors.mobs.FinalFroggit;
 import com.zrp200.rkpd2.actors.mobs.Mimic;
 import com.zrp200.rkpd2.actors.mobs.Mob;
 import com.zrp200.rkpd2.actors.mobs.Monk;
@@ -190,6 +191,7 @@ import com.zrp200.rkpd2.items.weapon.missiles.MissileWeapon;
 import com.zrp200.rkpd2.journal.Catalog;
 import com.zrp200.rkpd2.journal.Document;
 import com.zrp200.rkpd2.journal.Notes;
+import com.zrp200.rkpd2.levels.AbyssLevel;
 import com.zrp200.rkpd2.levels.Level;
 import com.zrp200.rkpd2.levels.MiningLevel;
 import com.zrp200.rkpd2.levels.Terrain;
@@ -2600,7 +2602,18 @@ if (wep != null) {
 				&& !Dungeon.level.plants.containsKey(cell)
 				&& (Dungeon.depth != 26 || Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
 
-			curAction = new HeroAction.LvlTransition( cell );
+            boolean canDo = true;
+            if (Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_EXIT &&
+                    (Dungeon.branch == AbyssLevel.BRANCH)) {
+                for (Mob mob: Dungeon.level.mobs){
+                    if (mob instanceof FinalFroggit)
+                        canDo = false;
+                }
+            }
+
+            if (canDo) curAction = new HeroAction.LvlTransition( cell );
+            else GLog.w(Messages.get(Level.class, "seal"));
+
 
 		}  else {
 
