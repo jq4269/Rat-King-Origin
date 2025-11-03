@@ -258,6 +258,7 @@ public class Challenge extends ArmorAbility {
 
 		@Override
 		public void detach() {
+            super.detach();
 			if (target != Dungeon.hero){
 				if (!target.isAlive() || target.alignment == Dungeon.hero.alignment){
 					Sample.INSTANCE.play(Assets.Sounds.BOSS);
@@ -307,7 +308,6 @@ public class Challenge extends ArmorAbility {
 					ch.buff(DuelParticipant.class).detach();
 				}
 			}
-			super.detach();
 		}
 
 		@Override
