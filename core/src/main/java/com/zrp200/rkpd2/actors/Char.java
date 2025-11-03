@@ -743,7 +743,7 @@ public abstract class Char extends Actor {
 						Preparation.bloodbathProc((Hero) this, enemy);
 					}
 					if (((Hero) this).hasTalent(Talent.DARKENING_STEPS)){
-						Buff.affect(this, ArtifactRecharge.class).postpone(Dungeon.hero.pointsInTalent(Talent.DARKENING_STEPS)*2);
+						Buff.affect(this, ArtifactRecharge.class).extend(Dungeon.hero.pointsInTalent(Talent.DARKENING_STEPS)*2);
 					}
 				}
 			}
