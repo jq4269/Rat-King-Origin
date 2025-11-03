@@ -49,7 +49,7 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static com.zrp200.rkpd2.actors.hero.HeroSubClass.NONE;
+import static com.zrp200.rkpd2.actors.hero.HeroSubClass.*;
 
 public class KromerCrown extends TengusMask {
 
@@ -95,6 +95,10 @@ public class KromerCrown extends TengusMask {
 						heroSubClasses.remove(HeroSubClass.SNIPER);
 					if (!curUser.isClassedLoosely(HeroClass.ROGUE))
 						heroSubClasses.remove(HeroSubClass.ASSASSIN);
+                    if (!curUser.isClassedLoosely(HeroClass.CLERIC)){
+                        heroSubClasses.remove(PRIEST);
+                        heroSubClasses.remove(PALADIN);
+                    }
 					heroSubClasses.remove(hero.subClass);
 					//remove rat king class
 					heroSubClasses.remove(HeroSubClass.KING);
