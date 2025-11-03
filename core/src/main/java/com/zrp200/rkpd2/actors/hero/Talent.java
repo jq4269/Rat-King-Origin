@@ -483,7 +483,7 @@ public enum Talent {
 			if(prep == null || !hero.hasTalent(LETHAL_MOMENTUM_2)) return false;
 			// 60 / 80 / 100% chance to proc
 			// todo determine if I should split these mechanics further?
-			if(Random.Float() > .2*(2+hero.pointsInTalent(LETHAL_MOMENTUM_2))) return false;
+			if(Random.Float() < .2*(2+hero.pointsInTalent(LETHAL_MOMENTUM_2))) return false;
 			// preserve half of the levels on average.
 			int level = Random.NormalIntRange(0, prep.attackLevel()-1);
 			if(level > 0) prep.setAttackLevel(level); else prep = null;
