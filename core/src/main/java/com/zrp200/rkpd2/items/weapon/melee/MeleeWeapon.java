@@ -736,6 +736,10 @@ public class MeleeWeapon extends Weapon implements BrawlerBuff.BrawlerWeapon {
 					if (hero.buff(RingOfForce.BrawlersStance.class) != null){
 						chargeToGain *= 0.50f;
 					}
+                    if (hero.hasTalent(Talent.ADVENTUROUS_SNOOZING) && hero.resting){
+                        float boostMod = hero.heroClass.isExact(HeroClass.DUELIST) ? 2f : 1f;
+                        chargeToGain += boostMod*0.5f/(100f/(1+hero.pointsInTalent(Talent.ADVENTUROUS_SNOOZING)));
+                    }
 
 					partialCharge += chargeToGain;
 				}
@@ -763,11 +767,6 @@ public class MeleeWeapon extends Weapon implements BrawlerBuff.BrawlerWeapon {
 		}
 
 		private float getBaseRecharge() {
-			Hero hero = SafeCast.cast(target, Hero.class);
-			if (hero.hasTalent(Talent.ADVENTUROUS_SNOOZING) && hero.resting){
-				float boostMod = hero.heroClass.isExact(HeroClass.DUELIST) ? 2f : 1f;
-				return 60f * (1f - ((hero.pointsInTalent(Talent.ADVENTUROUS_SNOOZING))*boostMod*1.5f / (float) chargeCap()));
-			}
 			return 60f;
 		}
 
