@@ -839,8 +839,11 @@ public abstract class Wand extends Item {
 							return;
 						}
 
-						float shield = curUser.HT * (curWand.curCharges()) *
-								curUser.byTalent(Talent.SHIELD_BATTERY, 0.0625f, Talent.RESTORATION, 0.05f);
+						float shield = curUser.HT * (curWand.curCharges());
+                        if (curUser.hasTalent(Talent.SHIELD_BATTERY))
+                            shield *= 0.06f;
+                        else
+                            shield *= 0.04f;
 						shield *= Math.pow(1.5f, curUser.pointsInTalent(Talent.SHIELD_BATTERY, Talent.RESTORATION)-1);
 						Buff.affect(curUser, Barrier.class).setShield(Math.round(shield));
 						curWand.curCharges = curWand.getMinCharges();
