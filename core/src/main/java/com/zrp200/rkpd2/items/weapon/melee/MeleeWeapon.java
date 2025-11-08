@@ -262,7 +262,7 @@ public class MeleeWeapon extends Weapon implements BrawlerBuff.BrawlerWeapon {
 	/** This removes basically all the duplication. anything implementing this will work with Elite Dexterity **/
 	public static class MeleeAbility implements DuelistAbility {
 
-		protected float delayMulti;
+		protected float delayMulti = 1f;
 
 		@Override
 		public boolean execute(Hero hero, Integer target, MeleeWeapon wep) {
