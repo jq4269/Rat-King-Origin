@@ -30,6 +30,7 @@ import com.zrp200.rkpd2.actors.buffs.Preparation;
 import com.zrp200.rkpd2.actors.buffs.RobotBuff;
 import com.zrp200.rkpd2.actors.buffs.WandEmpower;
 import com.zrp200.rkpd2.actors.hero.Hero;
+import com.zrp200.rkpd2.actors.hero.HeroClass;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.messages.Messages;
 import com.watabou.noosa.audio.Sample;
@@ -89,7 +90,8 @@ public abstract class DamageWand extends Wand{
 			boolean result = Dungeon.hero.buff(Preparation.class).procKO(Dungeon.hero, enemy);
 			if (result) Dungeon.hero.buff(Preparation.class).detach();
 		}
-		HolyFlames.proc(enemy);
+        if (!Dungeon.hero.heroClass.is(HeroClass.CLERIC))
+		    HolyFlames.proc(enemy);
 	}
 
 	@Override
