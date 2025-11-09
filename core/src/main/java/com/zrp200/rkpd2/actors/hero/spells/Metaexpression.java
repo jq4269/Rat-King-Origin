@@ -24,7 +24,7 @@ public class Metaexpression extends ClericSpell {
 
     public static final Metaexpression INSTANCE = new Metaexpression();
 
-    public static final int DURATION = 100;
+    public static final int DURATION = 250;
 
     @Override
     public int icon() {
@@ -39,7 +39,7 @@ public class Metaexpression extends ClericSpell {
 
     @Override
     public float chargeUse(Hero hero) {
-        return 1 + hero.pointsInTalent(Talent.METAEXPRESSION);
+        return 2 + hero.pointsInTalent(Talent.METAEXPRESSION);
     }
 
     @Override
@@ -63,8 +63,7 @@ public class Metaexpression extends ClericSpell {
             coolTrinket.upgrade(2);
         }
         coolTrinket.identify();
-        Buff.detach(hero, TrinketHolder.class);
-        TrinketHolder holder = Buff.affect(hero, TrinketHolder.class, DURATION);
+        TrinketHolder holder = Buff.append(hero, TrinketHolder.class, DURATION);
         holder.trinket = coolTrinket;
 
         Enchanting.show(hero, coolTrinket);

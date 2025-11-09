@@ -542,8 +542,7 @@ public class GameScene extends PixelScene {
 					Trinket coolTrinket = (Trinket) Generator.random(Generator.Category.TRINKET);
 					coolTrinket.level(Dungeon.hero.pointsInTalent(Talent.METAEXPRESSION));
 					coolTrinket.identify();
-					Buff.detach(Dungeon.hero, Metaexpression.TrinketHolder.class);
-					Metaexpression.TrinketHolder holder = Buff.affect(Dungeon.hero, Metaexpression.TrinketHolder.class, Metaexpression.DURATION*2);
+					Metaexpression.TrinketHolder holder = Buff.append(Dungeon.hero, Metaexpression.TrinketHolder.class, Metaexpression.DURATION*2);
 					holder.trinket = coolTrinket;
 					GLog.p(Messages.get(Metaexpression.class, "trinket", Messages.titleCase(coolTrinket.title())));
 				}
