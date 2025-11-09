@@ -67,11 +67,7 @@ public class HolyFlames extends Buff implements Hero.Doom, DamageOverTimeEffect 
                 damage *= 1.5f;
             damage *= (1 + Dungeon.hero.pointsInTalent(Talent.PYROMANIAC, Talent.RK_FIRE)*0.125f);
 
-            if (damage < (Dungeon.scalingDepth()/2)+2) {
-                burnIncrement++;
-            } else {
-                burnIncrement += 0.5f;
-            }
+            burnIncrement += 2/3f;
 
             Buff.detach( target, Chill.class);
             for (Buff b: target.buffs()){
@@ -96,7 +92,7 @@ public class HolyFlames extends Buff implements Hero.Doom, DamageOverTimeEffect 
     }
 
     public void reignite( ) {
-        reignite(2 + Dungeon.hero.pointsInTalent(Talent.EXORCISM)*2 );
+        reignite(3 + Dungeon.hero.pointsInTalent(Talent.EXORCISM)*2 );
     }
 
     public void reignite( float duration ) {
@@ -104,7 +100,7 @@ public class HolyFlames extends Buff implements Hero.Doom, DamageOverTimeEffect 
     }
 
     public static void proc(Char ch){
-        if (Dungeon.hero.hasTalent(Talent.EXORCISM) && ch.alignment == Char.Alignment.ENEMY)
+        if (Dungeon.hero.hasTalent(Talent.EXORCISM) && ch.alignment == Char.Alignment.ENEMY && Random.Float() < 0.5f)
             Buff.affect(ch, HolyFlames.class).reignite();
     }
 
