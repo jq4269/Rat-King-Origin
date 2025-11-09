@@ -283,6 +283,7 @@ public class MeleeWeapon extends Weapon implements BrawlerBuff.BrawlerWeapon {
 					// check charges of third slot, it should use the same amount of charges as the main slot
 					if (Buff.affect(hero, Charger.class).charges >= 2 * wep.abilityChargeUse(hero, enemy)
 							&& enemy.pos == QuickSlotButton.autoAim(enemy, hero.belongings.thirdWep)) {
+                        wep.consumeCharge(wep.abilityChargeUse(hero, enemy));
 						// fake throw = cool
 						beforeAbilityUsed(hero, enemy);
 						// see Item.cast, Hero.shoot
@@ -373,16 +374,8 @@ public class MeleeWeapon extends Weapon implements BrawlerBuff.BrawlerWeapon {
 
 	protected void beforeAbilityUsed(Hero hero, Char target){
 		hero.belongings.abilityWeapon = this;
-		Charger charger = Buff.affect(hero, Charger.class);
 
-		float charge = abilityChargeUse(hero, target);
-		charger.partialCharge -= charge;
-		while (charger.partialCharge < 0 && charger.charges > 0) {
-			charger.charges--;
-			charger.partialCharge++;
-		}
-		if (charge == 0)
-			grass -= DuelistGrass.getAbilityGrassCost();
+		consumeCharge(abilityChargeUse(hero, target));
 
 		if (hero.heroClass.is(HeroClass.DUELIST)
 				&& hero.canHaveTalent(Talent.AGGRESSIVE_BARRIER)
@@ -454,13 +447,25 @@ public class MeleeWeapon extends Weapon implements BrawlerBuff.BrawlerWeapon {
 	}
 
 	public final float abilityChargeUse(Hero hero, Char target){
-		int chargeUse = baseChargeUse(hero, target) * (activeAbility == null ? 1 : 2);
+		int chargeUse = baseChargeUse(hero, target);
 		if (cutGrass)
 			chargeUse = 1;
 		if (grass > DuelistGrass.getAbilityGrassCost())
 			chargeUse = 0;
 		return chargeUse;
 	}
+
+    public void consumeCharge(float charge){
+        Charger charger = Buff.affect(hero, Charger.class);
+
+        charger.partialCharge -= charge;
+        while (charger.partialCharge < 0 && charger.charges > 0) {
+            charger.charges--;
+            charger.partialCharge++;
+        }
+        if (charge == 0)
+            grass -= DuelistGrass.getAbilityGrassCost();
+    }
 
 	@Override
 	public int min(int lvl) {
