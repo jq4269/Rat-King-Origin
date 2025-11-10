@@ -236,7 +236,8 @@ public abstract class ClericSpell {
 				LayOnHands.INSTANCE,
 				AuraOfProtection.INSTANCE,
 				WallOfLight.INSTANCE,
-				SpellEmpower.LimitBreak.INSTANCE
+				SpellEmpower.LimitBreak.INSTANCE,
+                ArsRetractandi.INSTANCE,
 			}){
 				if (spell.isVisible(cleric)) spells.add(spell);
 			}
@@ -308,6 +309,7 @@ public abstract class ClericSpell {
 		spells.add(HallowedGround.INSTANCE);
 		spells.add(MnemonicPrayer.INSTANCE);
 		spells.add(SpellEmpower.DivineAdvent.INSTANCE);
+        spells.add(ArsRetractandi.INSTANCE);
 		spells.add(DivineIntervention.INSTANCE);
 		spells.add(Judgement.INSTANCE);
 		spells.add(Flash.INSTANCE);

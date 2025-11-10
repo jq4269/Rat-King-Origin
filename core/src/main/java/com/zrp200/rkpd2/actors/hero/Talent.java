@@ -264,7 +264,9 @@ public enum Talent {
 	HOLY_LANCE(171, 3, Aspect.OFFENSE), HALLOWED_GROUND(172, 3, Aspect.DEFENSE), MNEMONIC_PRAYER(173, 3, Aspect.MULTIFORM), DIVINE_ADVENT(188, 3, Aspect.MULTIFORM), ENDURING_LIGHT(189, 3, Aspect.OFFENSE),
 	//Paladin T3
 	LAY_ON_HANDS(174, 3, Aspect.DEFENSE), AURA_OF_PROTECTION(175, 3, Aspect.DEFENSE), WALL_OF_LIGHT(176, 3, Aspect.DEFENSE), LIMIT_BREAK(190, 3, Aspect.MULTIFORM), TRIAGE(191, 3, Aspect.UTILITY),
-	//Ascended Form T4
+	//Cenobite T3
+    ARS_RETRACTANDI(imageAt(8, 13), 3),
+    //Ascended Form T4
 	DIVINE_INTERVENTION(177, 4, Aspect.DEFENSE), JUDGEMENT(178, 4, Aspect.OFFENSE), FLASH(179, 4, Aspect.UTILITY), DIVINE_PROFICIENCY(imageAt(13, 13), 4),
 	//Trinity T4
 	BODY_FORM(180, 4, Aspect.MULTIFORM), MIND_FORM(181, 4, Aspect.MULTIFORM), SPIRIT_FORM(182, 4, Aspect.MULTIFORM), META_FORM(imageAt(14, 13), 4, Aspect.MULTIFORM),
@@ -1967,7 +1969,10 @@ public enum Talent {
 			case PALADIN:
 				Collections.addAll(tierTalents, LAY_ON_HANDS, AURA_OF_PROTECTION, WALL_OF_LIGHT, LIMIT_BREAK, TRIAGE);
 				break;
-			case KING: // this should be *lovely*
+            case CENOBITE:
+                Collections.addAll(tierTalents, ARS_RETRACTANDI);
+                break;
+            case KING: // this should be *lovely*
 				Collections.addAll(tierTalents, RK_BERSERKER, RK_BATTLEMAGE, RK_ASSASSIN, RK_SNIPER, RK_GLADIATOR, RK_WARLOCK, RK_FREERUNNER, RK_WARDEN); break;
 			case RK_CHAMPION:
 				Collections.addAll(tierTalents, RK_FIRE, RK_PROJECT, RK_ANTIMAGIC, RK_GIANT, RK_BLESSED, RK_CURSED, RK_SPLINT, RK_PALADIN); break;

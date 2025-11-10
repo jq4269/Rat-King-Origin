@@ -27,6 +27,7 @@ import com.zrp200.rkpd2.ShatteredPixelDungeon;
 import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.abilities.cleric.Trinity;
+import com.zrp200.rkpd2.actors.hero.spells.ArsRetractandi;
 import com.zrp200.rkpd2.effects.Speck;
 import com.zrp200.rkpd2.effects.Transmuting;
 import com.zrp200.rkpd2.items.scrolls.exotic.ScrollOfMetamorphosis;
@@ -40,6 +41,7 @@ import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.DeviceCompat;
+import com.watabou.utils.Random;
 
 import java.util.LinkedHashMap;
 
@@ -64,7 +66,8 @@ public class TalentButton extends Button {
 		UPGRADE,
 		METAMORPH_CHOOSE,
 		METAMORPH_REPLACE,
-		METAFORM_SELECT
+		METAFORM_SELECT,
+        ASPECT_REROLL
 	}
 
 	public TalentButton(int tier, Talent talent, int points, Mode mode){
@@ -248,7 +251,73 @@ public class TalentButton extends Button {
 					Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 				}
 			});
-		} else {
+		} else if (mode == Mode.ASPECT_REROLL && Dungeon.hero != null && Dungeon.hero.isAlive()) {
+            toAdd = new WndInfoTalent(talent, pointsInTalent, new WndInfoTalent.TalentButtonCallback() {
+
+                @Override
+                public String prompt() {
+                    return Messages.titleCase(Messages.get(ArsRetractandi.class, "metamorphose_talent"));
+                }
+
+                @Override
+                public void call() {
+                    if (ArsRetractandi.WndChoose.INSTANCE != null){
+                        ArsRetractandi.WndChoose.INSTANCE.hide();
+                    }
+                    Talent newTalent;
+                    while (true){
+                        Talent testTalent = Random.element(Talent.values());
+                        if (Dungeon.hero.talents.get(tier-1).containsKey(testTalent))
+                            continue;
+                        if (testTalent.aspect != talent.aspect)
+                            continue;
+                        if (testTalent.maxPoints() == 3 && Random.Int(3) != 0)
+                            continue;
+                        if (testTalent.maxPoints() == 4 && Random.Int(5) != 0)
+                            continue;
+                        newTalent = testTalent;
+                        break;
+                    }
+
+                    for (LinkedHashMap<Talent, Integer> tier : Dungeon.hero.talents){
+                        if (tier.containsKey(talent)){
+                            LinkedHashMap<Talent, Integer> newTier = new LinkedHashMap<>();
+                            for (Talent t : tier.keySet()){
+                                if (t == talent){
+                                    newTier.put(newTalent, tier.get(talent));
+
+                                    if (!Dungeon.hero.metamorphedTalents.containsValue(talent)){
+                                        Dungeon.hero.metamorphedTalents.put(talent, newTalent);
+
+                                        //if what we're replacing is already a value, we need to simplify the data structure
+                                    } else {
+                                        //a->b->a, we can just remove the entry entirely
+                                        if (Dungeon.hero.metamorphedTalents.get(talent) == talent){
+                                            Dungeon.hero.metamorphedTalents.remove(talent);
+
+                                            //a->b->c, we need to simplify to a->c
+                                        } else {
+                                            for (Talent t2 : Dungeon.hero.metamorphedTalents.keySet()){
+                                                if (Dungeon.hero.metamorphedTalents.get(t2) == talent){
+                                                    Dungeon.hero.metamorphedTalents.put(t2, talent);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                } else {
+                                    newTier.put(t, tier.get(t));
+                                }
+                            }
+                            Dungeon.hero.talents.set(TalentButton.this.tier-1, newTier);
+                            break;
+                        }
+                    }
+
+                    ArsRetractandi.onChange(talent, newTalent);
+                }
+            });
+        } else {
 			toAdd = new WndInfoTalent(talent, pointsInTalent, null);
 		}
 
