@@ -81,6 +81,7 @@ public enum HeroSubClass {
 
 	PRIEST(HeroIcon.PRIEST),
 	PALADIN(HeroIcon.PALADIN),
+    CENOBITE(HeroIcon.CENOBITE),
 
 	KING(HeroIcon.KING),
 	RK_CHAMPION(HeroIcon.CHAMP);

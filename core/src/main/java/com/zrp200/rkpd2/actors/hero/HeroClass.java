@@ -112,8 +112,8 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import static com.zrp200.rkpd2.Dungeon.hero;
-import static com.zrp200.rkpd2.actors.hero.HeroSubClass.PALADIN;
-import static com.zrp200.rkpd2.actors.hero.HeroSubClass.PRIEST;
+import static com.zrp200.rkpd2.actors.hero.HeroSubClass.*;
+
 public enum HeroClass {
 
 	WARRIOR(HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR),
@@ -129,7 +129,7 @@ public enum HeroClass {
 		}
 	},
 	DUELIST(HeroSubClass.CHAMPION, HeroSubClass.MONK),
-    CLERIC( PRIEST, PALADIN ),
+    CLERIC( PRIEST, PALADIN, CENOBITE ),
 	RAT_KING (HeroSubClass.KING);
 
 	private ArrayList<HeroSubClass> subClasses;

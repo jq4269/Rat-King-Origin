@@ -129,6 +129,7 @@ public class HeroIcon extends Image {
 	public static final int SPIRITUALIST    = imageAt(1, 14);
 	public static final int DECEPTICON      = imageAt(2, 14);
 	public static final int HIGHNESS        = imageAt(3, 14);
+    public static final int CENOBITE        = imageAt(4, 14);
 	public static final int CHAMP           = imageAt(5, 14);
 
 	public static final int LEGACYWRATH     = imageAt(6, 14);
