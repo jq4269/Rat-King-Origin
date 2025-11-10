@@ -384,6 +384,7 @@ public class Hero extends Char {
 	
 	public int lvl = 1;
 	public int exp = 0;
+    public int lvlCenobite = 1;
 	
 	public int HTBoost = 0;
 	
@@ -418,13 +419,14 @@ public class Hero extends Char {
 	
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
+        int level = lvlCenobite > 1 ? lvlCenobite : lvl;
 		
-		HT = 20 + 5*(lvl-1) + HTBoost;
+		HT = 20 + 5*(level-1) + HTBoost;
 		if (Dungeon.isChallenged(Challenges.JUST_KILL_ME)){
-			HT = Math.round(10 + 2.5f*(lvl-1) + HTBoost/2f);
+			HT = Math.round(10 + 2.5f*(level-1) + HTBoost/2f);
 		}
 		if (Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.BALANCE)){
-			HT = 5 + 3*(lvl-1) + HTBoost;
+			HT = 5 + 3*(level-1) + HTBoost;
 		}
 		float multiplier = RingOfMight.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
@@ -492,6 +494,7 @@ public class Hero extends Char {
 	private static final String EXPERIENCE	= "exp";
 	private static final String HTBOOST     = "htboost";
 	private static final String LASTMOVE = "last_move";
+    private static final String LEVEL_CENOBITE= "lvlCenobite";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -512,6 +515,7 @@ public class Hero extends Char {
 		
 		bundle.put( LEVEL, lvl );
 		bundle.put( EXPERIENCE, exp );
+        bundle.put( LEVEL_CENOBITE, lvlCenobite);
 		
 		bundle.put( HTBOOST, HTBoost );
 		bundle.put( LASTMOVE, lastMovPos);
@@ -524,6 +528,7 @@ public class Hero extends Char {
 
 		lvl = bundle.getInt( LEVEL );
 		exp = bundle.getInt( EXPERIENCE );
+        lvlCenobite = bundle.getInt(LEVEL_CENOBITE);
 
 		HTBoost = bundle.getInt(HTBOOST);
 
@@ -2736,8 +2741,10 @@ if (wep != null) {
 					}
 
 					updateHT(true);
-					attackSkill++;
-					defenseSkill++;
+                    if (lvlCenobite == 1) {
+                        attackSkill++;
+                        defenseSkill++;
+                    }
 
 				} else {
 					Buff.prolong(this, Bless.class, Bless.DURATION);

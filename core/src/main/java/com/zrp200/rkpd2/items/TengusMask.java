@@ -23,6 +23,7 @@ package com.zrp200.rkpd2.items;
 
 import com.zrp200.rkpd2.Assets;
 import com.zrp200.rkpd2.Badges;
+import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Actor;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.Preparation;
@@ -39,6 +40,8 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 
 import java.util.ArrayList;
+
+import static com.zrp200.rkpd2.actors.hero.HeroSubClass.CENOBITE;
 
 public class TengusMask extends Item {
 	
@@ -100,6 +103,9 @@ public class TengusMask extends Item {
 		curUser.busy();
 		
 		choose(curUser, way);
+        if (way == CENOBITE){
+            Dungeon.hero.lvlCenobite = Dungeon.hero.lvl;
+        }
 
 		if (way == HeroSubClass.ASSASSIN && curUser.invisible > 0){
 			Buff.affect(curUser, Preparation.class);
