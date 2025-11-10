@@ -537,6 +537,7 @@ public class Generator {
 					MailArmor.class,
 					ScaleArmor.class,
 					PlateArmor.class,
+                    PlateArmor.class,
 					WarriorArmor.class,
 					MageArmor.class,
 					RogueArmor.class,
@@ -546,7 +547,7 @@ public class Generator {
 					RatKingArmor.class,
 					ScoutArmor.class
 			};
-			ARMOR.probs = new float[]{ 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+			ARMOR.probs = new float[]{ 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 			
 			//see Generator.randomMissile
 			MISSILE.classes = new Class<?>[]{};
