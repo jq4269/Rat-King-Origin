@@ -26,6 +26,7 @@ import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.KromerCrown;
 import com.zrp200.rkpd2.items.TengusMask;
+import com.zrp200.rkpd2.items.artifacts.HolyTome;
 import com.zrp200.rkpd2.items.wands.Wand;
 import com.zrp200.rkpd2.items.weapon.Weapon;
 import com.zrp200.rkpd2.items.weapon.melee.MagesStaff;
@@ -81,7 +82,14 @@ public enum HeroSubClass {
 
 	PRIEST(HeroIcon.PRIEST),
 	PALADIN(HeroIcon.PALADIN),
-    CENOBITE(HeroIcon.CENOBITE),
+    CENOBITE(HeroIcon.CENOBITE){
+        @Override
+        public int getBonus(Item item) {
+            if (item instanceof HolyTome)
+                return item.level()/2;
+            return super.getBonus(item);
+        }
+    },
 
 	KING(HeroIcon.KING),
 	RK_CHAMPION(HeroIcon.CHAMP);
