@@ -282,6 +282,7 @@ public boolean isSimilar( Item item ) {
 			if (owner instanceof Hero){
 				// -50% / -30% / -10% / +10%
 				int points = ((Hero)owner).pointsInTalent(Talent.POINT_BLANK,Talent.RK_SNIPER);
+                points += ((Hero) owner).shiftedPoints(Talent.POINTY_BLACK);
 				factor += 0.2f*points;
 			}
 			return factor;
@@ -345,7 +346,7 @@ public boolean isSimilar( Item item ) {
 				}
 			}
 		}
-		if (Random.Int(8) < Dungeon.hero.pointsInTalent(Talent.POINT_BLANK) && Dungeon.level.adjacent(attacker.pos, defender.pos)){
+		if (Random.Int(8) < Dungeon.hero.pointsInTalent(Talent.POINTY_BLACK) && Dungeon.level.adjacent(attacker.pos, defender.pos)){
 			Ballistica trajectory = new Ballistica(attacker.pos, defender.pos, Ballistica.STOP_TARGET);
 			trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size()-1), Ballistica.PROJECTILE);
 			WandOfBlastWave.throwChar(defender, trajectory, 2, false, true, getClass());
