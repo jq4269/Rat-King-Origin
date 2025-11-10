@@ -65,12 +65,12 @@ public class MutareArtem extends ClericSpell {
         } else {
             ScrollOfMetamorphosis.mutareArtem = true;
             GameScene.show(new ScrollOfMetamorphosis.WndMetamorphChoose());
-
-            hero.spend(1f);
-            hero.busy();
-            hero.sprite.operate(hero.pos);
-
-            onSpellCast(tome, hero);
         }
+
+        hero.spend(1f);
+        hero.busy();
+        hero.sprite.operate(hero.pos);
+
+        onSpellCast(tome, hero);
     }
 }
