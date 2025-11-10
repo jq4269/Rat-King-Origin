@@ -129,7 +129,7 @@ public enum HeroClass {
 		}
 	},
 	DUELIST(HeroSubClass.CHAMPION, HeroSubClass.MONK),
-    CLERIC( PRIEST, PALADIN, CENOBITE ),
+    CLERIC( PRIEST, PALADIN ),
 	RAT_KING (HeroSubClass.KING);
 
 	private ArrayList<HeroSubClass> subClasses;
@@ -170,7 +170,7 @@ public enum HeroClass {
 			case DUELIST:
 				return HeroSubClass.HIGHNESS;
 			case CLERIC:
-				return HeroSubClass.FREERUNNER;
+				return CENOBITE;
 			default:
 				return null;
 		}
