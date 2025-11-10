@@ -24,6 +24,7 @@ package com.zrp200.rkpd2.ui;
 import com.zrp200.rkpd2.Assets;
 import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.ShatteredPixelDungeon;
+import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.abilities.cleric.Trinity;
 import com.zrp200.rkpd2.effects.Speck;
@@ -38,6 +39,7 @@ import com.watabou.noosa.Image;
 import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.DeviceCompat;
 
 import java.util.LinkedHashMap;
 
@@ -53,6 +55,7 @@ public class TalentButton extends Button {
 
 	TalentIcon icon;
 	Image bg;
+    Image aspectIcon;
 
 	ColorBlock fill;
 
@@ -77,6 +80,11 @@ public class TalentButton extends Button {
 
 		icon = new TalentIcon( talent );
 		add(icon);
+
+        if (DeviceCompat.isDebug() || (Dungeon.hero != null && Dungeon.hero.isSubclassedLoosely(HeroSubClass.CENOBITE))){
+            aspectIcon = talent.aspect.image();
+            add(aspectIcon);
+        }
 	}
 
 	@Override
@@ -107,6 +115,12 @@ public class TalentButton extends Button {
 		icon.x = x + 2;
 		icon.y = y + 2;
 		PixelScene.align(icon);
+
+        if (aspectIcon != null){
+            aspectIcon.x = x + WIDTH - aspectIcon.width();
+            aspectIcon.y = y;
+            PixelScene.align(aspectIcon);
+        }
 	}
 
 	@Override
@@ -249,6 +263,9 @@ public class TalentButton extends Button {
 	protected void onPointerDown() {
 		icon.brightness( 1.5f );
 		bg.brightness( 1.5f );
+        if (aspectIcon != null){
+            aspectIcon.brightness(1.5f);
+        }
 		Sample.INSTANCE.play( Assets.Sounds.CLICK );
 	}
 
@@ -256,6 +273,9 @@ public class TalentButton extends Button {
 	protected void onPointerUp() {
 		icon.resetColor();
 		bg.resetColor();
+        if (aspectIcon != null){
+            aspectIcon.resetColor();
+        }
 	}
 
 	@Override
@@ -267,6 +287,9 @@ public class TalentButton extends Button {
 		active = value;
 		icon.alpha( value ? 1.0f : 0.3f );
 		bg.alpha( value ? 1.0f : 0.3f );
+        if (aspectIcon != null){
+            aspectIcon.alpha(value ? 1.0f : 0.3f);
+        }
 	}
 
 	public void upgradeTalent(){
