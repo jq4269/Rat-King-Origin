@@ -227,6 +227,7 @@ public abstract class ClericSpell {
 			for (ClericSpell spell : new ClericSpell[]{
 				Radiance.INSTANCE,
 				Smite.INSTANCE,
+                MutareArtem.INSTANCE,
 				Cleanse.INSTANCE,
 				HolyLance.INSTANCE,
 				HallowedGround.INSTANCE,
@@ -298,6 +299,7 @@ public abstract class ClericSpell {
 		spells.add(Cleanse.INSTANCE);
 		spells.add(Radiance.INSTANCE);
 		spells.add(Smite.INSTANCE);
+        spells.add(MutareArtem.INSTANCE);
 		spells.add(LayOnHands.INSTANCE);
 		spells.add(AuraOfProtection.INSTANCE);
 		spells.add(SpellEmpower.DivineAdvent.INSTANCE);

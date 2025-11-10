@@ -26,6 +26,7 @@ import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.hero.HeroClass;
 import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.hero.Talent;
+import com.zrp200.rkpd2.actors.hero.spells.MutareArtem;
 import com.zrp200.rkpd2.effects.Speck;
 import com.zrp200.rkpd2.effects.Transmuting;
 import com.zrp200.rkpd2.items.scrolls.InventoryScroll;
@@ -34,6 +35,7 @@ import com.zrp200.rkpd2.scenes.GameScene;
 import com.zrp200.rkpd2.scenes.PixelScene;
 import com.zrp200.rkpd2.sprites.ItemSprite;
 import com.zrp200.rkpd2.sprites.ItemSpriteSheet;
+import com.zrp200.rkpd2.ui.HeroIcon;
 import com.zrp200.rkpd2.ui.RenderedTextBlock;
 import com.zrp200.rkpd2.ui.TalentButton;
 import com.zrp200.rkpd2.ui.TalentsPane;
@@ -58,6 +60,8 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 	}
 
 	protected static boolean identifiedByUse = false;
+
+    public static boolean mutareArtem = false;
 	
 	@Override
 	public void doRead() {
@@ -68,11 +72,12 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 		} else {
 			identifiedByUse = false;
 		}
+        mutareArtem = false;
 		GameScene.show(new WndMetamorphChoose());
 	}
 
 	public static void onMetamorph( Talent oldTalent, Talent newTalent ){
-		if (curItem instanceof ScrollOfMetamorphosis) {
+		if (!mutareArtem && curItem instanceof ScrollOfMetamorphosis) {
 			((ScrollOfMetamorphosis) curItem).readAnimation();
 			Sample.INSTANCE.play(Assets.Sounds.READ);
 		}
@@ -120,7 +125,9 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 
 			float top = 0;
 
-			IconTitle title = new IconTitle( curItem );
+			IconTitle title = mutareArtem
+                    ? new IconTitle(new HeroIcon(MutareArtem.INSTANCE), Messages.get(MutareArtem.class, "name"))
+                    : new IconTitle( curItem );
 			title.color( TITLE_COLOR );
 			title.setRect(0, 0, 120, 0);
 			add(title);
@@ -176,7 +183,7 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 		@Override
 		public void onBackPressed() {
 
-			if (identifiedByUse){
+			if (!mutareArtem && identifiedByUse){
 				if (curItem instanceof ScrollOfMetamorphosis) {
 					((ScrollOfMetamorphosis) curItem).confirmCancelation(this, true);
 				} else {
@@ -220,7 +227,7 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 		public WndMetamorphReplace(Talent replacing, int tier){
 			super();
 
-			if (!identifiedByUse && curItem instanceof ScrollOfMetamorphosis) {
+			if (!mutareArtem && !identifiedByUse && curItem instanceof ScrollOfMetamorphosis) {
 				curItem.detach(curUser.belongings.backpack);
 			}
 			identifiedByUse = false;
@@ -281,7 +288,9 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 		private void setup(Talent replacing, int tier, LinkedHashMap<Talent, Integer> replaceOptions){
 			float top = 0;
 
-			IconTitle title = new IconTitle( curItem );
+            IconTitle title = mutareArtem
+                    ? new IconTitle(new HeroIcon(MutareArtem.INSTANCE), Messages.get(MutareArtem.class, "name"))
+                    : new IconTitle( curItem );
 			title.color( TITLE_COLOR );
 			title.setRect(0, 0, 120, 0);
 			add(title);
@@ -315,7 +324,7 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
 
 		@Override
 		public void onBackPressed() {
-			if (curItem instanceof ScrollOfMetamorphosis) {
+			if (!mutareArtem && curItem instanceof ScrollOfMetamorphosis) {
 				((ScrollOfMetamorphosis) curItem).confirmCancelation(this, false);
 			} else {
 				super.onBackPressed();

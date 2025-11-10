@@ -1211,6 +1211,7 @@ public class CursedWand {
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			//triggers metamorph effect if positive only
 			if (positiveOnly){
+                ScrollOfMetamorphosis.mutareArtem = false;
 				GameScene.show(new ScrollOfMetamorphosis.WndMetamorphChoose());
 				return true;
 			}
