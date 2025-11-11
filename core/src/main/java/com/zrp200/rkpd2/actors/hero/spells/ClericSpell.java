@@ -249,6 +249,7 @@ public abstract class ClericSpell {
 				WallOfLight.INSTANCE,
 				SpellEmpower.LimitBreak.INSTANCE,
                 ArsRetractandi.INSTANCE,
+                MessisPotentiae.INSTANCE
 			}){
 				if (spell.isVisible(cleric)) spells.add(spell);
 			}

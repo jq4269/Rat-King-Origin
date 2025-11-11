@@ -66,7 +66,9 @@ import com.zrp200.rkpd2.actors.hero.abilities.huntress.SpiritHawk;
 import com.zrp200.rkpd2.actors.hero.abilities.rogue.ShadowClone;
 import com.zrp200.rkpd2.actors.hero.spells.ClericSpell;
 import com.zrp200.rkpd2.actors.hero.spells.GuidingLight;
+import com.zrp200.rkpd2.actors.hero.spells.MessisPotentiae;
 import com.zrp200.rkpd2.actors.hero.spells.ShieldOfLight;
+import com.zrp200.rkpd2.actors.hero.spells.SpellEmpower;
 import com.zrp200.rkpd2.actors.hero.spells.Stasis;
 import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
 import com.zrp200.rkpd2.effects.CellEmitter;
@@ -80,11 +82,13 @@ import com.zrp200.rkpd2.effects.particles.ShadowParticle;
 import com.zrp200.rkpd2.items.Generator;
 import com.zrp200.rkpd2.items.Gold;
 import com.zrp200.rkpd2.items.Item;
+import com.zrp200.rkpd2.items.artifacts.HolyTome;
 import com.zrp200.rkpd2.items.artifacts.MasterThievesArmband;
 import com.zrp200.rkpd2.items.artifacts.TimekeepersHourglass;
 import com.zrp200.rkpd2.items.potions.exotic.ExoticPotion;
 import com.zrp200.rkpd2.items.rings.Ring;
 import com.zrp200.rkpd2.items.rings.RingOfWealth;
+import com.zrp200.rkpd2.items.scrolls.ScrollOfRecharging;
 import com.zrp200.rkpd2.items.scrolls.exotic.ExoticScroll;
 import com.zrp200.rkpd2.items.spells.CurseInfusion;
 import com.zrp200.rkpd2.items.spells.ReclaimTrap;
@@ -1118,6 +1122,15 @@ public abstract class Mob extends Char {
 			trap.storedTrap = Random.element(Dungeon.level.traps.valueList()).getClass();
 			Dungeon.level.drop(trap, pos).sprite.drop();
 		}
+
+        if (Dungeon.hero.buff(MessisPotentiae.EmpowerBuff.class) != null){
+            HolyTome tome = Dungeon.hero.belongings.getItem(HolyTome.class);
+            if (tome != null) {
+                Sample.INSTANCE.play(Assets.Sounds.BURNING);
+                ScrollOfRecharging.charge(this, 1.67f);
+                tome.directCharge(SpellEmpower.isActive() ? 0.75f : 0.5f );
+            }
+        }
 	}
 
 	protected Object loot = null;
