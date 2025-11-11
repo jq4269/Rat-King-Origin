@@ -53,20 +53,25 @@ public class DivineSense extends ClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.DIVINE_SENSE;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		return 2;
 	}
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && (SpellEmpower.isActive() || hero.hasTalent(Talent.DIVINE_SENSE));
+		return super.canCast(hero) && (SpellEmpower.isActive() || hero.hasTalent(talent()));
 	}
 
 	public void apply(Hero hero, Char target) {
 		if (SpellEmpower.isActive()) {
 			// 60 / 90 / 120
-			Buff.prolong(target, MindVision.class, 30 * (2 + hero.pointsInTalent(Talent.DIVINE_SENSE)));
+			Buff.prolong(target, MindVision.class, 30 * (2 + hero.pointsInTalent(talent())));
 			Buff.detach(target, DivineSenseTracker.class);
 		} else {
 			Buff.prolong(target, DivineSenseTracker.class, DivineSenseTracker.DURATION);
@@ -93,7 +98,7 @@ public class DivineSense extends ClericSpell {
 	}
 
 	public String desc(){
-		return checkEmpowerMsg("desc", 4+4*Dungeon.hero.pointsInTalent(Talent.DIVINE_SENSE), 30 * (1 + Dungeon.hero.pointsInTalent(Talent.DIVINE_SENSE))) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return checkEmpowerMsg("desc", 4+4*Dungeon.hero.pointsInTalent(talent()), 30 * (1 + Dungeon.hero.pointsInTalent(talent()))) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
 	public static class DivineSenseTracker extends FlavourBuff {

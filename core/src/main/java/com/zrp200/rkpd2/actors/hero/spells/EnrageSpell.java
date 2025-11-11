@@ -27,9 +27,14 @@ public class EnrageSpell extends ClericSpell {
     }
 
     @Override
+    public Talent talent() {
+        return Talent.ENRAGE;
+    }
+
+    @Override
     public boolean canCast(Hero hero) {
         return super.canCast(hero)
-                && hero.hasTalent(Talent.ENRAGE)
+                && hero.hasTalent(talent())
                 && PowerOfMany.getPoweredAlly() != null;
     }
 
@@ -75,7 +80,7 @@ public class EnrageSpell extends ClericSpell {
 
     public static class EnrageBuff extends FlavourBuff {
         public static int duration(){
-            return Dungeon.hero.pointsInTalent(Talent.ENRAGE)*4;
+            return Dungeon.hero.pointsInTalent(EnrageSpell.INSTANCE.talent())*4;
         }
 
         {

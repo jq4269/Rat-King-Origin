@@ -44,8 +44,13 @@ public class ArsRetractandi extends ClericSpell {
     }
 
     @Override
+    public Talent talent() {
+        return ARS_RETRACTANDI;
+    }
+
+    @Override
     public float chargeUse(Hero hero) {
-        int base = 5 - hero.pointsInTalent(Talent.ARS_RETRACTANDI);
+        int base = 5 - hero.pointsInTalent(talent());
         if (SpellEmpower.isActive())
             base *= 2;
         return base;
@@ -53,7 +58,7 @@ public class ArsRetractandi extends ClericSpell {
 
     @Override
     public boolean canCast(Hero hero) {
-        return super.canCast(hero) && hero.shiftedPoints(Talent.ARS_RETRACTANDI) > (SpellEmpower.isActive() ? 0 : 1);
+        return super.canCast(hero) && hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1);
     }
 
     @Override

@@ -53,7 +53,12 @@ public class MindForm extends ClericSpell {
 		return HeroIcon.MIND_FORM;
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.MIND_FORM;
+    }
+
+    @Override
 	public String desc() {
 		return Messages.get(this, "desc", itemLevel()) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
@@ -65,11 +70,11 @@ public class MindForm extends ClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.hasTalent(Talent.MIND_FORM);
+		return super.canCast(hero) && hero.hasTalent(talent());
 	}
 
 	public static int effectLevel(){
-		return 2 + Dungeon.hero.pointsInTalent(Talent.MIND_FORM);
+		return 2 + Dungeon.hero.pointsInTalent(MindForm.INSTANCE.talent());
 	}
 
 	@Override
@@ -80,7 +85,7 @@ public class MindForm extends ClericSpell {
 	}
 
 	public static int itemLevel(){
-		return 2 + Dungeon.hero.pointsInTalent(Talent.MIND_FORM);
+		return 2 + Dungeon.hero.pointsInTalent(MindForm.INSTANCE.talent());
 	}
 
 	//TODO selecting

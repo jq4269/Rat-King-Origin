@@ -76,7 +76,12 @@ public class HallowedGround extends TargetedClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.HALLOWED_GROUND;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		return 2;
 	}
@@ -93,7 +98,7 @@ public class HallowedGround extends TargetedClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.shiftedPoints(Talent.HALLOWED_GROUND) > (SpellEmpower.isActive() ? 0 : 1);
+		return super.canCast(hero) && hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1);
 	}
 
     private final ArrayList<Char> affected = new ArrayList<>();
@@ -131,7 +136,7 @@ public class HallowedGround extends TargetedClericSpell {
 			return;
 		}
 
-		PathFinder.buildDistanceMap(target, canSeed, Math.max(1, hero.pointsInTalent(Talent.HALLOWED_GROUND)));
+		PathFinder.buildDistanceMap(target, canSeed, Math.max(1, hero.pointsInTalent(talent())));
 		for (int i = 0; i < Dungeon.level.length(); i++){
 			if (canSeed[i] && PathFinder.distance[i] != Integer.MAX_VALUE){
 				canSeed[i] = false;
@@ -143,7 +148,7 @@ public class HallowedGround extends TargetedClericSpell {
 					quantity += 2;
 				}
 				if (SpellEmpower.isActive()) {
-					int points = hero.pointsInTalent(Talent.HALLOWED_GROUND);
+					int points = hero.pointsInTalent(talent());
 					if (
 							// 13/25/38/50% chance to immediately give grass
 							Random.Int(quantity > 0 ? 8 : 4) <= points
@@ -194,7 +199,7 @@ public class HallowedGround extends TargetedClericSpell {
 		super.onSpellCast(tome, hero);
 	}
 
-	private int getHeal() { return 15 + 10 * (SpellEmpower.isActive() ? hero.pointsInTalent(Talent.HALLOWED_GROUND) : 0); }
+	private int getHeal() { return 15 + 10 * (SpellEmpower.isActive() ? hero.pointsInTalent(talent()) : 0); }
 
 	private void affectChar( Char ch ){
 		if (ch.alignment == Char.Alignment.ALLY){
@@ -212,16 +217,16 @@ public class HallowedGround extends TargetedClericSpell {
 			}
 		} else if (!ch.flying) {
 			// spell empower increases the duration slightly
-			Buff.affect(ch, Roots.class, 1 + (SpellEmpower.isActive() ? hero.shiftedPoints(Talent.HALLOWED_GROUND) : 1));
+			Buff.affect(ch, Roots.class, 1 + (SpellEmpower.isActive() ? hero.shiftedPoints(talent()) : 1));
 		}
 	}
 
 	@Override
 	protected List<Object> getDescArgs() {
-		int area = 1 + 2*Dungeon.hero.pointsInTalent(Talent.HALLOWED_GROUND);
-		int heal = 15 + 10 * (SpellEmpower.isActive() ? hero.pointsInTalent(Talent.HALLOWED_GROUND) : 0);
-		int radius = hero.pointsInTalent(Talent.HALLOWED_GROUND);
-		int root = 1 + hero.shiftedPoints(Talent.HALLOWED_GROUND);
+		int area = 1 + 2*Dungeon.hero.pointsInTalent(talent());
+		int heal = 15 + 10 * (SpellEmpower.isActive() ? hero.pointsInTalent(talent()) : 0);
+		int radius = hero.pointsInTalent(talent());
+		int root = 1 + hero.shiftedPoints(talent());
 		return Arrays.asList(area, heal, radius, root);
 	}
 
@@ -237,7 +242,7 @@ public class HallowedGround extends TargetedClericSpell {
 			ArrayList<Char> affected = new ArrayList<>();
 
 			// on avg, hallowed ground produces 9/17/25 tiles of grass, 100/67/50% of total tiles
-			int chance = 10 + 10*Dungeon.hero.pointsInTalent(Talent.HALLOWED_GROUND);
+			int chance = 10 + 10*Dungeon.hero.pointsInTalent(HallowedGround.INSTANCE.talent());
 
 			for (int i = area.left-1; i <= area.right; i++) {
 				for (int j = area.top-1; j <= area.bottom; j++) {

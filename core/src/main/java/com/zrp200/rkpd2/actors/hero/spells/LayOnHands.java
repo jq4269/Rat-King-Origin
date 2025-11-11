@@ -60,11 +60,16 @@ public class LayOnHands extends TargetedClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	private static final int STACKS = 3;
+    @Override
+    public Talent talent() {
+        return Talent.LAY_ON_HANDS;
+    }
+
+    private static final int STACKS = 3;
 
 	@Override
 	protected List<Object> getDescArgs() {
-		int points = 1 + Dungeon.hero.pointsInTalent(Talent.LAY_ON_HANDS);
+		int points = 1 + Dungeon.hero.pointsInTalent(talent());
 		int totalHeal = 5 * points;
 		return Arrays.asList(
 				/* standard heal */ totalHeal,
@@ -81,7 +86,7 @@ public class LayOnHands extends TargetedClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.shiftedPoints(Talent.LAY_ON_HANDS) > (SpellEmpower.isActive() ? 0 : 1);
+		return super.canCast(hero) && hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1);
 	}
 
 	@Override
@@ -160,7 +165,7 @@ public class LayOnHands extends TargetedClericSpell {
 	}
 
 	private void affectChar(Hero hero, Char ch, boolean originalTarget) {
-		int totalHeal = 5 + 5*hero.pointsInTalent(Talent.LAY_ON_HANDS);
+		int totalHeal = 5 + 5*hero.pointsInTalent(talent());
 		if (SpellEmpower.isActive() && originalTarget) {
 			totalHeal *= 2;
 		}
@@ -171,7 +176,7 @@ public class LayOnHands extends TargetedClericSpell {
 	}
 
 	private static int getAdrenalineDuration(boolean direct) {
-		float duration = Dungeon.hero.pointsInTalent(Talent.LAY_ON_HANDS);
+		float duration = Dungeon.hero.pointsInTalent(LayOnHands.INSTANCE.talent());
 		if (SpellEmpower.isActive()) {
 			duration++; // 1 / 2 / 3 / 4
 			if (direct) duration = duration * 2; // 2 / 4 / 6 / 8

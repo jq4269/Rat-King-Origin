@@ -59,9 +59,14 @@ public class Sunray extends MultiTargetSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.SUNRAY;
+    }
+
+    @Override
 	public String desc() {
-		int points = Dungeon.hero.pointsInTalent(Talent.SUNRAY);
+		int points = Dungeon.hero.pointsInTalent(talent());
 		int min = 3 * (1 + points);
 		int max = 5 * (1 + points);
 		int dur = 3 * (1 + points);
@@ -79,7 +84,7 @@ public class Sunray extends MultiTargetSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && (hero.hasTalent(Talent.SUNRAY) || SpellEmpower.isActive());
+		return super.canCast(hero) && (hero.hasTalent(talent()) || SpellEmpower.isActive());
 	}
 
 	@Override
@@ -114,7 +119,7 @@ public class Sunray extends MultiTargetSpell {
 		if (ch != null) {
 			ch.sprite.burst(0xFFFFFF44, 5);
 
-			int points = hero.pointsInTalent(Talent.SUNRAY);
+			int points = hero.pointsInTalent(talent());
 			int min = 3 * (1 + points);
 			int max = 5 * (1 + points);
 			int dur = 3 * (1 + points);

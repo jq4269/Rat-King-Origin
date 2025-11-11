@@ -46,7 +46,12 @@ public class BodyForm extends ClericSpell {
 		return HeroIcon.BODY_FORM;
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.BODY_FORM;
+    }
+
+    @Override
 	public String desc() {
 		return Messages.get(this, "desc", duration()) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
@@ -58,7 +63,7 @@ public class BodyForm extends ClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.hasTalent(Talent.BODY_FORM);
+		return super.canCast(hero) && hero.hasTalent(talent());
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class BodyForm extends ClericSpell {
 	}
 
 	public static int duration(){
-		return Math.round(13.33f + 6.67f* Dungeon.hero.pointsInTalent(Talent.BODY_FORM));
+		return Math.round(13.33f + 6.67f* Dungeon.hero.pointsInTalent(BodyForm.INSTANCE.talent()));
 	}
 
 	public static class BodyFormBuff extends FlavourBuff {

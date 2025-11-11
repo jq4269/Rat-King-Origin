@@ -31,6 +31,7 @@ import com.zrp200.rkpd2.actors.buffs.Light;
 import com.zrp200.rkpd2.actors.buffs.Paralysis;
 import com.zrp200.rkpd2.actors.hero.Hero;
 import com.zrp200.rkpd2.actors.hero.HeroSubClass;
+import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.mobs.Mob;
 import com.zrp200.rkpd2.items.artifacts.HolyTome;
 import com.zrp200.rkpd2.messages.Messages;
@@ -55,7 +56,12 @@ public class Radiance extends ClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent.Aspect aspect() {
+        return Talent.Aspect.OFFENSE;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		return 2;
 	}

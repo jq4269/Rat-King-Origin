@@ -26,6 +26,7 @@ import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.hero.Hero;
 import com.zrp200.rkpd2.actors.hero.HeroClass;
 import com.zrp200.rkpd2.actors.hero.HeroSubClass;
+import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.effects.Enchanting;
 import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.armor.Armor;
@@ -54,7 +55,12 @@ public class HolyWard extends ClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent.Aspect aspect() {
+        return Talent.Aspect.DEFENSE;
+    }
+
+    @Override
 	public void onCast(HolyTome tome, Hero hero) {
 		PaladinSpellExtendable.virtualAffect(hero, HolyArmBuff.class,
 				SpellEmpower.isActive() ? HolyArmBuff.Empowered.class : HolyArmBuff.class);

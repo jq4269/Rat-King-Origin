@@ -66,17 +66,22 @@ public class HolyLance extends MultiTargetSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.HOLY_LANCE;
+    }
+
+    @Override
 	public String desc() {
-		int min = 15 + 15* hero.pointsInTalent(Talent.HOLY_LANCE);
-		int max = Math.round(27.5f + 27.5f* hero.pointsInTalent(Talent.HOLY_LANCE));
+		int min = 15 + 15* hero.pointsInTalent(talent());
+		int max = Math.round(27.5f + 27.5f* hero.pointsInTalent(talent()));
 		return Messages.get(this, "desc", min, max) + "\n\n" + checkEmpowerMsg("cooldown") + "\n\n" + chargeUseDesc();
 	}
 
 	@Override
 	public boolean isVisible(Hero hero) {
 		return super.canCast(hero)
-				&& hero.shiftedPoints(Talent.HOLY_LANCE) > (SpellEmpower.isActive() ? 0 : 1);
+				&& hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1);
 	}
 	@Override
 	public boolean canCast(Hero hero) {
@@ -133,8 +138,8 @@ public class HolyLance extends MultiTargetSpell {
 							new Callback() {
 								@Override
 								public void call() {
-									int min = 15 + 15* Dungeon.hero.pointsInTalent(Talent.HOLY_LANCE);
-									int max = Math.round(27.5f + 27.5f* Dungeon.hero.pointsInTalent(Talent.HOLY_LANCE));
+									int min = 15 + 15* Dungeon.hero.pointsInTalent(talent());
+									int max = Math.round(27.5f + 27.5f* Dungeon.hero.pointsInTalent(talent()));
 									if (Char.hasProp(enemy, Char.Property.UNDEAD) || Char.hasProp(enemy, Char.Property.DEMONIC)){
 										min = max;
 									}

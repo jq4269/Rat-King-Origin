@@ -55,9 +55,14 @@ public class BeamingRay extends TargetedClericSpell {
 		return HeroIcon.BEAMING_RAY;
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.BEAMING_RAY;
+    }
+
+    @Override
 	public String desc() {
-		return Messages.get(this, "desc", 4*Dungeon.hero.pointsInTalent(Talent.BEAMING_RAY), 30 + 5*Dungeon.hero.pointsInTalent(Talent.BEAMING_RAY)) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return Messages.get(this, "desc", 4*Dungeon.hero.pointsInTalent(talent()), 30 + 5*Dungeon.hero.pointsInTalent(talent())) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
 	@Override
@@ -68,7 +73,7 @@ public class BeamingRay extends TargetedClericSpell {
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero)
-				&& hero.hasTalent(Talent.BEAMING_RAY)
+				&& hero.hasTalent(talent())
 				&& (PowerOfMany.getPoweredAlly() != null || Stasis.getStasisAlly() != null);
 	}
 
@@ -113,7 +118,7 @@ public class BeamingRay extends TargetedClericSpell {
 			ally = Stasis.getStasisAlly();
 		}
 
-		int range = 4*hero.pointsInTalent(Talent.BEAMING_RAY);
+		int range = 4*hero.pointsInTalent(talent());
 		if (Char.hasProp(ally, Char.Property.IMMOVABLE)){
 			range /= 2;
 		}

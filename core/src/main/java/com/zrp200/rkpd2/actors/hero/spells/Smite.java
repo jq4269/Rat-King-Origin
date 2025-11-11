@@ -68,7 +68,12 @@ public class Smite extends TargetedClericSpell {
 		return HeroIcon.SMITE;
 	}
 
-	@Override
+    @Override
+    public Talent.Aspect aspect() {
+        return Talent.Aspect.OFFENSE;
+    }
+
+    @Override
 	public int targetingFlags() {
 		return Ballistica.STOP_TARGET; //no auto-aim
 	}

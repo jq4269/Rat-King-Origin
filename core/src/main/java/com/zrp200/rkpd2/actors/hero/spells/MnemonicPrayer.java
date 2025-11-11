@@ -82,7 +82,12 @@ public class MnemonicPrayer extends TargetedClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.MNEMONIC_PRAYER;
+    }
+
+    @Override
 	public int targetingFlags() {
 		return Ballistica.STOP_TARGET;
 	}
@@ -92,7 +97,7 @@ public class MnemonicPrayer extends TargetedClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.shiftedPoints(Talent.MNEMONIC_PRAYER) > (SpellEmpower.isActive() ? 0 : 1);
+		return super.canCast(hero) && hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1);
 	}
 
 	private static boolean multiCast = false;
@@ -266,7 +271,7 @@ public class MnemonicPrayer extends TargetedClericSpell {
 
 	private static int getExtension() {
 		// 2 / 4 / 6 / 8
-		return 2 * (1 + Dungeon.hero.pointsInTalent(Talent.MNEMONIC_PRAYER));
+		return 2 * (1 + Dungeon.hero.pointsInTalent(MnemonicPrayer.INSTANCE.talent()));
 	}
 
 	@Override

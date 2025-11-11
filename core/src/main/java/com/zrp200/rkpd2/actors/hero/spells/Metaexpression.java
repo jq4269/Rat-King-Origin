@@ -38,18 +38,23 @@ public class Metaexpression extends ClericSpell {
     }
 
     @Override
+    public Talent talent() {
+        return Talent.METAEXPRESSION;
+    }
+
+    @Override
     public float chargeUse(Hero hero) {
-        return 2 + hero.pointsInTalent(Talent.METAEXPRESSION);
+        return 2 + hero.pointsInTalent(talent());
     }
 
     @Override
     public boolean canCast(Hero hero) {
-        return super.canCast(hero) && hero.hasTalent(Talent.METAEXPRESSION);
+        return super.canCast(hero) && hero.hasTalent(talent());
     }
 
     @Override
     protected List<Object> getDescArgs() {
-        int talentLvl = Dungeon.hero.pointsInTalent(Talent.METAEXPRESSION);
+        int talentLvl = Dungeon.hero.pointsInTalent(talent());
         if (SpellEmpower.isActive())
             talentLvl += 2;
         return Arrays.asList(talentLvl, DURATION);
@@ -58,7 +63,7 @@ public class Metaexpression extends ClericSpell {
     @Override
     public void onCast(HolyTome tome, Hero hero) {
         Trinket coolTrinket = (Trinket) Generator.random(Generator.Category.TRINKET);
-        coolTrinket.level(hero.pointsInTalent(Talent.METAEXPRESSION));
+        coolTrinket.level(hero.pointsInTalent(talent()));
         if (SpellEmpower.isActive()) {
             coolTrinket.upgrade(2);
         }

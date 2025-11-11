@@ -60,15 +60,20 @@ public class Stasis extends ClericSpell {
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", 20 + 20*Dungeon.hero.pointsInTalent(Talent.STASIS)) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return Messages.get(this, "desc", 20 + 20*Dungeon.hero.pointsInTalent(talent())) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero)
-				&& hero.hasTalent(Talent.STASIS)
+				&& hero.hasTalent(talent())
 				&& (PowerOfMany.getPoweredAlly() != null || hero.buff(StasisBuff.class) != null);
 	}
+
+    @Override
+    public Talent talent() {
+        return Talent.STASIS;
+    }
 
 	@Override
 	public float chargeUse(Hero hero) {
@@ -106,7 +111,7 @@ public class Stasis extends ClericSpell {
 		}
 		ally.clearTime();
 
-		Buff.prolong(hero, StasisBuff.class, 20 + 20*hero.pointsInTalent(Talent.STASIS)).stasisAlly = (Mob)ally;
+		Buff.prolong(hero, StasisBuff.class, 20 + 20*hero.pointsInTalent(talent())).stasisAlly = (Mob)ally;
 		Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
 		if (hero.buff(LifeLink.class) != null && hero.buff(LifeLink.class).object == ally.id()){
@@ -146,7 +151,7 @@ public class Stasis extends ClericSpell {
 
 		@Override
 		public float iconFadePercent() {
-			int duration = 20 + 20*Dungeon.hero.pointsInTalent(Talent.STASIS);
+			int duration = 20 + 20*Dungeon.hero.pointsInTalent(Stasis.INSTANCE.talent());
 			return Math.max(0, (duration - visualcooldown()) / duration);
 		}
 

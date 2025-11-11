@@ -57,18 +57,23 @@ public class Cleanse extends ClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.CLEANSE;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		return 2;
 	}
 
 	private int getImmunity() {
-		int immunity = 1 + 2 * Dungeon.hero.pointsInTalent(Talent.CLEANSE);
+		int immunity = 1 + 2 * Dungeon.hero.pointsInTalent(talent());
 		return (SpellEmpower.isActive() ? 2 : 1) * immunity;
 	}
 
 	private int getShield() {
-		int shield = Math.max(10, 15 * Dungeon.hero.pointsInTalent(Talent.CLEANSE));
+		int shield = Math.max(10, 15 * Dungeon.hero.pointsInTalent(talent()));
 		return SpellEmpower.isActive() ? 2 * shield : shield;
 	}
 
@@ -81,7 +86,7 @@ public class Cleanse extends ClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && (SpellEmpower.isActive() || hero.hasTalent(Talent.CLEANSE));
+		return super.canCast(hero) && (SpellEmpower.isActive() || hero.hasTalent(talent()));
 	}
 
 	@Override

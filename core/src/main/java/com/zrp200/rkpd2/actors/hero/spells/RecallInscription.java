@@ -63,7 +63,12 @@ public class RecallInscription extends ClericSpell {
 		if (SpellEmpower.isActive()) { icon.tint(0, .33f); }
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.RECALL_INSCRIPTION;
+    }
+
+    @Override
 	protected List<Object> getDescArgs() {
 		return Collections.singletonList((int)UsedItemTracker.duration());
 	}
@@ -151,7 +156,7 @@ public class RecallInscription extends ClericSpell {
 	}
 
 	public static boolean canTrack(Hero hero) {
-		return hero.hasTalent(Talent.RECALL_INSCRIPTION) || SpellEmpower.isActive();
+		return hero.hasTalent(RecallInscription.INSTANCE.talent()) || SpellEmpower.isActive();
 	}
 
 	@Override
@@ -185,7 +190,7 @@ public class RecallInscription extends ClericSpell {
 		}
 
 		public static float duration() {
-			return Dungeon.hero.pointsInTalent(Talent.RECALL_INSCRIPTION) < 2 ? 10 : 300;
+			return Dungeon.hero.pointsInTalent(RecallInscription.INSTANCE.talent()) < 2 ? 10 : 300;
 		}
 
 		@Override

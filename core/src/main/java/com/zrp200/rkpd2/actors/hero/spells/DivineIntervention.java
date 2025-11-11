@@ -47,7 +47,12 @@ public class DivineIntervention extends ClericSpell {
 		return HeroIcon.DIVINE_INTERVENTION;
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.DIVINE_INTERVENTION;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		return 5;
 	}
@@ -55,7 +60,7 @@ public class DivineIntervention extends ClericSpell {
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero)
-				&& hero.hasTalent(Talent.DIVINE_INTERVENTION)
+				&& hero.hasTalent(talent())
 				&& hero.buff(AscendedForm.AscendBuff.class) != null
 				&& !hero.buff(AscendedForm.AscendBuff.class).divineInverventionCast;
 	}
@@ -68,7 +73,7 @@ public class DivineIntervention extends ClericSpell {
 
 		for (Char ch : Actor.chars()){
 			if (ch.alignment == Char.Alignment.ALLY && ch != hero){
-				Buff.affect(ch, DivineShield.class).setShield(100 + 50*hero.pointsInTalent(Talent.DIVINE_INTERVENTION));
+				Buff.affect(ch, DivineShield.class).setShield(100 + 50*hero.pointsInTalent(talent()));
 				new Flare(6, 32).color(0xFFFF00, true).show(ch.sprite, 2f);
 			}
 		}
@@ -82,18 +87,18 @@ public class DivineIntervention extends ClericSpell {
 		onSpellCast(tome, hero);
 
 		//we apply buffs here so that the 5 charge cost and shield boost do not stack
-		hero.buff(AscendedForm.AscendBuff.class).setShield(100 + 50*hero.pointsInTalent(Talent.DIVINE_INTERVENTION));
+		hero.buff(AscendedForm.AscendBuff.class).setShield(100 + 50*hero.pointsInTalent(talent()));
 		new Flare(6, 32).color(0xFFFF00, true).show(hero.sprite, 2f);
 
 		hero.buff(AscendedForm.AscendBuff.class).divineInverventionCast = true;
-		hero.buff(AscendedForm.AscendBuff.class).extend(hero.pointsInTalent(Talent.DIVINE_INTERVENTION));
+		hero.buff(AscendedForm.AscendBuff.class).extend(hero.pointsInTalent(talent()));
 
 	}
 
 	@Override
 	public String desc() {
-		int shield = 100 + 50*Dungeon.hero.pointsInTalent(Talent.DIVINE_INTERVENTION);
-		int leftBonus = Dungeon.hero.pointsInTalent(Talent.DIVINE_INTERVENTION);
+		int shield = 100 + 50*Dungeon.hero.pointsInTalent(talent());
+		int leftBonus = Dungeon.hero.pointsInTalent(talent());
 		return Messages.get(this, "desc", shield, leftBonus) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 

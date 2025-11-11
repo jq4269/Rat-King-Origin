@@ -80,14 +80,19 @@ public class SpiritForm extends ClericSpell {
 		return Messages.get(this, "desc", ringLevel(), artifactLevel()) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.SPIRIT_FORM;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		return 4;
 	}
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.hasTalent(Talent.SPIRIT_FORM);
+		return super.canCast(hero) && hero.hasTalent(talent());
 	}
 
 	@Override
@@ -98,11 +103,11 @@ public class SpiritForm extends ClericSpell {
 	}
 
 	public static int ringLevel(){
-		return Dungeon.hero.pointsInTalent(Talent.SPIRIT_FORM);
+		return Dungeon.hero.pointsInTalent(SpiritForm.INSTANCE.talent());
 	}
 
 	public static int artifactLevel(){
-		return 2 + 2*Dungeon.hero.pointsInTalent(Talent.SPIRIT_FORM);
+		return 2 + 2*Dungeon.hero.pointsInTalent(SpiritForm.INSTANCE.talent());
 	}
 
 	public static class SpiritFormBuff extends FlavourBuff{

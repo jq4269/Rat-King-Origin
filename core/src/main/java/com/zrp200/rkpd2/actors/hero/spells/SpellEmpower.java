@@ -58,6 +58,11 @@ public abstract class SpellEmpower extends ClericSpell {
     protected Talent talent;
 
     @Override
+    public Talent talent() {
+        return talent;
+    }
+
+    @Override
     public boolean isVisible(Hero hero) {
         return hero.hasTalent(talent);
     }

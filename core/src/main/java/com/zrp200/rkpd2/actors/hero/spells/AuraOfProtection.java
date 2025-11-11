@@ -49,14 +49,19 @@ public class AuraOfProtection extends ClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(1,0, 0, .5f);
 	}
 
-	public static float reduction() {
-		return .1f * Math.max(1, Dungeon.hero.pointsInTalent(Talent.AURA_OF_PROTECTION));
+    @Override
+    public Talent talent() {
+        return Talent.AURA_OF_PROTECTION;
+    }
+
+    public static float reduction() {
+		return .1f * Math.max(1, Dungeon.hero.pointsInTalent(AuraOfProtection.INSTANCE.talent()));
 	}
 
 	@Override
 	public String desc() {
 		int dmgReduction = Math.round(reduction() * 100);
-		int glyphPow = 25 + 25*Dungeon.hero.pointsInTalent(Talent.AURA_OF_PROTECTION);
+		int glyphPow = 25 + 25*Dungeon.hero.pointsInTalent(talent());
 		AuraBuff buff = SpellEmpower.isActive() ? new RetributionBuff() : new AuraBuff();;
 		return Messages.get(this, "desc", dmgReduction, glyphPow, (int)buff.getDuration(), (int)buff.getTurnsPerCharge()) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
@@ -68,7 +73,7 @@ public class AuraOfProtection extends ClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.shiftedPoints(Talent.AURA_OF_PROTECTION) > (SpellEmpower.isActive() ? 0 : 1);
+		return super.canCast(hero) && hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1);
 	}
 
 	@Override

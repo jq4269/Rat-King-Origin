@@ -52,8 +52,13 @@ public class RadiantGrappler extends TargetedClericSpell {
     }
 
     @Override
+    public Talent talent() {
+        return Talent.RADIANT_GRAPPLER;
+    }
+
+    @Override
     public boolean canCast(Hero hero) {
-        return super.canCast(hero) && (hero.hasTalent(Talent.RADIANT_GRAPPLER) || SpellEmpower.isActive());
+        return super.canCast(hero) && (hero.hasTalent(talent()) || SpellEmpower.isActive());
     }
 
     @Override
@@ -125,14 +130,14 @@ public class RadiantGrappler extends TargetedClericSpell {
         final Ballistica chain = new Ballistica(hero.pos, target, Ballistica.FRIENDLY_PROJECTILE);
 
         boolean success = false;
-        if (Actor.findChar( chain.collisionPos ) != null && Dungeon.hero.pointsInTalent(Talent.RADIANT_GRAPPLER) > 1){
+        if (Actor.findChar( chain.collisionPos ) != null && Dungeon.hero.pointsInTalent(talent()) > 1){
             success = chainEnemy( chain, hero, Actor.findChar( chain.collisionPos ));
         } else if (Dungeon.level.heaps.get( chain.collisionPos ) != null) {
             success = chainItem( chain, hero, Dungeon.level.heaps.get( chain.collisionPos ) );
         } else if (Dungeon.level.traps.get( chain.collisionPos ) != null) {
             success = chainTrap( chain, hero, Dungeon.level.traps.get( chain.collisionPos ) );
         }
-        else if (Dungeon.hero.pointsInTalent(Talent.RADIANT_GRAPPLER) > 1) {
+        else if (Dungeon.hero.pointsInTalent(talent()) > 1) {
             success = chainLocation( chain, hero );
         }
         if (success) {

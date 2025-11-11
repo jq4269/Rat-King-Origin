@@ -74,7 +74,12 @@ public class WallOfLight extends TargetedClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.WALL_OF_LIGHT;
+    }
+
+    @Override
 	public String desc() {
 		if (SpellEmpower.isActive()) {
 			toPlace = 1;
@@ -90,7 +95,7 @@ public class WallOfLight extends TargetedClericSpell {
 
 	@Override
 	protected List<Object> getDescArgs() {
-		return Collections.singletonList(1 + 2*Dungeon.hero.pointsInTalent(Talent.WALL_OF_LIGHT));
+		return Collections.singletonList(1 + 2*Dungeon.hero.pointsInTalent(talent()));
 	}
 
 	@Override
@@ -102,7 +107,7 @@ public class WallOfLight extends TargetedClericSpell {
 	public float chargeUse(Hero hero) {
 		if (toPlace > 0) {
 			// 1/3 / 1/5 / 1/7
-			return toPlace/(float)(1+2*hero.pointsInTalent(Talent.WALL_OF_LIGHT));
+			return toPlace/(float)(1+2*hero.pointsInTalent(talent()));
 		}
 		if (Dungeon.level.blobs.get(LightWall.class) != null
 			&& Dungeon.level.blobs.get(LightWall.class).volume > 0){
@@ -113,7 +118,7 @@ public class WallOfLight extends TargetedClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.shiftedPoints(Talent.WALL_OF_LIGHT) > (SpellEmpower.isActive() ? 0 : 1)
+		return super.canCast(hero) && hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1)
 				// allow for clean-up of existing walls
 				|| Dungeon.level.blobs.containsKey(LightWall.class)
 				&& Dungeon.level.blobs.get(LightWall.class).volume > 0;
@@ -350,7 +355,7 @@ public class WallOfLight extends TargetedClericSpell {
 		int rightDirX = 0;
 		int rightDirY = 0;
 
-		int steps = Dungeon.hero.pointsInTalent(Talent.WALL_OF_LIGHT);
+		int steps = Dungeon.hero.pointsInTalent(talent());
 
 		switch (closestIdx){
 			case 0: //top left

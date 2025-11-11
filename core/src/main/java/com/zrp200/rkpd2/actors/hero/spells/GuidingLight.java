@@ -62,7 +62,12 @@ public class GuidingLight extends MultiTargetSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent.Aspect aspect() {
+        return Talent.Aspect.OFFENSE;
+    }
+
+    @Override
 	protected void onTargetSelected(HolyTome tome, Hero hero, Integer target) {
 		if (target == null){
 			return;

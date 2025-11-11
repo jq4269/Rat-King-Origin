@@ -58,7 +58,12 @@ public class BlessSpell extends TargetedClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.BLESS;
+    }
+
+    @Override
 	public int targetingFlags(){
 		return -1; //auto-targeting behaviour is often wrong, so we don't use it
 	}
@@ -66,7 +71,7 @@ public class BlessSpell extends TargetedClericSpell {
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero) &&
-				(hero.hasTalent(Talent.BLESS) || SpellEmpower.isActive());
+				(hero.hasTalent(talent()) || SpellEmpower.isActive());
 	}
 
 	@Override
@@ -148,7 +153,7 @@ public class BlessSpell extends TargetedClericSpell {
 
 	private void affectChar(Hero hero, Char ch){
 		new Flare(6, 32).color(0xFFFF00, true).show(ch.sprite, 2f);
-		int points = hero.pointsInTalent(Talent.BLESS);
+		int points = hero.pointsInTalent(talent());
 		if (SpellEmpower.isActive() || ch.buff(Bless.class) != null) {
 			Buff.affect(ch, Adrenaline.class, getAdrenaline(points) + 0.5f);
 		}
@@ -162,7 +167,7 @@ public class BlessSpell extends TargetedClericSpell {
 
 	@Override
 	protected List<Object> getDescArgs() {
-		int talentLvl = hero.pointsInTalent(Talent.BLESS);
+		int talentLvl = hero.pointsInTalent(talent());
 		return Arrays.asList(getSelfBlessDuration(talentLvl), getHeal(talentLvl), getBlessDuration(talentLvl), getHeal(talentLvl), getAdrenaline(talentLvl));
 	}
 }

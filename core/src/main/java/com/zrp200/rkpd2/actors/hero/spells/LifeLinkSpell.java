@@ -47,15 +47,20 @@ public class LifeLinkSpell extends ClericSpell {
 		return HeroIcon.LIFE_LINK;
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.LIFE_LINK;
+    }
+
+    @Override
 	public String desc() {
-		return Messages.get(this, "desc", 4 + 2*Dungeon.hero.pointsInTalent(Talent.LIFE_LINK), 30 + 5*Dungeon.hero.pointsInTalent(Talent.LIFE_LINK)) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return Messages.get(this, "desc", 4 + 2*Dungeon.hero.pointsInTalent(talent()), 30 + 5*Dungeon.hero.pointsInTalent(talent())) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero)
-				&& hero.hasTalent(Talent.LIFE_LINK)
+				&& hero.hasTalent(talent())
 				&& (PowerOfMany.getPoweredAlly() != null || Stasis.getStasisAlly() != null);
 	}
 
@@ -67,7 +72,7 @@ public class LifeLinkSpell extends ClericSpell {
 	@Override
 	public void onCast(HolyTome tome, Hero hero) {
 
-		int duration = 4 + 2*hero.pointsInTalent(Talent.LIFE_LINK);
+		int duration = 4 + 2*hero.pointsInTalent(talent());
 
 		Char ally = PowerOfMany.getPoweredAlly();
 
@@ -116,7 +121,7 @@ public class LifeLinkSpell extends ClericSpell {
 
 		@Override
 		public float iconFadePercent() {
-			int duration = 4 + 2*Dungeon.hero.pointsInTalent(Talent.LIFE_LINK);
+			int duration = 4 + 2*Dungeon.hero.pointsInTalent(LifeLinkSpell.INSTANCE.talent());
 			return Math.max(0, (duration - visualcooldown()) / duration);
 		}
 	}

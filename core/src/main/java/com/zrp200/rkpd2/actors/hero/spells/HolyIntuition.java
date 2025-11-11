@@ -51,19 +51,24 @@ public class HolyIntuition extends InventoryClericSpell {
 		if (SpellEmpower.isActive()) icon.tint(0, .33f);
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.HOLY_INTUITION;
+    }
+
+    @Override
 	protected boolean usableOnItem(Item item) {
 		return !item.isIdentified() || ScrollOfRemoveCurse.uncursable(item);
 	}
 
 	@Override
 	public float chargeUse(Hero hero) {
-		return 4 - hero.pointsInTalent(Talent.HOLY_INTUITION);
+		return 4 - hero.pointsInTalent(talent());
 	}
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.hasTalent(Talent.HOLY_INTUITION);
+		return super.canCast(hero) && hero.hasTalent(talent());
 	}
 
 	@Override

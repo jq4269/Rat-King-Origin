@@ -33,6 +33,11 @@ public class MutareArtem extends ClericSpell {
     }
 
     @Override
+    public Talent.Aspect aspect() {
+        return Talent.Aspect.NEUTRAL;
+    }
+
+    @Override
     public float chargeUse(Hero hero) {
         return 5;
     }

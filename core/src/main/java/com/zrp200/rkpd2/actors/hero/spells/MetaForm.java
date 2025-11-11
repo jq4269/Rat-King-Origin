@@ -24,13 +24,18 @@ public class MetaForm extends ClericSpell {
     }
 
     @Override
+    public Talent talent() {
+        return Talent.META_FORM;
+    }
+
+    @Override
     public float chargeUse(Hero hero) {
         return 5;
     }
 
     @Override
     public boolean canCast(Hero hero) {
-        return super.canCast(hero) && hero.hasTalent(Talent.META_FORM);
+        return super.canCast(hero) && hero.hasTalent(talent());
     }
 
     @Override
@@ -40,7 +45,7 @@ public class MetaForm extends ClericSpell {
     }
 
     public static int duration(){
-        return Math.round(75 + 25f* Dungeon.hero.pointsInTalent(Talent.META_FORM));
+        return Math.round(75 + 25f* Dungeon.hero.pointsInTalent(MetaForm.INSTANCE.talent()));
     }
 
     public static class MetaFormBuff extends FlavourBuff {

@@ -45,6 +45,10 @@ public abstract class ClericSpell {
 
 	public abstract void onCast(HolyTome tome, Hero hero);
 
+    public Talent talent(){
+        return null;
+    }
+
 	public float chargeUse( Hero hero ){
 		return 1;
 	}
@@ -113,6 +117,13 @@ public abstract class ClericSpell {
 	}
 
 	public void tintIcon(HeroIcon icon) {/* do nothing */}
+
+    public Talent.Aspect aspect(){
+        if (talent() != null)
+            return talent().aspect;
+        else
+            return Talent.Aspect.NEUTRAL;
+    }
 
 	public void onSpellCast(HolyTome tome, Hero hero){
 		Invisibility.dispel();
@@ -244,41 +255,22 @@ public abstract class ClericSpell {
 
 		} else if (tier == 4){
 
-			if (cleric.hasTalent(Talent.DIVINE_INTERVENTION)){
-				spells.add(DivineIntervention.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.JUDGEMENT)){
-				spells.add(Judgement.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.FLASH)){
-				spells.add(Flash.INSTANCE);
-			}
-
-			if (cleric.hasTalent(Talent.BODY_FORM)){
-				spells.add(BodyForm.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.MIND_FORM)){
-				spells.add(MindForm.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.SPIRIT_FORM)){
-				spells.add(SpiritForm.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.META_FORM)){
-				spells.add(MetaForm.INSTANCE);
-			}
-
-			if (cleric.hasTalent(Talent.BEAMING_RAY)){
-				spells.add(BeamingRay.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.LIFE_LINK)){
-				spells.add(LifeLinkSpell.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.STASIS)){
-				spells.add(Stasis.INSTANCE);
-			}
-			if (cleric.hasTalent(Talent.ENRAGE)){
-				spells.add(EnrageSpell.INSTANCE);
-			}
+            for (ClericSpell spell : new ClericSpell[]{
+                    DivineIntervention.INSTANCE,
+                    Judgement.INSTANCE,
+                    Flash.INSTANCE,
+                    BodyForm.INSTANCE,
+                    MindForm.INSTANCE,
+                    SpiritForm.INSTANCE,
+                    MetaForm.INSTANCE,
+                    BeamingRay.INSTANCE,
+                    LifeLinkSpell.INSTANCE,
+                    Stasis.INSTANCE,
+                    EnrageSpell.INSTANCE
+            }){
+                if (cleric.hasTalent(spell.talent()))
+                    spells.add(spell);
+            }
 
 		}
 

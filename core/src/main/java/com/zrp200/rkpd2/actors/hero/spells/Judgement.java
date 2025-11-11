@@ -48,7 +48,12 @@ public class Judgement extends ClericSpell {
 		return HeroIcon.JUDGEMENT;
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.JUDGEMENT;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		return 3;
 	}
@@ -56,7 +61,7 @@ public class Judgement extends ClericSpell {
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero)
-				&& hero.hasTalent(Talent.JUDGEMENT)
+				&& hero.hasTalent(talent())
 				&& hero.buff(AscendedForm.AscendBuff.class) != null;
 	}
 
@@ -69,7 +74,7 @@ public class Judgement extends ClericSpell {
 				GameScene.flash( 0x80FFFFFF );
 				Sample.INSTANCE.play(Assets.Sounds.BLAST);
 
-				int damageBase = 5 + 5*hero.pointsInTalent(Talent.JUDGEMENT);
+				int damageBase = 5 + 5*hero.pointsInTalent(talent());
 				damageBase += 5*hero.buff(AscendedForm.AscendBuff.class).spellCasts;
 
 				boolean empowered = SpellEmpower.isActive();
@@ -107,7 +112,7 @@ public class Judgement extends ClericSpell {
 
 	@Override
 	public String desc() {
-		int baseDmg = 5 + 5*Dungeon.hero.pointsInTalent(Talent.JUDGEMENT);
+		int baseDmg = 5 + 5*Dungeon.hero.pointsInTalent(talent());
 		int totalBaseDmg = baseDmg;
 		if (Dungeon.hero.buff(AscendedForm.AscendBuff.class) != null) {
 			totalBaseDmg += 5 * Dungeon.hero.buff(AscendedForm.AscendBuff.class).spellCasts;

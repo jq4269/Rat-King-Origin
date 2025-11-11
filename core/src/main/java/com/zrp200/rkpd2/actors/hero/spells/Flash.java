@@ -40,7 +40,12 @@ public class Flash extends TargetedClericSpell {
 		return HeroIcon.FLASH;
 	}
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.FLASH;
+    }
+
+    @Override
 	public float chargeUse(Hero hero) {
 		if (hero.buff(AscendedForm.AscendBuff.class) != null){
 			return 1 + hero.buff(AscendedForm.AscendBuff.class).flashCasts;
@@ -52,7 +57,7 @@ public class Flash extends TargetedClericSpell {
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero)
-				&& hero.hasTalent(Talent.FLASH)
+				&& hero.hasTalent(talent())
 				&& hero.buff(AscendedForm.AscendBuff.class) != null;
 	}
 
@@ -69,7 +74,7 @@ public class Flash extends TargetedClericSpell {
 		}
 
 		if (Dungeon.level.solid[target] || (!Dungeon.level.mapped[target] && !Dungeon.level.visited[target])
-				|| Dungeon.level.distance(hero.pos, target) > 2+hero.pointsInTalent(Talent.FLASH)){
+				|| Dungeon.level.distance(hero.pos, target) > 2+hero.pointsInTalent(talent())){
 			GLog.w(Messages.get(this, "invalid_target"));
 			return;
 		}

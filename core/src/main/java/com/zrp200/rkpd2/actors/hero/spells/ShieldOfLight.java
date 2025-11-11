@@ -60,14 +60,19 @@ public class ShieldOfLight extends TargetedClericSpell {
 	@Override
 	public void tintIcon(HeroIcon icon) { if (SpellEmpower.isActive()) icon.tint(0, .33f); }
 
-	@Override
+    @Override
+    public Talent talent() {
+        return Talent.SHIELD_OF_LIGHT;
+    }
+
+    @Override
 	public int targetingFlags() {
 		return Ballistica.STOP_TARGET;
 	}
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && (SpellEmpower.isActive() || hero.canHaveTalent(Talent.SHIELD_OF_LIGHT));
+		return super.canCast(hero) && (SpellEmpower.isActive() || hero.canHaveTalent(talent()));
 	}
 
 	@Override
@@ -118,7 +123,7 @@ public class ShieldOfLight extends TargetedClericSpell {
 		HolyFlames.proc(ch);
 	}
 
-	public static int min() { return 2 + Dungeon.hero.pointsInTalent(Talent.SHIELD_OF_LIGHT); }
+	public static int min() { return 2 + Dungeon.hero.pointsInTalent(ShieldOfLight.INSTANCE.talent()); }
 	public static int max() { return 2 * min(); }
 
 	@Override
@@ -188,7 +193,7 @@ public class ShieldOfLight extends TargetedClericSpell {
 
 		public float getMaxDurability() {
 			// 2 / 5 / 8 hits
-			return 2 + 3 * Dungeon.hero.pointsInTalent(Talent.SHIELD_OF_LIGHT);
+			return 2 + 3 * Dungeon.hero.pointsInTalent(ShieldOfLight.INSTANCE.talent());
 		}
 		public int getDurability() { return (int)Math.ceil(visualcooldown() / getDurabilityPerHit()); }
 		private float getDurabilityPerHit() { return getDuration() / getMaxDurability(); }
