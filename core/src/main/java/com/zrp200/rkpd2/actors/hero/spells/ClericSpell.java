@@ -223,6 +223,12 @@ public abstract class ClericSpell {
 					HolyIntuition.INSTANCE, ShieldOfLight.INSTANCE, Metaexpression.INSTANCE
 			}) if (spell.isVisible(cleric)) spells.add(spell);
 
+            PetitioMagica.SpellHolder spellHolder;
+
+            if ((spellHolder = cleric.buff(PetitioMagica.SpellHolder.class)) != null){
+                spells.add(spellHolder.spell);
+            }
+
 		} else if (tier == 2) {
 
 			for (ClericSpell spell : new ClericSpell[]{
@@ -249,7 +255,8 @@ public abstract class ClericSpell {
 				WallOfLight.INSTANCE,
 				SpellEmpower.LimitBreak.INSTANCE,
                 ArsRetractandi.INSTANCE,
-                MessisPotentiae.INSTANCE
+                MessisPotentiae.INSTANCE,
+                PetitioMagica.INSTANCE,
 			}){
 				if (spell.isVisible(cleric)) spells.add(spell);
 			}

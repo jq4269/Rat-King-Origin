@@ -69,7 +69,7 @@ public class Radiance extends ClericSpell {
 	@Override
 	public boolean canCast(Hero hero) {
 		return super.canCast(hero) &&
-				(hero.subClass.is(HeroSubClass.PRIEST) || Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.CLERIC));
+				(hero.subClass.is(HeroSubClass.PRIEST) || Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.CLERIC) || PetitioMagica.containsSpell(hero, this));
 	}
 
 	@Override

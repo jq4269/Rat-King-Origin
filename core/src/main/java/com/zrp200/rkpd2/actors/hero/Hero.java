@@ -96,6 +96,7 @@ import com.zrp200.rkpd2.actors.hero.spells.HallowedGround;
 import com.zrp200.rkpd2.actors.hero.spells.HolyWard;
 import com.zrp200.rkpd2.actors.hero.spells.HolyWeapon;
 import com.zrp200.rkpd2.actors.hero.spells.MetaForm;
+import com.zrp200.rkpd2.actors.hero.spells.PetitioMagica;
 import com.zrp200.rkpd2.actors.hero.spells.ShieldOfLight;
 import com.zrp200.rkpd2.actors.hero.spells.Smite;
 import com.zrp200.rkpd2.actors.mobs.AbyssalSpawner;
@@ -584,6 +585,12 @@ public class Hero extends Char {
 				return true;
 			}
 		}
+        if (buff(PetitioMagica.SpellHolder.class) != null){
+            Talent spellTalent = buff(PetitioMagica.SpellHolder.class).spell.talent();
+            if (spellTalent == talent){
+                return true;
+            }
+        }
 		if (Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.ALL_TALENTS))
 			return true;
 		for(LinkedHashMap<Talent,Integer> tier : talents) if(tier.containsKey(talent)) return true;
@@ -614,6 +621,12 @@ public class Hero extends Char {
 				return metaTalent.maxPoints;
 			}
 		}
+        if (buff(PetitioMagica.SpellHolder.class) != null){
+            Talent spellTalent = buff(PetitioMagica.SpellHolder.class).spell.talent();
+            if (spellTalent == talent){
+                return spellTalent.maxPoints;
+            }
+        }
 		if (Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.ALL_TALENTS))
 			return talent.maxPoints();
 		for (LinkedHashMap<Talent, Integer> tier : talents){

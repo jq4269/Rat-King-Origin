@@ -45,7 +45,7 @@ public class MutareArtem extends ClericSpell {
     @Override
     public boolean canCast(Hero hero) {
         return super.canCast(hero) &&
-                (hero.subClass.is(HeroSubClass.CENOBITE) || Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.CLERIC));
+                (hero.subClass.is(HeroSubClass.CENOBITE) || Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.CLERIC) || PetitioMagica.containsSpell(hero, this));
     }
 
     @Override
