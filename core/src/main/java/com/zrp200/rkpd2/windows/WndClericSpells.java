@@ -189,7 +189,7 @@ public class WndClericSpells extends Window {
 			}
             if (aspectIcon != null){
                 aspectIcon.x = x + width - aspectIcon.width;
-                aspectIcon.y = 0;
+                aspectIcon.y = y;
             }
 		}
 
