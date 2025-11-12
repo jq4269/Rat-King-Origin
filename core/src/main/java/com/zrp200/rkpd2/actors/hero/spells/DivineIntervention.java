@@ -87,18 +87,18 @@ public class DivineIntervention extends ClericSpell {
 		onSpellCast(tome, hero);
 
 		//we apply buffs here so that the 5 charge cost and shield boost do not stack
-		hero.buff(AscendedForm.AscendBuff.class).setShield(100 + 50*hero.pointsInTalent(talent()));
+		hero.buff(AscendedForm.AscendBuff.class).setShield(100 + 50*scalingPoints());
 		new Flare(6, 32).color(0xFFFF00, true).show(hero.sprite, 2f);
 
 		hero.buff(AscendedForm.AscendBuff.class).divineInverventionCast = true;
-		hero.buff(AscendedForm.AscendBuff.class).extend(hero.pointsInTalent(talent()));
+		hero.buff(AscendedForm.AscendBuff.class).extend(scalingPoints());
 
 	}
 
 	@Override
 	public String desc() {
-		int shield = 100 + 50*Dungeon.hero.pointsInTalent(talent());
-		int leftBonus = Dungeon.hero.pointsInTalent(talent());
+		int shield = 100 + 50*scalingPoints();
+		int leftBonus = scalingPoints();
 		return Messages.get(this, "desc", shield, leftBonus) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 

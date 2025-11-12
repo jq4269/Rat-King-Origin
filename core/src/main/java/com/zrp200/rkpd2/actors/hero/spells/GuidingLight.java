@@ -98,7 +98,7 @@ public class GuidingLight extends MultiTargetSpell {
 
 				Char ch = Actor.findChar( aim.collisionPos );
 				if (ch != null) {
-					ch.damage(Random.NormalIntRange(2, 6), GuidingLight.this);
+					ch.damage(Random.NormalIntRange(2 + scalingPoints(), 6 + scalingPoints()*2), GuidingLight.this);
 					Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f));
 					ch.sprite.burst(0xFFFFFF44, 3);
 					if (ch.isAlive()){

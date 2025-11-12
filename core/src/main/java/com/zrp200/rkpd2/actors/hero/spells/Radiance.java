@@ -79,7 +79,7 @@ public class Radiance extends ClericSpell {
 		Sample.INSTANCE.play(Assets.Sounds.BLAST);
 
 		if (Dungeon.level.viewDistance < 6 ){
-			Buff.prolong(hero, Light.class, Dungeon.isChallenged(Challenges.DARKNESS) ? 20 : 100);
+			Buff.prolong(hero, Light.class, (Dungeon.isChallenged(Challenges.DARKNESS) ? 20 : 100)*(1 + 0.25f*scalingPoints()));
 		}
 
 		if (SpellEmpower.isActive()) {
@@ -95,7 +95,7 @@ public class Radiance extends ClericSpell {
 				}
 				Buff.affect(mob, GuidingLight.Illuminated.class);
 				Buff.affect(mob, GuidingLight.WasIlluminatedTracker.class);
-				Buff.affect(mob, Paralysis.class, 3f);
+				Buff.affect(mob, Paralysis.class, 3f*(1f + 0.25f*scalingPoints()));
 				HolyFlames.proc(mob);
 			}
 		}

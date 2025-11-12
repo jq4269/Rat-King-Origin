@@ -109,7 +109,7 @@ public abstract class SpellEmpower extends ClericSpell {
 
         protected void applyBuff(Hero hero) {
             // 4 / 6 / 8
-            Buff.append(hero, Recharging.class, 2 * (1 + hero.pointsInTalent(talent)));
+            Buff.append(hero, Recharging.class, 2 * (1 + scalingPoints()));
             Buff.affect(hero, Buff.class);
         }
 
@@ -118,7 +118,7 @@ public abstract class SpellEmpower extends ClericSpell {
 
         @Override
         public float chargeUse(Hero hero) {
-            return 8 - hero.pointsInTalent(talent);
+            return Math.max(1, 8 - scalingPoints());
         }
 
         public static class Buff extends SpellEmpower.Buff {
@@ -142,7 +142,7 @@ public abstract class SpellEmpower extends ClericSpell {
         public static class Cooldown extends SpellCooldown {
             @Override
             public int icon() { return BuffIndicator.DIVINE_ADVENT; }
-            public float duration() { return 100; }
+            public float duration() { return 100 - 10*DivineAdvent.INSTANCE.scalingPoints(); }
         }
     }
 
@@ -184,7 +184,7 @@ public abstract class SpellEmpower extends ClericSpell {
         @Override
         protected List<Object> getDescArgs() {
             List<Object> args = new ArrayList(super.getDescArgs());
-            args.add(hero.isNearDeath() ? 300 : 150);
+            args.add((hero.isNearDeath() ? 300 : 150)-20*scalingPoints());
             return args;
         }
 
@@ -221,7 +221,7 @@ public abstract class SpellEmpower extends ClericSpell {
                 return target.buff(Buff.class) != null ? BuffIndicator.NONE : BuffIndicator.LIMIT_BREAK;
             }
             public float duration() {
-                return 300;
+                return 300 - 20*LimitBreak.INSTANCE.scalingPoints();
             }
         }
     }

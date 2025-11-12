@@ -470,11 +470,11 @@ public class WallOfLight extends TargetedClericSpell {
 
 	private void placeWall( int pos, int knockbackDIR){
 		if (!Dungeon.level.solid[pos]) {
-			GameScene.add(Blob.seed(pos, 20, LightWall.class));
+			GameScene.add(Blob.seed(pos, 20 + 4*scalingPoints(), LightWall.class));
 
 			Char ch = Actor.findChar(pos);
 			if (ch != null && ch.alignment == Char.Alignment.ENEMY){
-				WandOfBlastWave.throwChar(ch, new Ballistica(pos, pos+knockbackDIR, Ballistica.PROJECTILE), 1, false, false, WallOfLight.INSTANCE);
+				WandOfBlastWave.throwChar(ch, new Ballistica(pos, pos+knockbackDIR, Ballistica.PROJECTILE), 1 + scalingPoints()/2, false, false, WallOfLight.INSTANCE);
 				Buff.affect(ch, Paralysis.class, ch.cooldown());
 			}
 		}

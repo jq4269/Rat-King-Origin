@@ -80,7 +80,7 @@ public class EnrageSpell extends ClericSpell {
 
     public static class EnrageBuff extends FlavourBuff {
         public static int duration(){
-            return Dungeon.hero.pointsInTalent(EnrageSpell.INSTANCE.talent())*4;
+            return EnrageSpell.INSTANCE.scalingPoints()*4;
         }
 
         {

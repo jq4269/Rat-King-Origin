@@ -90,8 +90,8 @@ public class Smite extends TargetedClericSpell {
 
 	@Override
 	public String desc() {
-		int min = 5 + Dungeon.hero.lvl/2;
-		int max = 10 + Dungeon.hero.lvl;
+		int min = 5 + Dungeon.hero.lvl/2 + 2*scalingPoints();
+		int max = 10 + Dungeon.hero.lvl + 4*scalingPoints();
 		String desc = Messages.get(this, "desc", min, max)
 				+ "\n\n"
 				+ chargeUseDesc();
@@ -171,8 +171,8 @@ public class Smite extends TargetedClericSpell {
 
 	public static class SmiteTracker extends FlavourBuff {
 		public int bonusDmg( Hero attacker, Char defender){
-			int min = 5 + attacker.lvl/2;
-			int max = 10 + attacker.lvl;
+			int min = 5 + attacker.lvl/2 + Smite.INSTANCE.scalingPoints()*2;
+			int max = 10 + attacker.lvl + Smite.INSTANCE.scalingPoints()*4;
 			if (Char.hasProp(defender, Char.Property.UNDEAD) || Char.hasProp(defender, Char.Property.DEMONIC)){
 				return max;
 			} else {
@@ -180,7 +180,7 @@ public class Smite extends TargetedClericSpell {
 			}
 		}
 		public float enchMulti() {
-			return 3f;
+			return 3f + 0.5f*Smite.INSTANCE.scalingPoints();
 		}
 	};
 

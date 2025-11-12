@@ -54,7 +54,7 @@ public class LifeLinkSpell extends ClericSpell {
 
     @Override
 	public String desc() {
-		return Messages.get(this, "desc", 4 + 2*Dungeon.hero.pointsInTalent(talent()), 30 + 5*Dungeon.hero.pointsInTalent(talent())) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return Messages.get(this, "desc", 4 + 2*scalingPoints(), 30 + 5*scalingPoints()) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class LifeLinkSpell extends ClericSpell {
 	@Override
 	public void onCast(HolyTome tome, Hero hero) {
 
-		int duration = 4 + 2*hero.pointsInTalent(talent());
+		int duration = 4 + 2*scalingPoints();
 
 		Char ally = PowerOfMany.getPoweredAlly();
 
@@ -121,7 +121,7 @@ public class LifeLinkSpell extends ClericSpell {
 
 		@Override
 		public float iconFadePercent() {
-			int duration = 4 + 2*Dungeon.hero.pointsInTalent(LifeLinkSpell.INSTANCE.talent());
+			int duration = 4 + 2*LifeLinkSpell.INSTANCE.scalingPoints();
 			return Math.max(0, (duration - visualcooldown()) / duration);
 		}
 	}

@@ -49,8 +49,6 @@ import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-import static com.zrp200.rkpd2.Dungeon.hero;
-
 public class HolyLance extends MultiTargetSpell {
 
 	public static final HolyLance INSTANCE = new HolyLance();
@@ -73,8 +71,8 @@ public class HolyLance extends MultiTargetSpell {
 
     @Override
 	public String desc() {
-		int min = 15 + 15* hero.pointsInTalent(talent());
-		int max = Math.round(27.5f + 27.5f* hero.pointsInTalent(talent()));
+		int min = 15 + 15*scalingPoints();
+		int max = Math.round(27.5f + 27.5f*scalingPoints());
 		return Messages.get(this, "desc", min, max) + "\n\n" + checkEmpowerMsg("cooldown") + "\n\n" + chargeUseDesc();
 	}
 
@@ -138,8 +136,8 @@ public class HolyLance extends MultiTargetSpell {
 							new Callback() {
 								@Override
 								public void call() {
-									int min = 15 + 15* Dungeon.hero.pointsInTalent(talent());
-									int max = Math.round(27.5f + 27.5f* Dungeon.hero.pointsInTalent(talent()));
+									int min = 15 + 15*scalingPoints();
+									int max = Math.round(27.5f + 27.5f*scalingPoints());
 									if (Char.hasProp(enemy, Char.Property.UNDEAD) || Char.hasProp(enemy, Char.Property.DEMONIC)){
 										min = max;
 									}

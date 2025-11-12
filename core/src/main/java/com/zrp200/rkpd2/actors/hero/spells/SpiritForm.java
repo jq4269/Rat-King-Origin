@@ -103,11 +103,11 @@ public class SpiritForm extends ClericSpell {
 	}
 
 	public static int ringLevel(){
-		return Dungeon.hero.pointsInTalent(SpiritForm.INSTANCE.talent());
+		return SpiritForm.INSTANCE.scalingPoints();
 	}
 
 	public static int artifactLevel(){
-		return 2 + 2*Dungeon.hero.pointsInTalent(SpiritForm.INSTANCE.talent());
+		return 2 + 2*SpiritForm.INSTANCE.scalingPoints();
 	}
 
 	public static class SpiritFormBuff extends FlavourBuff{

@@ -74,7 +74,7 @@ public class BodyForm extends ClericSpell {
 	}
 
 	public static int duration(){
-		return Math.round(13.33f + 6.67f* Dungeon.hero.pointsInTalent(BodyForm.INSTANCE.talent()));
+		return Math.round(13.33f + 6.67f*BodyForm.INSTANCE.scalingPoints());
 	}
 
 	public static class BodyFormBuff extends FlavourBuff {

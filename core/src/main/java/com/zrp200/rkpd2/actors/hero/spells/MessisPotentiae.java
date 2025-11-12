@@ -1,7 +1,6 @@
 package com.zrp200.rkpd2.actors.hero.spells;
 
 import com.zrp200.rkpd2.Assets;
-import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.FlavourBuff;
 import com.zrp200.rkpd2.actors.hero.Hero;
@@ -30,17 +29,22 @@ public class MessisPotentiae extends ClericSpell {
     }
 
     @Override
+    public Talent talent() {
+        return Talent.MESSIS_POTENTIAE;
+    }
+
+    @Override
     public float chargeUse(Hero hero) {
         return 2f;
     }
 
     @Override
     public boolean canCast(Hero hero) {
-        return super.canCast(hero) && hero.shiftedPoints(Talent.MESSIS_POTENTIAE) > (SpellEmpower.isActive() ? 0 : 1);
+        return super.canCast(hero) && hero.shiftedPoints(talent()) > (SpellEmpower.isActive() ? 0 : 1);
     }
 
     public static int duration(){
-        int base = 10 * (1 + Dungeon.hero.pointsInTalent(Talent.MESSIS_POTENTIAE));
+        int base = 10 * (1 + MessisPotentiae.INSTANCE.scalingPoints());
         if (SpellEmpower.isActive()){
             base *= 2;
         }
@@ -50,6 +54,11 @@ public class MessisPotentiae extends ClericSpell {
     @Override
     protected List<Object> getDescArgs() {
         return Arrays.asList(duration(), 0.5f);
+    }
+
+    @Override
+    public int aspectRequirement() {
+        return 1;
     }
 
     @Override

@@ -69,7 +69,7 @@ public class LayOnHands extends TargetedClericSpell {
 
 	@Override
 	protected List<Object> getDescArgs() {
-		int points = 1 + Dungeon.hero.pointsInTalent(talent());
+		int points = 1 + scalingPoints();
 		int totalHeal = 5 * points;
 		return Arrays.asList(
 				/* standard heal */ totalHeal,
@@ -165,7 +165,7 @@ public class LayOnHands extends TargetedClericSpell {
 	}
 
 	private void affectChar(Hero hero, Char ch, boolean originalTarget) {
-		int totalHeal = 5 + 5*hero.pointsInTalent(talent());
+		int totalHeal = 5 + 5*scalingPoints();
 		if (SpellEmpower.isActive() && originalTarget) {
 			totalHeal *= 2;
 		}
@@ -176,7 +176,7 @@ public class LayOnHands extends TargetedClericSpell {
 	}
 
 	private static int getAdrenalineDuration(boolean direct) {
-		float duration = Dungeon.hero.pointsInTalent(LayOnHands.INSTANCE.talent());
+		float duration = LayOnHands.INSTANCE.scalingPoints();
 		if (SpellEmpower.isActive()) {
 			duration++; // 1 / 2 / 3 / 4
 			if (direct) duration = duration * 2; // 2 / 4 / 6 / 8

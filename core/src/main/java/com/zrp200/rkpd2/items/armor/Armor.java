@@ -796,7 +796,7 @@ public class Armor extends EquipableItem {
 			if(berserk != null) multi *= berserk.enchantFactor(multi, true);
 
 			if (AuraOfProtection.isActiveFor(defender)){
-				multi += 0.25f + 0.25f*Dungeon.hero.pointsInTalent(Talent.AURA_OF_PROTECTION);
+				multi += 0.25f + 0.25f*AuraOfProtection.INSTANCE.scalingPoints();
 			}
 			if (defender instanceof Hero && ((Hero) defender).pointsInTalent(Talent.HEROIC_ENDURANCE) >= 4){
 				multi *= 1.25f;

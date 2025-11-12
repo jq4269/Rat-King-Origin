@@ -25,6 +25,7 @@ import com.zrp200.rkpd2.Chrome;
 import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.SPDSettings;
 import com.zrp200.rkpd2.actors.hero.Hero;
+import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.spells.ClericSpell;
 import com.zrp200.rkpd2.items.artifacts.HolyTome;
@@ -145,6 +146,7 @@ public class WndClericSpells extends Window {
 		ClericSpell spell;
 		HolyTome tome;
 		boolean info;
+        Image aspectIcon;
 
 		NinePatch bg;
 
@@ -161,6 +163,11 @@ public class WndClericSpells extends Window {
 
 			bg = Chrome.get(Chrome.Type.TOAST);
 			addToBack(bg);
+
+            if (DeviceCompat.isDebug() || (Dungeon.hero != null && Dungeon.hero.isSubclassedLoosely(HeroSubClass.CENOBITE))){
+                aspectIcon = spell.aspect().image();
+                add(aspectIcon);
+            }
 		}
 
 		@Override
@@ -180,6 +187,10 @@ public class WndClericSpells extends Window {
 				bg.x = x;
 				bg.y = y;
 			}
+            if (aspectIcon != null){
+                aspectIcon.x = x + width - aspectIcon.width;
+                aspectIcon.y = 0;
+            }
 		}
 
 		@Override

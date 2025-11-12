@@ -271,7 +271,7 @@ public class MnemonicPrayer extends TargetedClericSpell {
 
 	private static int getExtension() {
 		// 2 / 4 / 6 / 8
-		return 2 * (1 + Dungeon.hero.pointsInTalent(MnemonicPrayer.INSTANCE.talent()));
+		return 2 * (1 + MnemonicPrayer.INSTANCE.scalingPoints());
 	}
 
 	@Override

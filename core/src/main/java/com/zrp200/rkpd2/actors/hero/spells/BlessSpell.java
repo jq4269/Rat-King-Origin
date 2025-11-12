@@ -40,7 +40,6 @@ import com.watabou.noosa.audio.Sample;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.zrp200.rkpd2.Dungeon.hero;
 import static com.zrp200.rkpd2.Dungeon.level;
 
 public class BlessSpell extends TargetedClericSpell {
@@ -153,7 +152,7 @@ public class BlessSpell extends TargetedClericSpell {
 
 	private void affectChar(Hero hero, Char ch){
 		new Flare(6, 32).color(0xFFFF00, true).show(ch.sprite, 2f);
-		int points = hero.pointsInTalent(talent());
+		int points = scalingPoints();
 		if (SpellEmpower.isActive() || ch.buff(Bless.class) != null) {
 			Buff.affect(ch, Adrenaline.class, getAdrenaline(points) + 0.5f);
 		}
@@ -167,7 +166,7 @@ public class BlessSpell extends TargetedClericSpell {
 
 	@Override
 	protected List<Object> getDescArgs() {
-		int talentLvl = hero.pointsInTalent(talent());
+		int talentLvl = scalingPoints();
 		return Arrays.asList(getSelfBlessDuration(talentLvl), getHeal(talentLvl), getBlessDuration(talentLvl), getHeal(talentLvl), getAdrenaline(talentLvl));
 	}
 }

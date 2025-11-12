@@ -22,7 +22,6 @@
 package com.zrp200.rkpd2.actors.hero.spells;
 
 import com.zrp200.rkpd2.Assets;
-import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Actor;
 import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.buffs.Blindness;
@@ -66,7 +65,7 @@ public class Sunray extends MultiTargetSpell {
 
     @Override
 	public String desc() {
-		int points = Dungeon.hero.pointsInTalent(talent());
+		int points = scalingPoints();
 		int min = 3 * (1 + points);
 		int max = 5 * (1 + points);
 		int dur = 3 * (1 + points);
@@ -119,7 +118,7 @@ public class Sunray extends MultiTargetSpell {
 		if (ch != null) {
 			ch.sprite.burst(0xFFFFFF44, 5);
 
-			int points = hero.pointsInTalent(talent());
+			int points = scalingPoints();
 			int min = 3 * (1 + points);
 			int max = 5 * (1 + points);
 			int dur = 3 * (1 + points);

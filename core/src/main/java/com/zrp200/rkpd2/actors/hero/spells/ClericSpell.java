@@ -39,6 +39,7 @@ import com.watabou.utils.GameMath;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public abstract class ClericSpell {
@@ -123,6 +124,34 @@ public abstract class ClericSpell {
             return talent().aspect;
         else
             return Talent.Aspect.NEUTRAL;
+    }
+
+    public int scalingPoints(){
+        Hero cleric = Dungeon.hero;
+        int points = 0;
+        if (talent() != null)
+            points = cleric.pointsInTalent(talent());
+        if (cleric.isSubclassedLoosely(HeroSubClass.CENOBITE)){
+            Talent.Aspect aspect = aspect();
+            float aspectPoints = 0;
+            for (LinkedHashMap<Talent, Integer> talentTier : cleric.talents){
+                for (Talent talent: talentTier.keySet()){
+                    if (talent.aspect == aspect && talent != talent()){
+                        aspectPoints += 1;
+                    }
+                    if (talent.aspect == Talent.Aspect.NEUTRAL && aspect != Talent.Aspect.NEUTRAL){
+                        aspectPoints += 1/2f;
+                    }
+                }
+            }
+            points = (int) Math.max(0, aspectPoints - aspectRequirement());
+        }
+        return points;
+    }
+
+    //some spells require more to be scaled up (like cenobite ones)
+    public int aspectRequirement(){
+        return 0;
     }
 
 	public void onSpellCast(HolyTome tome, Hero hero){

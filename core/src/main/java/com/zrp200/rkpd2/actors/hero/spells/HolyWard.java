@@ -87,8 +87,8 @@ public class HolyWard extends ClericSpell {
 
 	public static class HolyArmBuff extends PaladinSpellExtendable {
 
-		public float getDuration() { return 60; }
-		public float getTurnsPerCharge() { return 10; }
+		public float getDuration() { return 60 + HolyWard.INSTANCE.scalingPoints()*10; }
+		public float getTurnsPerCharge() { return 10 + HolyWard.INSTANCE.scalingPoints()*2; }
 
 		public ClericSpell getSourceSpell() { return INSTANCE; }
 
@@ -142,11 +142,11 @@ public class HolyWard extends ClericSpell {
 
 	public static float effectiveness(boolean empowered) {
 		// since it interacts with more stuff, the descriptions aren't updated to show the actual value
-		return hero.subClass.is(HeroSubClass.PALADIN) ?
+		return (hero.subClass.is(HeroSubClass.PALADIN) ?
 				empowered ? 4.5f : 3 :
 				empowered ? 3 :
 				hero.heroClass.isExact(HeroClass.CLERIC) ? 1.5f :
-						1;
+						1)*(1 + 0.25f*HolyWard.INSTANCE.scalingPoints());
 	}
 
 }

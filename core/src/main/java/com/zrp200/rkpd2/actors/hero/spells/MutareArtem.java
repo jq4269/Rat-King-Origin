@@ -39,7 +39,12 @@ public class MutareArtem extends ClericSpell {
 
     @Override
     public float chargeUse(Hero hero) {
-        return 5;
+        return Math.max(1, 5 - scalingPoints());
+    }
+
+    @Override
+    public int aspectRequirement() {
+        return 3;
     }
 
     @Override

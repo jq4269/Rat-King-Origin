@@ -62,7 +62,7 @@ public class BeamingRay extends TargetedClericSpell {
 
     @Override
 	public String desc() {
-		return Messages.get(this, "desc", 4*Dungeon.hero.pointsInTalent(talent()), 30 + 5*Dungeon.hero.pointsInTalent(talent())) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return Messages.get(this, "desc", 4*scalingPoints(), 30 + 5*scalingPoints()) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class BeamingRay extends TargetedClericSpell {
 			ally = Stasis.getStasisAlly();
 		}
 
-		int range = 4*hero.pointsInTalent(talent());
+		int range = 4*scalingPoints();
 		if (Char.hasProp(ally, Char.Property.IMMOVABLE)){
 			range /= 2;
 		}

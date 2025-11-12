@@ -123,7 +123,7 @@ public class ShieldOfLight extends TargetedClericSpell {
 		HolyFlames.proc(ch);
 	}
 
-	public static int min() { return 2 + Dungeon.hero.pointsInTalent(ShieldOfLight.INSTANCE.talent()); }
+	public static int min() { return 2 + ShieldOfLight.INSTANCE.scalingPoints(); }
 	public static int max() { return 2 * min(); }
 
 	@Override
@@ -143,7 +143,7 @@ public class ShieldOfLight extends TargetedClericSpell {
 
 		public int object = 0;
 
-		protected float getDuration() { return 10; }
+		protected float getDuration() { return 10 + 2*ShieldOfLight.INSTANCE.scalingPoints(); }
 
 		{
 			type = buffType.POSITIVE;
@@ -193,7 +193,7 @@ public class ShieldOfLight extends TargetedClericSpell {
 
 		public float getMaxDurability() {
 			// 2 / 5 / 8 hits
-			return 2 + 3 * Dungeon.hero.pointsInTalent(ShieldOfLight.INSTANCE.talent());
+			return 2 + 3 * ShieldOfLight.INSTANCE.scalingPoints();
 		}
 		public int getDurability() { return (int)Math.ceil(visualcooldown() / getDurabilityPerHit()); }
 		private float getDurabilityPerHit() { return getDuration() / getMaxDurability(); }

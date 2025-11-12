@@ -71,7 +71,7 @@ public class DivineSense extends ClericSpell {
 	public void apply(Hero hero, Char target) {
 		if (SpellEmpower.isActive()) {
 			// 60 / 90 / 120
-			Buff.prolong(target, MindVision.class, 30 * (2 + hero.pointsInTalent(talent())));
+			Buff.prolong(target, MindVision.class, 30 * (2 + scalingPoints()));
 			Buff.detach(target, DivineSenseTracker.class);
 		} else {
 			Buff.prolong(target, DivineSenseTracker.class, DivineSenseTracker.DURATION);
@@ -98,7 +98,7 @@ public class DivineSense extends ClericSpell {
 	}
 
 	public String desc(){
-		return checkEmpowerMsg("desc", 4+4*Dungeon.hero.pointsInTalent(talent()), 30 * (1 + Dungeon.hero.pointsInTalent(talent()))) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return checkEmpowerMsg("desc", 4+4*scalingPoints(), 30 * (1 + scalingPoints())) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
 	public static class DivineSenseTracker extends FlavourBuff {

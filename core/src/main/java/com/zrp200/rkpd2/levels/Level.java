@@ -1481,7 +1481,7 @@ public abstract class Level implements Bundlable {
                 }
 				if (c.buff(DivineSense.DivineSenseTracker.class) != null){
 					if (((Hero) c).heroClass.is(HeroClass.CLERIC)){
-						mindVisRange = 4+4*((Hero) c).pointsInTalent(Talent.DIVINE_SENSE);
+						mindVisRange = 4+4*DivineSense.INSTANCE.scalingPoints();
 					} else {
 						// 3 / 5 / 7
 						mindVisRange = 1+2*((Hero) c).shiftedPoints(Talent.DIVINE_SENSE);

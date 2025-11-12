@@ -74,7 +74,7 @@ public class MindForm extends ClericSpell {
 	}
 
 	public static int effectLevel(){
-		return 2 + Dungeon.hero.pointsInTalent(MindForm.INSTANCE.talent());
+		return 2 + MindForm.INSTANCE.scalingPoints();
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class MindForm extends ClericSpell {
 	}
 
 	public static int itemLevel(){
-		return 2 + Dungeon.hero.pointsInTalent(MindForm.INSTANCE.talent());
+		return 2 + MindForm.INSTANCE.scalingPoints();
 	}
 
 	//TODO selecting

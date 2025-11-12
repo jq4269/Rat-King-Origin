@@ -152,7 +152,9 @@ public class RecallInscription extends ClericSpell {
 		float chargeUse = baseChargeUse(hero);
 		if (chargeUse == 0) return 0;
 		// cost increases by +50% every use
-		return (int)Math.ceil(chargeUse * (1 + hero.buff(UsedItemTracker.class).used/2f));
+        chargeUse = (int) Math.ceil(chargeUse * (1 + hero.buff(UsedItemTracker.class).used / 2f));
+        chargeUse = Math.max(1, chargeUse - scalingPoints());
+        return chargeUse;
 	}
 
 	public static boolean canTrack(Hero hero) {

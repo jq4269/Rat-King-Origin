@@ -68,7 +68,7 @@ public class Metaexpression extends ClericSpell {
             coolTrinket.upgrade(2);
         }
         coolTrinket.identify();
-        TrinketHolder holder = Buff.append(hero, TrinketHolder.class, DURATION);
+        TrinketHolder holder = Buff.append(hero, TrinketHolder.class, DURATION * (1.0f + 0.25f * scalingPoints()));
         holder.trinket = coolTrinket;
 
         Enchanting.show(hero, coolTrinket);

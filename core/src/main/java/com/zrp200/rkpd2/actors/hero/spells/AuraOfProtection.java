@@ -55,13 +55,13 @@ public class AuraOfProtection extends ClericSpell {
     }
 
     public static float reduction() {
-		return .1f * Math.max(1, Dungeon.hero.pointsInTalent(AuraOfProtection.INSTANCE.talent()));
+		return .1f * Math.max(1, AuraOfProtection.INSTANCE.scalingPoints());
 	}
 
 	@Override
 	public String desc() {
 		int dmgReduction = Math.round(reduction() * 100);
-		int glyphPow = 25 + 25*Dungeon.hero.pointsInTalent(talent());
+		int glyphPow = 25 + 25*scalingPoints();
 		AuraBuff buff = SpellEmpower.isActive() ? new RetributionBuff() : new AuraBuff();;
 		return Messages.get(this, "desc", dmgReduction, glyphPow, (int)buff.getDuration(), (int)buff.getTurnsPerCharge()) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}

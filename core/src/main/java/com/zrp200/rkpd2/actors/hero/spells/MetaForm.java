@@ -1,6 +1,5 @@
 package com.zrp200.rkpd2.actors.hero.spells;
 
-import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.buffs.FlavourBuff;
 import com.zrp200.rkpd2.actors.hero.Hero;
 import com.zrp200.rkpd2.actors.hero.Talent;
@@ -30,7 +29,7 @@ public class MetaForm extends ClericSpell {
 
     @Override
     public float chargeUse(Hero hero) {
-        return 5;
+        return Math.max(1, 5 - scalingPoints());
     }
 
     @Override
@@ -45,7 +44,7 @@ public class MetaForm extends ClericSpell {
     }
 
     public static int duration(){
-        return Math.round(75 + 25f* Dungeon.hero.pointsInTalent(MetaForm.INSTANCE.talent()));
+        return Math.round(75 + 25f*MetaForm.INSTANCE.scalingPoints());
     }
 
     public static class MetaFormBuff extends FlavourBuff {

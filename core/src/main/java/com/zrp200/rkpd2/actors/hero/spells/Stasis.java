@@ -60,7 +60,7 @@ public class Stasis extends ClericSpell {
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", 20 + 20*Dungeon.hero.pointsInTalent(talent())) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
+		return Messages.get(this, "desc", 20 + 20*scalingPoints() + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero)));
 	}
 
 	@Override
@@ -111,7 +111,7 @@ public class Stasis extends ClericSpell {
 		}
 		ally.clearTime();
 
-		Buff.prolong(hero, StasisBuff.class, 20 + 20*hero.pointsInTalent(talent())).stasisAlly = (Mob)ally;
+		Buff.prolong(hero, StasisBuff.class, 20 + 20*scalingPoints()).stasisAlly = (Mob)ally;
 		Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
 		if (hero.buff(LifeLink.class) != null && hero.buff(LifeLink.class).object == ally.id()){

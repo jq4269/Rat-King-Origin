@@ -1,7 +1,6 @@
 package com.zrp200.rkpd2.actors.hero.spells;
 
 import com.zrp200.rkpd2.Assets;
-import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.FlavourBuff;
 import com.zrp200.rkpd2.actors.hero.Hero;
@@ -51,6 +50,11 @@ public class PetitioMagica extends ClericSpell {
     }
 
     @Override
+    public int aspectRequirement() {
+        return 3;
+    }
+
+    @Override
     public void onCast(HolyTome tome, Hero hero) {
         ArrayList<ClericSpell> currentSpells = new ArrayList<>();
         for (int i = 1; i <= 3; i++)
@@ -80,7 +84,7 @@ public class PetitioMagica extends ClericSpell {
     }
 
     public static int duration(){
-        int base = 50 * (1 + Dungeon.hero.pointsInTalent(PetitioMagica.INSTANCE.talent()));
+        int base = 50 * (1 + PetitioMagica.INSTANCE.scalingPoints());
         if (SpellEmpower.isActive()){
             base *= 1.5f;
         }
