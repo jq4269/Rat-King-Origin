@@ -19,7 +19,7 @@ allprojects {
         appPackageName = 'com.zrp200.rkpd2abyssal'
 
         appVersionCode = 850
-        appVersionName = '2.2.3'
+        appVersionName = '2.3.0-BETA-1'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
