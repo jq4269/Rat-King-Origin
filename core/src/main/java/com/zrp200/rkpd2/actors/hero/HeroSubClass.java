@@ -184,6 +184,8 @@ public enum HeroSubClass {
 				return Badges.Badge.WON_RK_CHAMPION;
 			case HIGHNESS:
 				return Badges.Badge.WON_SECRET_DUELIST;
+            case CENOBITE:
+                return Badges.Badge.WON_CENOBITE;
 		}
 		return null;
 	}

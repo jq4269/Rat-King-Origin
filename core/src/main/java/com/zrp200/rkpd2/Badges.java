@@ -79,6 +79,7 @@ public class Badges {
 		WON_DECEPTICON,
 		WON_RK_CHAMPION,
 		WON_SECRET_DUELIST, //TODO: haven't decided what that should be
+        WON_CENOBITE,
 
 		//bronze
 		UNLOCK_MAGE                 ( 1 ),
@@ -212,6 +213,7 @@ public class Badges {
         BOSS_SLAIN_3_DECEPTICON,
         BOSS_SLAIN_3_HIGHNESS,
         BOSS_SLAIN_3_OMNIBATTLER,
+        BOSS_SLAIN_3_CENOBITE,
         BOSS_SLAIN_3_ALL_SUBCLASSES ( 103, BadgeType.GLOBAL ),
         BOSS_CHALLENGE_3            ( 104 ),
         BOSS_CHALLENGE_4            ( 105 ),
@@ -877,6 +879,7 @@ public class Badges {
 
 		thirdBossSubclassBadges.put(HeroSubClass.PRIEST, Badge.BOSS_SLAIN_3_PRIEST);
 		thirdBossSubclassBadges.put(HeroSubClass.PALADIN, Badge.BOSS_SLAIN_3_PALADIN);
+        thirdBossSubclassBadges.put(HeroSubClass.CENOBITE, Badge.BOSS_SLAIN_3_CENOBITE);
 		thirdBossSubclassBadges.put(HeroSubClass.KING, Badge.BOSS_SLAIN_3_KING);
 	}
 
