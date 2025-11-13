@@ -114,7 +114,8 @@ public class HeroIcon extends Image {
             MUTARE_ARTEM    = imageAt(2, 16),
             ARS_RETRACTANDI = imageAt(3, 16),
             MESSIS_POTENTIAE = imageAt(4, 16),
-            PETITIO_MAGICA   = imageAt(5, 16);
+            PETITIO_MAGICA   = imageAt(5, 16),
+            EMENDATIO_ICATUS = imageAt(6, 16);
 
 	//all cleric spells have a separate icon with no background for the action indicator
 	public static final int SPELL_ACTION_OFFSET      = 32;

@@ -286,6 +286,7 @@ public abstract class ClericSpell {
                 ArsRetractandi.INSTANCE,
                 MessisPotentiae.INSTANCE,
                 PetitioMagica.INSTANCE,
+                SpellEmpower.EmendatioIactus.INSTANCE
 			}){
 				if (spell.isVisible(cleric)) spells.add(spell);
 			}

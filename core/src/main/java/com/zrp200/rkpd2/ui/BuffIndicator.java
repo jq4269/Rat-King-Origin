@@ -149,6 +149,7 @@ public class BuffIndicator extends Component {
 	public static final int HOLYFLAMES  = 8_07;
     public static final int MESSIS_POTENTIAE = 9_07;
     public static final int PETITIO_MAGICA   = 10_07;
+    public static final int EMENDATIO_ICATUS = 11_07;
 
     private static BuffIndicator heroInstance;
 	private static BuffIndicator bossInstance;

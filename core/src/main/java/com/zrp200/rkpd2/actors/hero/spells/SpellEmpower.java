@@ -18,6 +18,8 @@ import com.watabou.utils.GameMath;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.zrp200.rkpd2.Dungeon.hero;
 
@@ -44,6 +46,8 @@ public abstract class SpellEmpower extends ClericSpell {
     }
 
     public static float limit() {
+        if (hero.buff(EmendatioIactus.Buff.class) != null)
+            return EmendatioIactus.charges();
         return Math.max(
                 1 << hero.pointsInTalent(Talent.LIMIT_BREAK),
                 2 + hero.pointsInTalent(Talent.DIVINE_ADVENT)
@@ -222,6 +226,96 @@ public abstract class SpellEmpower extends ClericSpell {
             }
             public float duration() {
                 return 300 - 20*LimitBreak.INSTANCE.scalingPoints();
+            }
+        }
+    }
+
+    public static class EmendatioIactus extends SpellEmpower {
+        public static final EmendatioIactus INSTANCE = new EmendatioIactus();
+
+        {
+            talent = Talent.EMENDATIO_ICATUS;
+        }
+
+        public static class aspect_holder {
+            Talent.Aspect aspect;
+            int amount;
+
+            public aspect_holder(Talent.Aspect aspect, int value) {
+                this.aspect = aspect;
+                this.amount = value;
+            }
+        }
+
+        @Override
+        public int icon() { return HeroIcon.EMENDATIO_ICATUS; }
+
+        @Override
+        public float chargeUse(Hero hero) {
+            return 4;
+        }
+
+        @Override
+        public int aspectRequirement() {
+            return 1;
+        }
+
+        public static aspect_holder givenAspect(){
+            TreeMap<Talent.Aspect, Integer> existingAspects = new TreeMap<>();
+
+            for (int i = 0; i < hero.talents.size(); i++){
+                for (Map.Entry<Talent, Integer> talentData : hero.talents.get(i).entrySet()){
+                    existingAspects.put(talentData.getKey().aspect,
+                            !existingAspects.containsKey(talentData.getKey().aspect) ?
+                                    1 : existingAspects.get(talentData.getKey().aspect) + 1);
+                }
+            }
+
+            return new aspect_holder(existingAspects.lastEntry().getKey(), existingAspects.lastEntry().getValue());
+        }
+
+        public static float charges(){
+            return givenAspect().amount*(0.5f*(1+hero.pointsInTalent(INSTANCE.talent())));
+        }
+
+        @Override
+        protected List<Object> getDescArgs() {
+            ArrayList<Object> args = new ArrayList<>();
+            aspect_holder holder = givenAspect();
+            args.add(holder.aspect.toString());
+            args.add(charges());
+            args.add((int)(25*charges()));
+            return args;
+        }
+
+        @Override
+        protected void applyBuff(Hero hero) {
+            Buff.affect(hero, Buff.class);
+            Cooldown cd = Cooldown.affectHero(Cooldown.class);
+            cd.spend(-1); // offset the instant cast
+        }
+
+        public static class Buff extends SpellEmpower.Buff {
+            @Override
+            public int icon() { return BuffIndicator.EMENDATIO_ICATUS; }
+
+            @Override
+            public String desc() {
+                return super.desc() + "\n" + Messages.get(this, "cooldown", target.buff(Cooldown.class).iconTextDisplay());
+            }
+
+            @Override
+            public float getTurnsPerCharge() {
+                return 10;
+            }
+        }
+
+        public static class Cooldown extends SpellCooldown {
+            public int icon() {
+                return target.buff(Buff.class) != null ? BuffIndicator.NONE : BuffIndicator.EMENDATIO_ICATUS;
+            }
+            public float duration() {
+                return 25*charges();
             }
         }
     }
