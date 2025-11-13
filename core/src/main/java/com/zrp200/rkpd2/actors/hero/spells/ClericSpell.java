@@ -144,7 +144,7 @@ public abstract class ClericSpell {
                     }
                 }
             }
-            points = (int) Math.max(0, aspectPoints - aspectRequirement());
+            points += (int) Math.max(0, aspectPoints - aspectRequirement());
         }
         return points;
     }
