@@ -144,7 +144,13 @@ public abstract class ClericSpell {
                     }
                 }
             }
-            points += (int) Math.max(0, aspectPoints - aspectRequirement());
+            aspectPoints -= aspectRequirement();
+            if (cleric.pointsInTalent(Talent.RECARGA_ADDITA) > 2 && Dungeon.hero.belongings.getItem(HolyTome.class) != null){
+                HolyTome tome = Dungeon.hero.belongings.getItem(HolyTome.class);
+                if (tome.isFullyCharged())
+                    aspectPoints *= 1.75f;
+            }
+            points += (int) Math.max(0, aspectPoints);
         }
         return points;
     }
@@ -354,4 +360,25 @@ public abstract class ClericSpell {
 		spells.add(Stasis.INSTANCE);
 		return spells;
 	}
+
+    public static ArrayList<ClericSpell> getCenobiteSpells(){
+        ArrayList<ClericSpell> spells = new ArrayList<>();
+        spells.add(GuidingLight.INSTANCE);
+        spells.add(HolyWeapon.INSTANCE);
+        spells.add(HolyWard.INSTANCE);
+        spells.add(HolyIntuition.INSTANCE);
+        spells.add(ShieldOfLight.INSTANCE);
+        spells.add(Metaexpression.INSTANCE);
+        spells.add(RecallInscription.INSTANCE);
+        spells.add(Sunray.INSTANCE);
+        spells.add(DivineSense.INSTANCE);
+        spells.add(BlessSpell.INSTANCE);
+        spells.add(Cleanse.INSTANCE);
+        spells.add(MutareArtem.INSTANCE);
+        spells.add(ArsRetractandi.INSTANCE);
+        spells.add(MessisPotentiae.INSTANCE);
+        spells.add(PetitioMagica.INSTANCE);
+        spells.add(SpellEmpower.EmendatioIactus.INSTANCE);
+        return spells;
+    }
 }

@@ -265,7 +265,7 @@ public enum Talent {
 	//Paladin T3
 	LAY_ON_HANDS(174, 3, Aspect.DEFENSE), AURA_OF_PROTECTION(175, 3, Aspect.DEFENSE), WALL_OF_LIGHT(176, 3, Aspect.DEFENSE), LIMIT_BREAK(190, 3, Aspect.MULTIFORM), TRIAGE(191, 3, Aspect.UTILITY),
 	//Cenobite T3
-    ARS_RETRACTANDI(imageAt(8, 13), 3), MESSIS_POTENTIAE(imageAt(9, 13), 3, Aspect.MULTIFORM), PETITIO_MAGICA(imageAt(10, 13), 3), EMENDATIO_ICATUS(imageAt(11, 13), 3, Aspect.MULTIFORM),
+    ARS_RETRACTANDI(imageAt(8, 13), 3), MESSIS_POTENTIAE(imageAt(9, 13), 3, Aspect.MULTIFORM), PETITIO_MAGICA(imageAt(10, 13), 3), EMENDATIO_ICATUS(imageAt(11, 13), 3, Aspect.MULTIFORM), RECARGA_ADDITA(imageAt(12, 13), 3, Aspect.UTILITY),
     //Ascended Form T4
 	DIVINE_INTERVENTION(177, 4, Aspect.DEFENSE), JUDGEMENT(178, 4, Aspect.OFFENSE), FLASH(179, 4, Aspect.UTILITY), DIVINE_PROFICIENCY(imageAt(13, 13), 4),
 	//Trinity T4
@@ -1970,7 +1970,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, LAY_ON_HANDS, AURA_OF_PROTECTION, WALL_OF_LIGHT, LIMIT_BREAK, TRIAGE);
 				break;
             case CENOBITE:
-                Collections.addAll(tierTalents, ARS_RETRACTANDI, MESSIS_POTENTIAE, PETITIO_MAGICA, EMENDATIO_ICATUS);
+                Collections.addAll(tierTalents, ARS_RETRACTANDI, MESSIS_POTENTIAE, PETITIO_MAGICA, EMENDATIO_ICATUS, RECARGA_ADDITA);
                 break;
             case KING: // this should be *lovely*
 				Collections.addAll(tierTalents, RK_BERSERKER, RK_BATTLEMAGE, RK_ASSASSIN, RK_SNIPER, RK_GLADIATOR, RK_WARLOCK, RK_FREERUNNER, RK_WARDEN); break;

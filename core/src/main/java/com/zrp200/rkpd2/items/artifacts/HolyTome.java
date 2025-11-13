@@ -100,7 +100,7 @@ public class HolyTome extends Artifact {
 	}
 
 	public float getCharges() {
-		return charge + partialCharge;
+		return charge + partialCharge - getMinimalCharge();
 	}
 
 	public static final String AC_CAST = "CAST";
@@ -196,7 +196,7 @@ public class HolyTome extends Artifact {
 	public boolean canCast( Hero hero, ClericSpell spell ){
 		return spell != null && (isEquipped(hero) || (hero.canHaveTalent(Talent.LIGHT_READING) && hero.belongings.contains(this)))
 				&& hero.buff(MagicImmune.class) == null
-				&& (spell.ignoreChargeUse(this) || charge >= spell.chargeUse(hero))
+				&& (spell.ignoreChargeUse(this) || charge - getMinimalCharge() >= spell.chargeUse(hero))
 				&& spell.canCast(hero);
 	}
 
@@ -262,6 +262,23 @@ public class HolyTome extends Artifact {
 		return new TomeRecharge();
 	}
 
+    public int getMinimalCharge(){
+        if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.RECARGA_ADDITA)){
+            final int[] bonusCharges = {0};
+            ArrayList<ClericSpell> currentSpells = new ArrayList<>();
+            for (int i = 1; i <= 3; i++)
+                currentSpells.addAll(ClericSpell.getSpellList(Dungeon.hero, i));
+            ArrayList<ClericSpell> allSpells = ClericSpell.getCenobiteSpells();
+            currentSpells.forEach(spell -> {
+                if (!allSpells.contains(spell))
+                    bonusCharges[0] -= 1;
+            });
+            return bonusCharges[0];
+        } else {
+            return 0;
+        }
+    }
+
 	@Override
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
@@ -280,6 +297,10 @@ public class HolyTome extends Artifact {
 			updateQuickslot();
 		}
 	}
+
+    public boolean isFullyCharged(){
+        return charge == chargeCap;
+    }
 
 	private ClericSpell quickSpell = null;
 
@@ -342,9 +363,12 @@ public class HolyTome extends Artifact {
 		public boolean act() {
 			if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null) {
 				if (Regeneration.regenOn()) {
-					float missing = (chargeCap - charge);
+					float missing = (chargeCap - charge - getMinimalCharge());
 					if (level() > 7) missing += 5*(level() - 7)/3f;
-					float turnsToCharge = Math.max(0, 45 - missing);
+                    int baseRecharge = 45;
+                    if (((Hero)target).pointsInTalent(Talent.RECARGA_ADDITA) > 1)
+                        baseRecharge = 35;
+                    float turnsToCharge = Math.max(0, baseRecharge - missing);
 					turnsToCharge /= RingOfEnergy.artifactChargeMultiplier(target);
 					float chargeToGain = (1f / turnsToCharge);
 					if (!isEquipped(Dungeon.hero)){
