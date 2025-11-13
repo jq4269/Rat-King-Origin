@@ -340,6 +340,9 @@ public abstract class ClericSpell {
 		spells.add(MnemonicPrayer.INSTANCE);
 		spells.add(SpellEmpower.DivineAdvent.INSTANCE);
         spells.add(ArsRetractandi.INSTANCE);
+        spells.add(MessisPotentiae.INSTANCE);
+        spells.add(PetitioMagica.INSTANCE);
+        spells.add(SpellEmpower.EmendatioIactus.INSTANCE);
 		spells.add(DivineIntervention.INSTANCE);
 		spells.add(Judgement.INSTANCE);
 		spells.add(Flash.INSTANCE);
