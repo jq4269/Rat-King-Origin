@@ -53,6 +53,7 @@ import com.zrp200.rkpd2.sprites.RatKingBossSprite;
 import com.zrp200.rkpd2.sprites.ShopkeeperSprite;
 import com.zrp200.rkpd2.sprites.TormentedSpiritSprite;
 import com.zrp200.rkpd2.sprites.WraithSprite;
+import com.zrp200.rkpd2.ui.HeroIcon;
 import com.zrp200.rkpd2.ui.Icons;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Random;
@@ -91,6 +92,62 @@ interface ChangeLog {
 public enum RKPD2Changes {
     v3_v2(() -> new ChangeInfo[][]{
             {
+                    new ChangeInfo("RKA-2.3.0", true, TITLE_COLOR
+                    ),
+                    NewContent(
+                            new ChangeButton(new Image(new HeroIcon(CENOBITE)), "Cleric's Secret Subclass",
+                                    list("Finally added a secret subclass for Cleric, _Cenobite_!",
+                                            "_Cenobite_ focuses on breaking the boundaries of what a class with ability to renewably transmogrify talents with a _Mutare Artem_ spell.",
+                                            "Free metamorphs come with a big benefit: all talents have one of 4 _aspects_, that loosely describe their purpose; this includes spells.",
+                                            "Cenobite's spells will scale in power with an amount of talents, that correspond to their aspect. The neutral-aspect talents can power up all spells but at half efficiency.",
+                                            "The downside of Cenobite is that they do not get health from level ups.")
+                            )
+                    ),
+                    Changes(
+                            new ChangeButton(ADVENTUROUS_SNOOZING,
+                                    "Reworked: \n" +
+                                    list(
+                                       "Now gives set amount of bonus recharge during sleeping instead of attempting to scale with charges (that caused a lot of bugs)."
+                                    )),
+                            misc(list(
+                                    "Kromer's Crown can no longer give Cleric's subclasses as an option.",
+                                        "Reimplemented Final Froggit's level seal mechanic.",
+                                        "Hero armor can no longer be rolled as natural drop."
+                            )),
+                            bugFixes("Fixed following bugs:\n\n"+list(0,
+                                    "Seed journal pages having no description\n",
+                                    "Challenge ability endlessly looping when duel ends\n",
+                                    "Most duelist abilities taking 0 turns and costing double amount of charges\n",
+                                    "Shield battery scaling being significantly larger than intended"
+                            ))
+                    ),
+                    Buffs(
+                            new ChangeButton(METAEXPRESSION,
+                                    list(
+                                            "Increased trinket's duration from 100 to 250 turns",
+                                            "Increased charge cost by 1",
+                                            "Now allows to stack up multiple temporary trinkets"
+                                    )),
+                            new ChangeButton(KINGS_VISION, "Talent fixes",
+                                    "Fixed few talents not having intended functionality:\n" +
+                                    list(
+                                            "_Point Blank_ doing nothing",
+                                            "_King's Vision_ not having Heightened Senses",
+                                            "_Energized Steps_ not giving artifact recharge",
+                                            "Assassin's _Lethal Momentum_ doing nothing"
+                                    ))
+                    ),
+                    Nerfs(
+                            new ChangeButton(EXORCISM,
+                                    list(
+                                            "No longer triggers from Cleric's wands.",
+                                            "Now only has 50% chance to trigger per enemy affected.",
+                                            "Increased the duration of Holy Flames by 1.",
+                                            "Reduced damage ramp-up from 0.5-1 to 0.67."
+                                    ))
+                    ),
+
+
                     new ChangeInfo("RKA-2.2.0", true, TITLE_COLOR,
                             new ChangeButton(new ItemSprite(ARMOR_RAT_KING), "RKPD 3.0.1 ports",
                                     "Successfully ported RKPD2 3.0.1.\n\n" +
