@@ -82,6 +82,9 @@ public class ArsRetractandi extends ClericSpell {
                         hero.busy();
                         hero.sprite.operate(hero.pos);
                         TreeMap<Aspect, Integer> existingAspects = new TreeMap<>();
+                        ArrayList<Talent> allTalents = new ArrayList<>();
+                        for (LinkedHashMap<Talent, Integer> tier : hero.talents)
+                            allTalents.addAll(tier.keySet());
                         LinkedHashMap<Talent, Integer> decidedTier = Dungeon.hero.talents.get(index);
 
                         for (Map.Entry<Talent, Integer> talentData : decidedTier.entrySet()){
@@ -96,7 +99,7 @@ public class ArsRetractandi extends ClericSpell {
                             Talent oldTalent = talentData.getKey();
                             while (true){
                                 Talent testTalent = Random.element(Talent.values());
-                                if (decidedTier.containsKey(testTalent))
+                                if (allTalents.contains(testTalent))
                                     continue;
                                 if (newTier.containsKey(testTalent))
                                     continue;
