@@ -17,6 +17,9 @@ import com.zrp200.rkpd2.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 public class MutareArtem extends ClericSpell {
 
     public static final MutareArtem INSTANCE = new MutareArtem();
@@ -60,7 +63,10 @@ public class MutareArtem extends ClericSpell {
             if (Dungeon.hero.talents.get(index).size() <= Talent.talentList(hero.heroClass, index + 1).length){
                 HeroClass cls;
                 Talent randomTalent = null;
-                while (randomTalent == null) {
+                ArrayList<Talent> allTalents = new ArrayList<>();
+                for (LinkedHashMap<Talent, Integer> tier : hero.talents)
+                    allTalents.addAll(tier.keySet());
+                while (randomTalent == null || allTalents.contains(randomTalent)) {
                     do {
                         cls = Random.element(HeroClass.values());
                     } while (cls == Dungeon.hero.heroClass);
