@@ -100,8 +100,7 @@ public class MiningLevel extends CavesLevel {
 		s.setSizeCat();
 		initRooms.add(s);
 
-		// -33%
-		int rooms = 2;
+		int rooms = 3;
 		for (int i = 0; i < rooms; i++){
 			s = new MineLargeRoom();
 			s.setSizeCat();
