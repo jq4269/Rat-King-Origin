@@ -363,7 +363,7 @@ public class HolyTome extends Artifact {
 		public boolean act() {
 			if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null) {
 				if (Regeneration.regenOn()) {
-					float missing = (chargeCap - charge - getMinimalCharge());
+					float missing = (chargeCap - charge);
 					if (level() > 7) missing += 5*(level() - 7)/3f;
                     int baseRecharge = 45;
                     if (((Hero)target).pointsInTalent(Talent.RECARGA_ADDITA) > 1)
