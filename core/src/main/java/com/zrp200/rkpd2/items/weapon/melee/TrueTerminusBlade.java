@@ -182,6 +182,7 @@ public class TrueTerminusBlade extends MeleeWeapon implements Talent.SpellbladeF
                         if (!curBlade.cursedKnown){
                             GLog.n(Messages.get(Wand.class, "curse_discover", curBlade.name()));
                         }
+                        curUser.spendAndNext(curBlade.delayFactor(curUser)*2);
                     } else {
                         Sample.INSTANCE.play(Assets.Sounds.HIT_SLASH);
                         ((MissileSprite) curUser.sprite.parent.recycle(MissileSprite.class)).
