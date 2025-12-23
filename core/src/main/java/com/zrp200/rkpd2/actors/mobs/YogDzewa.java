@@ -30,6 +30,7 @@ import com.zrp200.rkpd2.actors.Actor;
 import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.buffs.Barrier;
 import com.zrp200.rkpd2.actors.buffs.Buff;
+import com.zrp200.rkpd2.actors.buffs.HPDebuff;
 import com.zrp200.rkpd2.actors.buffs.Invisibility;
 import com.zrp200.rkpd2.actors.buffs.Light;
 import com.zrp200.rkpd2.actors.buffs.LockedFloor;
@@ -43,6 +44,7 @@ import com.zrp200.rkpd2.effects.Pushing;
 import com.zrp200.rkpd2.effects.Speck;
 import com.zrp200.rkpd2.effects.SpellSprite;
 import com.zrp200.rkpd2.effects.TargetedCell;
+import com.zrp200.rkpd2.effects.particles.GodfireParticle;
 import com.zrp200.rkpd2.effects.particles.PurpleParticle;
 import com.zrp200.rkpd2.effects.particles.ShadowParticle;
 import com.zrp200.rkpd2.items.artifacts.DriedRose;
@@ -61,6 +63,7 @@ import com.zrp200.rkpd2.ui.BossHealthBar;
 import com.zrp200.rkpd2.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
@@ -248,6 +251,11 @@ public class YogDzewa extends Mob {
 							ch.buff(WarriorParry.BlockTrock.class).triggered = true;
 						} else {
 							ch.damage(dmg, new Eye.DeathGaze());
+                            if (Dungeon.isChallenged(Challenges.EVIL_MODE)){
+                                ch.sprite.emitter().burst(GodfireParticle.FACTORY, 14);
+                                Sample.INSTANCE.play(Assets.Sounds.BLAST, 1f, 1.5f);
+                                Buff.count(ch, HPDebuff.class, ch.HT * 0.33f);
+                            }
 
 							if (Dungeon.level.heroFOV[pos]) {
 								ch.sprite.flash();
