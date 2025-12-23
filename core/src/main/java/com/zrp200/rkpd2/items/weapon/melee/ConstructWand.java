@@ -194,6 +194,7 @@ public class ConstructWand extends MeleeWeapon {
             state = WANDERING;
             spriteClass = GuardianSprite.class;
             alignment = Alignment.ALLY;
+            levelGenStatue = false;
         }
 
         public GuardianKnight() {
