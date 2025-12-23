@@ -56,11 +56,25 @@ public class MutareArtem extends ClericSpell {
                 (hero.subClass.is(HeroSubClass.CENOBITE) || Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.CLERIC) || PetitioMagica.containsSpell(hero, this));
     }
 
+    private static int talentAmount(int tier){
+        switch (tier){
+            case 0:
+                return 5;
+            case 1:
+                return 6;
+            case 2:
+                return 8;
+            case 3:
+                return 5;
+        }
+        return 0;
+    }
+
     @Override
     public void onCast(HolyTome tome, Hero hero) {
         if (SpellEmpower.isActive()){
             int index = Random.Int(3);
-            if (Dungeon.hero.talents.get(index).size() <= Talent.talentList(hero.heroClass, index + 1).length){
+            if (Dungeon.hero.talents.get(index).size() <= talentAmount(index + 1)*2){
                 HeroClass cls;
                 Talent randomTalent = null;
                 ArrayList<Talent> allTalents = new ArrayList<>();
