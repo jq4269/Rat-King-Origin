@@ -94,6 +94,28 @@ public enum RKPD2Changes {
             {
                     new ChangeInfo("RKA-2.3.0", true, TITLE_COLOR
                     ),
+                    new ChangeInfo("v2.3.1", false, TITLE_COLOR,
+                            new ChangeButton(Icons.get(TALENT), "Talent changes",
+                                    list("Trinity setup talents can no longer be used, if you don't have Trinity",
+                                            "_Recarga Addita_'s negative charges no longer additionally speed up tome's recharge"
+                                    )),
+                            misc(list(
+                                    "NOW-ALL-SHE no longer affect Tengu's level.",
+                                    "Removed caustic slime spawning from Animosity Mode Goo.",
+                                    "Reimplemented Animosity Mode Yog-Dzewa's health degradation."
+                            )),
+                            bugFixes("Caused by v2.3.0:" + list(
+                                    "Assassin's _Lethal Momentum_ not actually being fixed",
+                                    "_Disce Nova_ spell not properly counting amount of spells that can be added",
+                                    "Chalice of Blood softlocking the game, if boosted by Cenobite-empowered Spirit Form"
+                            ), "Existed prior:" + list(
+                                    "Longstanding issue of Gnoll Geomancer teleporting into the edge of the level on third dash (by adding additional sapper room)",
+                                    "Cleric-related RKA content having incorrect wording or pronouns",
+                                    "True Terminus Blade softlocking the game, if trying to use ranged attack while cursed",
+                                    "Construction Wand's knights being marked in the Adventurer's Journal as actual statues",
+                                    "Crashes when animated statue somehow ends without a weapon"
+                            ))
+                    ),
                     NewContent(
                             new ChangeButton(new Image(new HeroIcon(CENOBITE)), "Cleric's Secret Subclass",
                                     list("Finally added a secret subclass for Cleric, _Cenobite_!",
