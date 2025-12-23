@@ -26,6 +26,7 @@ import com.zrp200.rkpd2.actors.Actor;
 import com.zrp200.rkpd2.actors.hero.Hero;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.abilities.cleric.Trinity;
+import com.zrp200.rkpd2.actors.hero.abilities.rat_king.OmniAbility;
 import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.armor.ClassArmor;
 import com.zrp200.rkpd2.items.artifacts.HolyTome;
@@ -70,7 +71,8 @@ public class MindForm extends ClericSpell {
 
 	@Override
 	public boolean canCast(Hero hero) {
-		return super.canCast(hero) && hero.hasTalent(talent());
+		return super.canCast(hero) && hero.hasTalent(talent()) && (Dungeon.hero.armorAbility instanceof Trinity
+                || (Dungeon.hero.armorAbility instanceof OmniAbility && ((OmniAbility) Dungeon.hero.armorAbility).activeAbility() instanceof Trinity));
 	}
 
 	public static int effectLevel(){
