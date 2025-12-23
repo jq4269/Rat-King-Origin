@@ -27,6 +27,7 @@ import com.zrp200.rkpd2.actors.Actor;
 import com.zrp200.rkpd2.actors.blobs.Blob;
 import com.zrp200.rkpd2.actors.blobs.Fire;
 import com.zrp200.rkpd2.levels.Level;
+import com.zrp200.rkpd2.levels.PrisonBossLevel;
 import com.zrp200.rkpd2.levels.Terrain;
 import com.zrp200.rkpd2.levels.rooms.Room;
 import com.zrp200.rkpd2.utils.DungeonSeed;
@@ -47,10 +48,10 @@ public abstract class Painter {
 	// Static methods
 
 	public static void set( Level level, int cell, int value ) {
-		if (value == Terrain.WALL && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS)){
+		if (value == Terrain.WALL && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS) && !(level instanceof PrisonBossLevel)){
 			value = Terrain.EMBERS;
 		}
-		if ((value == Terrain.BOOKSHELF || value == Terrain.DOOR) && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS)){
+		if ((value == Terrain.BOOKSHELF || value == Terrain.DOOR) && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS) && !(level instanceof PrisonBossLevel)){
 			value = Terrain.CHASM;
 		}
 		level.map[cell] = value;
@@ -68,7 +69,7 @@ public abstract class Painter {
 	}
 	
 	public static void fill( Level level, int x, int y, int w, int h, int value ) {
-		if (value == Terrain.WALL && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS)){
+		if (value == Terrain.WALL && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS) && !(level instanceof PrisonBossLevel)){
 			value = Terrain.EMBERS;
 		}
 		if ((value == Terrain.BOOKSHELF || value == Terrain.DOOR) && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS)){
@@ -134,7 +135,7 @@ public abstract class Painter {
 	
 	public static void fillEllipse(Level level, int x, int y, int w, int h, int value){
 
-		if (value == Terrain.WALL && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS)){
+		if (value == Terrain.WALL && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS) && !(level instanceof PrisonBossLevel)){
 			value = Terrain.EMBERS;
 		}
 		if ((value == Terrain.BOOKSHELF || value == Terrain.DOOR) && Dungeon.isSpecialSeedEnabled(DungeonSeed.SpecialSeed.NO_WALLS)){
