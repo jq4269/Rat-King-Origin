@@ -95,6 +95,9 @@ public class Regeneration extends Buff {
 			} else {
 				//15% boost at +0, scaling to a 500% boost at +10
 				delay -= 1.33f + chaliceLevel*0.667f;
+                if (delay <= 0){
+                    delay = (1 / (float)Math.pow(2, (chaliceLevel-12)));
+                }
 				delay /= RingOfEnergy.artifactChargeMultiplier(target);
 			}
 		}
