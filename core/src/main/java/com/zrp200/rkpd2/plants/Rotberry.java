@@ -25,9 +25,11 @@ import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.blobs.Blob;
 import com.zrp200.rkpd2.actors.blobs.ToxicGas;
+import com.zrp200.rkpd2.actors.buffs.Adrenaline;
 import com.zrp200.rkpd2.actors.buffs.AdrenalineSurge;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.hero.HeroSubClass;
+import com.zrp200.rkpd2.actors.mobs.RotLasher;
 import com.zrp200.rkpd2.effects.CellEmitter;
 import com.zrp200.rkpd2.effects.particles.LeafParticle;
 import com.zrp200.rkpd2.scenes.GameScene;
@@ -43,7 +45,11 @@ public class Rotberry extends Plant {
 	@Override
 	public void activate( Char ch ) {
 		if (isWarden( ch )){
-			Buff.affect(ch, AdrenalineSurge.class).reset(1, AdrenalineSurge.DURATION);
+			if (ch instanceof RotLasher) {
+				Buff.affect(ch, Adrenaline.class, 10f);
+			} else {
+				Buff.affect(ch, AdrenalineSurge.class).reset(1, AdrenalineSurge.DURATION);
+			}
 		} else {
 			GameScene.add( Blob.seed( pos, 100, ToxicGas.class ) );
 		}

@@ -27,7 +27,6 @@ import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.Haste;
 import com.zrp200.rkpd2.actors.hero.Hero;
-import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.mobs.Mob;
 import com.zrp200.rkpd2.items.artifacts.TimekeepersHourglass;
 import com.zrp200.rkpd2.levels.traps.Trap;
@@ -52,7 +51,7 @@ public class Swiftthistle extends Plant {
 	public void activate( Char ch ) {
 		if (ch != null) {
 			Buff.affect(ch, TimeBubble.class).reset();
-			if (ch instanceof Hero && ((Hero) ch).subClass.is(HeroSubClass.WARDEN)){
+			if (isWarden(ch)){
 				Buff.affect(ch, Haste.class, 1f);
 			}
 		}

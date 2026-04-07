@@ -32,6 +32,7 @@ import com.zrp200.rkpd2.actors.buffs.HighnessBuff;
 import com.zrp200.rkpd2.actors.hero.Hero;
 import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.hero.Talent;
+import com.zrp200.rkpd2.actors.mobs.RotLasher;
 import com.zrp200.rkpd2.effects.CellEmitter;
 import com.zrp200.rkpd2.effects.particles.LeafParticle;
 import com.zrp200.rkpd2.items.Item;
@@ -79,6 +80,9 @@ public abstract class Plant implements Bundlable {
 		if (!(ch instanceof Hero) && Random.Int(6) < Dungeon.hero.pointsInTalent(Talent.INDIRECT_BENEFITS)){
 			activate(Dungeon.hero);
 		}
+		if ((ch instanceof Hero) && Random.Int(6) < Dungeon.hero.pointsInTalent(Talent.INDIRECT_BENEFITS) && RotLasher.getRotLasherCount() > 0){
+			activate(Random.element(RotLasher.getRotLashers()));
+		}
 		HighnessBuff.agreenalineProc();
 		Bestiary.setSeen(getClass());
 		Bestiary.countEncounter(getClass());
@@ -86,7 +90,8 @@ public abstract class Plant implements Bundlable {
 	
 	public abstract void activate( Char ch );
 	public static boolean isWarden( Char ch ) {
-		return ch instanceof Hero && ((Hero) ch).subClass.is(HeroSubClass.WARDEN);
+		// rot lashers get warden effects too
+		return (ch instanceof Hero && ((Hero) ch).subClass.is(HeroSubClass.WARDEN)) || ch instanceof RotLasher;
 	}
 
 
@@ -152,7 +157,7 @@ public abstract class Plant implements Bundlable {
 	}
 
 	protected final String wardenDesc(HeroSubClass subClass, Object... args) {
-		Array<Object> array = new Array(args);
+		Array<Object> array = new Array<>(args);
 		array.insert(0, Messages.titleCase(subClass.title()));
 		return Messages.get(this, "warden_desc", array.items);
 	}

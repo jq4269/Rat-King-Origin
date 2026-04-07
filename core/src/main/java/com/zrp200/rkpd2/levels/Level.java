@@ -1234,7 +1234,7 @@ public abstract class Level implements Bundlable {
 							set(ally.pos, Terrain.GRASS);
 							Dungeon.observe();
 
-							RotLasher.addRotLasher();
+							RotLasher.addRotLasher(ally);
 
 						} else {
 							GLog.w(Messages.get(this, "no_space"));

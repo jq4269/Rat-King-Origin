@@ -33,26 +33,29 @@ import com.zrp200.rkpd2.items.Generator;
 import com.zrp200.rkpd2.items.weapon.missiles.MissileWeapon;
 import com.zrp200.rkpd2.sprites.CharSprite;
 import com.zrp200.rkpd2.sprites.RotLasherSprite;
+
+import java.util.ArrayList;
+
 import com.watabou.utils.Random;
 
 public class RotLasher extends Mob {
 
-	private static int rotLasherCount = 0;
+	private static ArrayList<RotLasher> rotLashers = new ArrayList<>();
+
+	public static ArrayList<RotLasher> getRotLashers() {
+		return rotLashers;
+	}
 
 	public static int getRotLasherCount() {
-		return rotLasherCount;
+		return rotLashers.size();
 	}
 
-	public static void addRotLasher() {
-		rotLasherCount++;
+	public static void addRotLasher(RotLasher r) {
+		rotLashers.add(r);
 	}
 
-	public static void removeRotLasher() {
-		rotLasherCount--;
-		if (rotLasherCount < 0) {
-			//todo: raise warning since there shouldn't be negative rotLashers on the map
-			rotLasherCount = 0;
-		}
+	public static void removeRotLasher(RotLasher r) {
+		rotLashers.remove(r);
 	}
 
 	{
@@ -99,7 +102,7 @@ public class RotLasher extends Mob {
 
 	@Override
 	public void die(Object src) {
-		removeRotLasher();
+		removeRotLasher(this);
 		super.die(src);
 	}
 

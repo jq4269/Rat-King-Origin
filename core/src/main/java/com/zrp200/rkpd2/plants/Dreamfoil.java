@@ -26,8 +26,8 @@ import com.zrp200.rkpd2.actors.buffs.BlobImmunity;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.MagicalSleep;
 import com.zrp200.rkpd2.actors.hero.Hero;
-import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.mobs.Mob;
+import com.zrp200.rkpd2.actors.mobs.RotLasher;
 import com.zrp200.rkpd2.messages.Messages;
 import com.zrp200.rkpd2.sprites.ItemSpriteSheet;
 import com.zrp200.rkpd2.utils.GLog;
@@ -43,12 +43,12 @@ public class Dreamfoil extends Plant {
 	public void activate( Char ch ) {
 
 		if (ch != null) {
-			if (ch instanceof Mob) {
+			if (ch instanceof Mob && !(ch instanceof RotLasher)) {
 				Buff.affect(ch, MagicalSleep.class);
-			} else if (ch instanceof Hero) {
+			} else if (ch instanceof Hero || ch instanceof RotLasher) {
 				GLog.i( Messages.get(this, "refreshed") );
 
-				if (((Hero)ch).subClass.is(HeroSubClass.WARDEN)){
+				if (isWarden(ch)){
 					Buff.affect(ch, BlobImmunity.class, BlobImmunity.DURATION/2f);
 				}
 			}
