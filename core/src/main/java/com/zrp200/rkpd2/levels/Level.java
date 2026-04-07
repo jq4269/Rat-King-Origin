@@ -34,12 +34,14 @@ import com.zrp200.rkpd2.actors.blobs.SmokeScreen;
 import com.zrp200.rkpd2.actors.blobs.Web;
 import com.zrp200.rkpd2.actors.blobs.WellWater;
 import com.zrp200.rkpd2.actors.buffs.Adrenaline;
+import com.zrp200.rkpd2.actors.buffs.AllyBuff;
 import com.zrp200.rkpd2.actors.buffs.Awareness;
 import com.zrp200.rkpd2.actors.buffs.Blindness;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.Burning;
 import com.zrp200.rkpd2.actors.buffs.ChampionEnemy;
 import com.zrp200.rkpd2.actors.buffs.Cooldown;
+import com.zrp200.rkpd2.actors.buffs.Corruption;
 import com.zrp200.rkpd2.actors.buffs.LockedFloor;
 import com.zrp200.rkpd2.actors.buffs.MagicalSight;
 import com.zrp200.rkpd2.actors.buffs.MindVision;
@@ -62,6 +64,7 @@ import com.zrp200.rkpd2.actors.mobs.Mimic;
 import com.zrp200.rkpd2.actors.mobs.Mob;
 import com.zrp200.rkpd2.actors.mobs.MobSpawner;
 import com.zrp200.rkpd2.actors.mobs.Piranha;
+import com.zrp200.rkpd2.actors.mobs.RotLasher;
 import com.zrp200.rkpd2.actors.mobs.YogFist;
 import com.zrp200.rkpd2.actors.mobs.npcs.Blacksmith;
 import com.zrp200.rkpd2.actors.mobs.npcs.Sheep;
@@ -79,6 +82,7 @@ import com.zrp200.rkpd2.items.food.MysteryMeat;
 import com.zrp200.rkpd2.items.potions.PotionOfStrength;
 import com.zrp200.rkpd2.items.quest.Kromer;
 import com.zrp200.rkpd2.items.scrolls.ScrollOfRecharging;
+import com.zrp200.rkpd2.items.scrolls.ScrollOfTeleportation;
 import com.zrp200.rkpd2.items.scrolls.ScrollOfUpgrade;
 import com.zrp200.rkpd2.items.scrolls.exotic.ScrollOfChallenge;
 import com.zrp200.rkpd2.items.stones.StoneOfEnchantment;
@@ -1210,7 +1214,36 @@ public abstract class Level implements Bundlable {
 				} else if (ch.buff(Talent.RejuvenatingStepsFurrow.class) != null && ch.buff(Talent.RejuvenatingStepsFurrow.class).count() >= 200) {
 					set(ch.pos, Terrain.FURROWED_GRASS);
 				} else {
-					set(ch.pos, Terrain.HIGH_GRASS);
+					if (Dungeon.hero.hasTalent(Talent.NATURES_BETTER_AID) && RotLasher.getRotLasherCount() < 2*Dungeon.hero.pointsInTalent(Talent.NATURES_BETTER_AID) + 1) {
+						ArrayList<Integer> spawnPoints = new ArrayList<>();
+						for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+							int p = ch.pos + PathFinder.NEIGHBOURS8[i];
+							if (Actor.findChar(p) == null && Dungeon.level.passable[p]) {
+								spawnPoints.add(p);
+							}
+						}
+
+						if (!spawnPoints.isEmpty()){
+							
+							RotLasher ally = new RotLasher();
+							ally.pos = Random.element(spawnPoints);
+							GameScene.add(ally);
+
+							ScrollOfTeleportation.appear(ally, ally.pos);
+							AllyBuff.affectAndLoot(ally, Dungeon.hero, Corruption.class);
+							set(ally.pos, Terrain.GRASS);
+							Dungeon.observe();
+
+							RotLasher.addRotLasher();
+
+						} else {
+							GLog.w(Messages.get(this, "no_space"));
+						}
+						set(ch.pos, Terrain.FURROWED_GRASS);
+					} else {
+						set(ch.pos, Terrain.HIGH_GRASS);
+					}
+					
 					Talent.RejuvenatingStepsFurrow.record();
 				}
 				GameScene.updateMap(ch.pos);

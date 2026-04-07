@@ -27,13 +27,33 @@ import com.zrp200.rkpd2.actors.blobs.ToxicGas;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.Burning;
 import com.zrp200.rkpd2.actors.buffs.Cripple;
+import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.effects.FloatingText;
 import com.zrp200.rkpd2.items.Generator;
+import com.zrp200.rkpd2.items.weapon.missiles.MissileWeapon;
 import com.zrp200.rkpd2.sprites.CharSprite;
 import com.zrp200.rkpd2.sprites.RotLasherSprite;
 import com.watabou.utils.Random;
 
 public class RotLasher extends Mob {
+
+	private static int rotLasherCount = 0;
+
+	public static int getRotLasherCount() {
+		return rotLasherCount;
+	}
+
+	public static void addRotLasher() {
+		rotLasherCount++;
+	}
+
+	public static void removeRotLasher() {
+		rotLasherCount--;
+		if (rotLasherCount < 0) {
+			//todo: raise warning since there shouldn't be negative rotLashers on the map
+			rotLasherCount = 0;
+		}
+	}
 
 	{
 		spriteClass = RotLasherSprite.class;
@@ -45,17 +65,19 @@ public class RotLasher extends Mob {
 
 		loot = Generator.Category.SEED;
 		lootChance = 0.75f;
+		if (Dungeon.hero.hasTalent(Talent.NATURES_BETTER_AID)) {
+			lootChance = 0.0f;
+		}
 
 		state = WANDERING = new Waiting();
 		viewDistance = 1;
 
 		properties.add(Property.IMMOVABLE);
-		properties.add(Property.MINIBOSS);
 	}
 
 	@Override
 	protected boolean act() {
-		if (HP < HT && (enemy == null || !Dungeon.level.adjacent(pos, enemy.pos))) {
+		if (HP < HT && (enemy == null || !Dungeon.level.adjacent(pos, enemy.pos)) && !Dungeon.hero.hasTalent(Talent.NATURES_BETTER_AID)) {
 			sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(Math.min(5, HT - HP)), FloatingText.HEALING);
 			HP = Math.min(HT, HP + 5);
 		}
@@ -64,12 +86,21 @@ public class RotLasher extends Mob {
 
 	@Override
 	public void damage(int dmg, Object src) {
-		if (src instanceof Burning) {
+		if (src instanceof Burning || 
+					(src == Dungeon.hero
+					&& Dungeon.hero.hasTalent(Talent.NATURES_BETTER_AID)
+					&& Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon)) {
 			destroy();
 			sprite.die();
 		} else {
 			super.damage(dmg, src);
 		}
+	}
+
+	@Override
+	public void die(Object src) {
+		removeRotLasher();
+		super.die(src);
 	}
 
 	@Override
