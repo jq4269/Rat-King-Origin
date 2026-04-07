@@ -27,6 +27,7 @@ import com.zrp200.rkpd2.actors.blobs.ToxicGas;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.Burning;
 import com.zrp200.rkpd2.actors.buffs.Cripple;
+import com.zrp200.rkpd2.actors.buffs.Poison;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.effects.FloatingText;
 import com.zrp200.rkpd2.items.Generator;
@@ -110,6 +111,9 @@ public class RotLasher extends Mob {
 	public int attackProc(Char enemy, int damage) {
 		damage = super.attackProc( enemy, damage );
 		Buff.affect( enemy, Cripple.class, 2f );
+		if (Dungeon.hero.hasTalent(Talent.NATURES_BETTER_AID) || Dungeon.hero.pointsInTalent(Talent.NATURES_BETTER_AID) >= 3) {
+			Buff.affect(enemy, Poison.class).set(damage);
+		}
 		return super.attackProc(enemy, damage);
 	}
 
