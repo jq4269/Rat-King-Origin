@@ -20,3 +20,6 @@ local.properties
 *.iml
 *.idea
 *.patch
+
+# bin folders
+**/bin/
