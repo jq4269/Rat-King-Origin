@@ -5,6 +5,7 @@ For now, it is just a playground for me and I don't really know what I'll do wit
 
 Here is a list of changes so far:
 - Reworked Warden's Nature's Better Aid talent to spawn corrupted Rot Lashers
+- Buffed Warden's Indirect Benefits talent to benefit corrupted Rot Lashers
 
 ---
 
