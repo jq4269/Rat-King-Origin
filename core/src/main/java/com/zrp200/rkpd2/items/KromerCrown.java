@@ -30,6 +30,7 @@ import com.zrp200.rkpd2.actors.hero.Hero;
 import com.zrp200.rkpd2.actors.hero.HeroClass;
 import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.effects.Speck;
+import com.zrp200.rkpd2.items.artifacts.HolyTome;
 import com.zrp200.rkpd2.items.quest.Kromer;
 import com.zrp200.rkpd2.items.scrolls.exotic.ScrollOfMetamorphosis;
 import com.zrp200.rkpd2.messages.Messages;
@@ -98,6 +99,7 @@ public class KromerCrown extends TengusMask {
                     if (!curUser.isClassedLoosely(HeroClass.CLERIC)){
                         heroSubClasses.remove(PRIEST);
                         heroSubClasses.remove(PALADIN);
+						heroSubClasses.remove(CENOBITE);
                     }
 					heroSubClasses.remove(hero.subClass);
 					//remove rat king class
