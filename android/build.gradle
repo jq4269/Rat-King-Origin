@@ -4,13 +4,11 @@ android {
     namespace 'com.zrp200.rkpd2.android'
     signingConfigs {
         release {
-            def keystoreFile = file('C:\\Users\\zrp20\\Zrp200.jks')
-
-            if (keystoreFile.exists()) {
-                storeFile keystoreFile
-                storePassword "dummy_local_pass" 
-                keyAlias "dummy_local_alias"
-                keyPassword "dummy_local_pass"
+            if (System.getenv("RELEASE_KEYSTORE_CONTENTS")) {
+                storeFile file(System.getenv("RELEASE_KEYSTORE_PATH") ?: "release.keystore")
+                storePassword System.getenv("RELEASE_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword System.getenv("RELEASE_KEY_PASSWORD")
             } else {
                 storeFile file("debug.keystore")
                 storePassword "android"
