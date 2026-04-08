@@ -1954,6 +1954,10 @@ public enum Talent {
 				Collections.addAll(tierTalents, DURABLE_TIPS, BARKSKIN, SHIELDING_DEW,
 						NATURES_BETTER_AID, INDIRECT_BENEFITS);
 				break;
+			case CHANNELER:
+				//TODO: add unique talents 
+				Collections.addAll(tierTalents, DURABLE_TIPS, BARKSKIN, SHIELDING_DEW,
+						SHARED_ENCHANTMENT, FARSIGHT);
 			case CHAMPION:
 				Collections.addAll(tierTalents, VARIED_CHARGE, TWIN_UPGRADES, COMBINED_LETHALITY, ELITE_DEXTERITY, HELPER_TO_HERO);
 				break;

@@ -158,7 +158,7 @@ public enum HeroClass {
 	public HeroSubClass secretSub(){
 		switch (this){
 			case HUNTRESS:
-				return HeroSubClass.WARLOCK;
+				return HeroSubClass.CHANNELER;
 			case WARRIOR:
 				return HeroSubClass.BRAWLER;
 			case ROGUE:
