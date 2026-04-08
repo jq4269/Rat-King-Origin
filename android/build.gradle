@@ -4,10 +4,19 @@ android {
     namespace 'com.zrp200.rkpd2.android'
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\zrp20\\Zrp200.jks')
-            storePassword 'palkia'
-            keyAlias 'Zrp200'
-            keyPassword 'palkia'
+            def keystoreFile = file('C:\\Users\\zrp20\\Zrp200.jks')
+
+            if (keystoreFile.exists()) {
+                storeFile keystoreFile
+                storePassword "dummy_local_pass" 
+                keyAlias "dummy_local_alias"
+                keyPassword "dummy_local_pass"
+            } else {
+                storeFile file("debug.keystore")
+                storePassword "android"
+                keyAlias "androiddebugkey"
+                keyPassword "android"
+            }
         }
     }
     compileSdk appAndroidCompileSDK
