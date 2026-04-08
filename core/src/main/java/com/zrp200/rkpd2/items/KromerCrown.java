@@ -98,6 +98,7 @@ public class KromerCrown extends TengusMask {
                     if (!curUser.isClassedLoosely(HeroClass.CLERIC)){
                         heroSubClasses.remove(PRIEST);
                         heroSubClasses.remove(PALADIN);
+						heroSubClasses.remove(CENOBITE);
                     }
 					heroSubClasses.remove(hero.subClass);
 					//remove rat king class
