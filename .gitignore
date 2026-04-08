@@ -26,3 +26,6 @@ local.properties
 
 # jks files
 *.jks
+
+# stupid .vscode settings files
+.vscode/
