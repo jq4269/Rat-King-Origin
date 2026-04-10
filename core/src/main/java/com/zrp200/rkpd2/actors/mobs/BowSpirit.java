@@ -32,8 +32,11 @@ public class BowSpirit extends DirectableAlly {
 		defenseSkill = 0;
 		viewDistance = Light.DISTANCE;
 
-        properties.add(Property.IMMOVABLE);
 		flying = true;
+
+		// this wont work because it makes the bow jump away from it
+        //properties.add(Property.IMMOVABLE);
+		baseSpeed = 0f; // instead we set the base speed to 0
 
 		//TODO: fix talent once i actually add it
 		baseSpeed = Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
