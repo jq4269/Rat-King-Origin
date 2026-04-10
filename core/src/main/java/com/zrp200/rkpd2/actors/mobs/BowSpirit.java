@@ -1,21 +1,26 @@
 package com.zrp200.rkpd2.actors.mobs;
 
-import com.watabou.utils.Random;
 import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.buffs.ChampionEnemy;
 import com.zrp200.rkpd2.actors.buffs.Light;
-import com.zrp200.rkpd2.items.Generator;
+import com.zrp200.rkpd2.actors.hero.Talent;
+import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
+import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.weapon.SpiritBow;
 import com.zrp200.rkpd2.mechanics.Ballistica;
+import com.zrp200.rkpd2.messages.Messages;
 import com.zrp200.rkpd2.sprites.ScorpioSprite;
+import com.zrp200.rkpd2.utils.GLog;
 
-public class BowSpirit extends Mob {
+public class BowSpirit extends DirectableAlly {
     
     int MINDMG;
     int MAXDMG;
     float ACC;
     float DLY;
+
+	SpiritBow bow;
 
     {
         //TODO: fix sprite
@@ -24,24 +29,18 @@ public class BowSpirit extends Mob {
 		HP = HT = Dungeon.hero.lvl;
 		defenseSkill = 0;
 		viewDistance = Light.DISTANCE;
-		
-		EXP = 0;
-		maxLvl = 30;
-		
-		loot = Generator.Category.MISSILE;
-		lootChance = 0f;
-        super.alignment = Alignment.ALLY;
 
         properties.add(Property.IMMOVABLE);
-        // awaken bow when it spawns
-        // dunno if this should be wandering or passive
-        state = WANDERING;
 
+		//TODO: fix talent once i actually add it
+		baseSpeed = Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
 	}
 
     // Must be initialized using this constructor
     public BowSpirit(SpiritBow bow) {
-        this.MINDMG = bow.min();
+        super();
+		this.bow = bow;
+		this.MINDMG = bow.min();
         this.MAXDMG = bow.max();
         this.ACC = bow.ACC;
         this.DLY = bow.DLY;
@@ -49,22 +48,8 @@ public class BowSpirit extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( MINDMG, MAXDMG );
+		return bow.damageRoll(this);
 	}
-	
-	@Override
-	public int attackSkill( Char target ) {
-		return (MINDMG + MAXDMG) / 2;
-	}
-	
-	@Override
-	public boolean canAttack(Char enemy) {
-        if (buff(ChampionEnemy.Paladin.class) != null){
-            return false;
-        }
-		return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos;
-	}
-	
 	
 	@Override
 	public void aggro(Char ch) {
@@ -75,4 +60,82 @@ public class BowSpirit extends Mob {
 			super.aggro(ch);
 		}
 	}
+
+	private void updateBow(){
+		if (bow == null) {
+			bow = Dungeon.hero.belongings.getItem(SpiritBow.class);
+		}
+		
+		//same dodge as the hero
+		defenseSkill = (Dungeon.hero.lvl+4);
+		if (bow == null) return;
+		HT = 20 + 8*(bow.level() + Math.max(0, Dungeon.hero.lvl-30));
+	}
+
+	@Override
+	protected boolean act() {
+		updateBow();
+		
+		if (!isAlive()) {
+			return true;
+		}
+		return super.act();
+	}
+
+	@Override
+	public int attackSkill(Char target) {
+		
+		//same accuracy as the hero.
+		int acc = Dungeon.hero.lvl + 9;
+		
+		if (bow != null){
+			acc *= bow.accuracyFactor( this, target );
+		}
+		
+		return acc;
+	}
+	
+	@Override
+	public float attackDelay() {
+		float delay = super.attackDelay();
+		if (bow != null){
+			delay *= bow.delayFactor(this);
+		}
+		return delay;
+	}
+
+	@Override
+	public boolean canAttack(Char enemy) {
+        if (buff(ChampionEnemy.Paladin.class) != null){
+            return false;
+        }
+		return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos;
+	}
+	
+	@Override
+	public int attackProc(Char enemy, int damage) {
+		damage = super.attackProc(enemy, damage);
+		if (bow != null) {
+			damage = bow.proc(this, enemy, damage);
+			if (!enemy.isAlive() && enemy == Dungeon.hero) {
+				Dungeon.fail(this);
+				GLog.n(Messages.capitalize(Messages.get(Char.class, "kill", name())));
+			}
+		}
+		return damage;
+	}
+	
+	@Override
+	public void damage(int dmg, Object src) {
+		super.damage( dmg, src );
+		
+		//for the bow status indicator
+		Item.updateQuickslot();
+	}
+
+	@Override
+	public void die(Object cause) {
+		
+		super.die(cause);
+	}		
 }
