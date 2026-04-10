@@ -89,7 +89,7 @@ public class SpiritBow extends Weapon implements BrawlerBuff.BrawlerWeapon {
 		defaultAction = AC_SHOOT;
 		usesTargeting = true;
 		
-		unique = true;
+		unique = false;
 		bones = false;
 	}
 
@@ -161,6 +161,7 @@ public class SpiritBow extends Weapon implements BrawlerBuff.BrawlerWeapon {
 			spirit.pos = cell;
 			GameScene.add(spirit);
 			ScrollOfTeleportation.appear(spirit, spirit.pos);
+			spirit.defendPos(cell);
 		}
 	}
 

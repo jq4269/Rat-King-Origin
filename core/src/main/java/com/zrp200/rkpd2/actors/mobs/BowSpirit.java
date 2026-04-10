@@ -1,16 +1,18 @@
 package com.zrp200.rkpd2.actors.mobs;
 
+import com.watabou.utils.Callback;
 import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.buffs.ChampionEnemy;
 import com.zrp200.rkpd2.actors.buffs.Light;
 import com.zrp200.rkpd2.actors.hero.Talent;
+import com.zrp200.rkpd2.actors.hero.abilities.huntress.SpiritHawk.HawkSprite;
 import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
 import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.weapon.SpiritBow;
 import com.zrp200.rkpd2.mechanics.Ballistica;
 import com.zrp200.rkpd2.messages.Messages;
-import com.zrp200.rkpd2.sprites.ScorpioSprite;
+import com.zrp200.rkpd2.sprites.MissileSprite;
 import com.zrp200.rkpd2.utils.GLog;
 
 public class BowSpirit extends DirectableAlly {
@@ -24,13 +26,14 @@ public class BowSpirit extends DirectableAlly {
 
     {
         //TODO: fix sprite
-		spriteClass = ScorpioSprite.class;
+		spriteClass = HawkSprite.class;
 		
 		HP = HT = Dungeon.hero.lvl;
 		defenseSkill = 0;
 		viewDistance = Light.DISTANCE;
 
         properties.add(Property.IMMOVABLE);
+		flying = true;
 
 		//TODO: fix talent once i actually add it
 		baseSpeed = Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
@@ -124,6 +127,29 @@ public class BowSpirit extends DirectableAlly {
 		}
 		return damage;
 	}
+
+	@Override
+	protected boolean doAttack( Char enemy ) {
+		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
+			((MissileSprite) sprite.parent.recycle(MissileSprite.class)).
+					reset(sprite,
+							enemy.sprite,
+							new SpiritBow().knockArrow(),
+							new Callback() {
+								@Override
+								public void call() {
+									attack(enemy,
+											1,
+											0, 1);
+									spend(attackDelay());
+									next();
+								}
+							});
+			return false;
+		} else {
+			return super.doAttack(enemy);
+		}
+	}
 	
 	@Override
 	public void damage(int dmg, Object src) {
@@ -131,6 +157,13 @@ public class BowSpirit extends DirectableAlly {
 		
 		//for the bow status indicator
 		Item.updateQuickslot();
+	}
+
+	@Override
+	public boolean interact(Char c) {
+		// kills the bow spirit so that the bow can be collected
+		die(c);
+		return true;
 	}
 
 	@Override
