@@ -1,5 +1,6 @@
 package com.zrp200.rkpd2.actors.mobs;
 
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Char;
@@ -16,13 +17,8 @@ import com.zrp200.rkpd2.sprites.MissileSprite;
 import com.zrp200.rkpd2.utils.GLog;
 
 public class BowSpirit extends DirectableAlly {
-    
-    int MINDMG;
-    int MAXDMG;
-    float ACC;
-    float DLY;
 
-	SpiritBow bow;
+	public static SpiritBow bow;
 
     {
         //TODO: fix sprite
@@ -42,14 +38,13 @@ public class BowSpirit extends DirectableAlly {
 		baseSpeed = Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
 	}
 
-    // Must be initialized using this constructor
+	public BowSpirit() {
+		super();
+	}
+
     public BowSpirit(SpiritBow bow) {
         super();
-		this.bow = bow;
-		this.MINDMG = bow.min();
-        this.MAXDMG = bow.max();
-        this.ACC = bow.ACC;
-        this.DLY = bow.DLY;
+		BowSpirit.bow = bow;
     }
 	
 	@Override
@@ -173,5 +168,22 @@ public class BowSpirit extends DirectableAlly {
 	public void die(Object cause) {
 		
 		super.die(cause);
-	}		
+	}
+	private static final String SPIRIT_BOW = "spirit_bow";  
+
+	@Override  
+	public void storeInBundle(Bundle bundle) {  
+		super.storeInBundle(bundle);  
+		if (bow != null) {  
+			bundle.put(SPIRIT_BOW, bow); 
+		}  
+	}  
+	
+	@Override  
+	public void restoreFromBundle(Bundle bundle) {  
+		super.restoreFromBundle(bundle);  
+		if (bundle.contains(SPIRIT_BOW)) {  
+			bow = (SpiritBow) bundle.get(SPIRIT_BOW);   
+		}  
+	}
 }

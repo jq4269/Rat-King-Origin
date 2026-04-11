@@ -159,6 +159,7 @@ public class SpiritBow extends Weapon implements BrawlerBuff.BrawlerWeapon {
 		if (Dungeon.hero.isSubclassedLoosely(HeroSubClass.CHANNELER) && !Dungeon.level.pit[cell]) {
 			BowSpirit spirit = new BowSpirit(this);
 			spirit.pos = cell;
+			Dungeon.level.mobs.add(spirit);  
 			GameScene.add(spirit);
 			ScrollOfTeleportation.appear(spirit, spirit.pos);
 			spirit.defendPos(cell);
