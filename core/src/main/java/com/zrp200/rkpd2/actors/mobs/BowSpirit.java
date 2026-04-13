@@ -4,7 +4,9 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Char;
+import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.ChampionEnemy;
+import com.zrp200.rkpd2.actors.buffs.Healing;
 import com.zrp200.rkpd2.actors.buffs.Light;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.abilities.huntress.SpiritHawk.HawkSprite;
@@ -90,6 +92,9 @@ public class BowSpirit extends DirectableAlly {
 	protected boolean act() {
 		boolean b = super.act();
 		heroAttacked = false;
+		if (HP < HT && Dungeon.hero.hasTalent(Talent.PATIENT_BOW) && state != HUNTING) {
+			Buff.affect(this, Healing.class).setHeal(1, 0, 1);
+		}
 		return b;
 	}
 
