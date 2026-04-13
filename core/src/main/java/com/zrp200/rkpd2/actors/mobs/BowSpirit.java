@@ -25,7 +25,8 @@ public class BowSpirit extends DirectableAlly {
 	public static SpiritBow bow;
 	private static boolean heroAttacked;
 	private double dmgMultiplier;
-	private int turnsNotAttacked;
+	private float turnsNotAttacked;
+	private float lastActTime;
 
     {
         //TODO: fix sprite
@@ -60,7 +61,8 @@ public class BowSpirit extends DirectableAlly {
         super();
 		BowSpirit.bow = bow;
 		heroAttacked = false;
-		turnsNotAttacked = 0;
+		turnsNotAttacked = 0f;
+		lastActTime = now();
     }
 	
 	@Override
@@ -99,9 +101,10 @@ public class BowSpirit extends DirectableAlly {
 	@Override
 	protected boolean act() {
 		boolean b = super.act();
-		turnsNotAttacked++;
+		turnsNotAttacked += (now() - lastActTime);
+		lastActTime = now();
 		heroAttacked = false;
-		GLog.i("Turns not Attacked: %d", turnsNotAttacked);
+		GLog.i("Turns not Attacked: %.2f", turnsNotAttacked);
 		if (state != HUNTING) {
 			
 			if (HP < HT && Dungeon.hero.hasTalent(Talent.PATIENT_BOW)) {
@@ -148,11 +151,11 @@ public class BowSpirit extends DirectableAlly {
 			damage = bow.proc(this, enemy, damage);
 			int patientBowPoints = Dungeon.hero.pointsInTalent(Talent.PATIENT_BOW);
 			if (patientBowPoints > 1) {
-				float procChance = (float) ((patientBowPoints - 1) * 0.05 * turnsNotAttacked);
+				float procChance = (float) ((patientBowPoints - 1) * 0.025 * turnsNotAttacked);
 				if (Random.Float() < procChance) {
 					GLog.i("Patient Bow proc'd! Knockback Chance: %.2f%%", procChance * 100);
-					// caps at 500% knockback
-					float powerMulti = (float) Math.min(5.0, Math.max(1.0, procChance));
+					// caps at 300% knockback
+					float powerMulti = (float) Math.min(3.0, Math.max(1.0, procChance));
 
 					//trace a ballistica to our target (which will also extend past them)
 					Ballistica trajectory = new Ballistica(this.pos, enemy.pos, Ballistica.STOP_TARGET);
@@ -172,7 +175,7 @@ public class BowSpirit extends DirectableAlly {
 				GLog.n(Messages.capitalize(Messages.get(Char.class, "kill", name())));
 			}
 		}
-		turnsNotAttacked = 0;
+		turnsNotAttacked = turnsNotAttacked - (int) turnsNotAttacked; //reset the counter if it procs
 		return damage;
 	}
 
