@@ -211,6 +211,8 @@ public class BowSpirit extends DirectableAlly {
 
 	@Override
 	public boolean interact(Char c) {
+		bow.doPickUp(Dungeon.hero, this.pos);
+		bow = null;
 		// kills the bow spirit so that the bow can be collected
 		die(c);
 		return true;
