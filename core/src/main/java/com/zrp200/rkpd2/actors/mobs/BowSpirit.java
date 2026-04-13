@@ -104,7 +104,6 @@ public class BowSpirit extends DirectableAlly {
 		turnsNotAttacked += (now() - lastActTime);
 		lastActTime = now();
 		heroAttacked = false;
-		GLog.i("Turns not Attacked: %.2f", turnsNotAttacked);
 		if (state != HUNTING) {
 			
 			if (HP < HT && Dungeon.hero.hasTalent(Talent.PATIENT_BOW)) {
@@ -153,7 +152,6 @@ public class BowSpirit extends DirectableAlly {
 			if (patientBowPoints > 1) {
 				float procChance = (float) ((patientBowPoints - 1) * 0.025 * turnsNotAttacked);
 				if (Random.Float() < procChance) {
-					GLog.i("Patient Bow proc'd! Knockback Chance: %.2f%%", procChance * 100);
 					// caps at 300% knockback
 					float powerMulti = (float) Math.min(3.0, Math.max(1.0, procChance));
 
