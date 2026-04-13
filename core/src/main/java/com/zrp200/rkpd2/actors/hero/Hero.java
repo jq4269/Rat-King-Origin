@@ -100,6 +100,7 @@ import com.zrp200.rkpd2.actors.hero.spells.PetitioMagica;
 import com.zrp200.rkpd2.actors.hero.spells.ShieldOfLight;
 import com.zrp200.rkpd2.actors.hero.spells.Smite;
 import com.zrp200.rkpd2.actors.mobs.AbyssalSpawner;
+import com.zrp200.rkpd2.actors.mobs.BowSpirit;
 import com.zrp200.rkpd2.actors.mobs.Ech;
 import com.zrp200.rkpd2.actors.mobs.Elemental;
 import com.zrp200.rkpd2.actors.mobs.FinalFroggit;
@@ -109,6 +110,7 @@ import com.zrp200.rkpd2.actors.mobs.Monk;
 import com.zrp200.rkpd2.actors.mobs.Phantom;
 import com.zrp200.rkpd2.actors.mobs.Snake;
 import com.zrp200.rkpd2.actors.mobs.npcs.Blacksmith;
+import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
 import com.zrp200.rkpd2.effects.CellEmitter;
 import com.zrp200.rkpd2.effects.CheckedCell;
 import com.zrp200.rkpd2.effects.Flare;
@@ -1911,6 +1913,9 @@ public class Hero extends Char {
 					Buff.affect(this, Barrier.class).setShield(8);
 					Cooldown.affectHero(Talent.AggressiveBarrierCooldown.class);
 				}
+			}
+			if (isSubclassedLoosely(HeroSubClass.CHANNELER)) {
+				BowSpirit.heroAttacked();
 			}
 			sprite.attack( enemy.pos );
 

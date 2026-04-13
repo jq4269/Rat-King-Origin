@@ -19,6 +19,7 @@ import com.zrp200.rkpd2.utils.GLog;
 public class BowSpirit extends DirectableAlly {
 
 	public static SpiritBow bow;
+	private static boolean heroAttacked;
 
     {
         //TODO: fix sprite
@@ -48,6 +49,7 @@ public class BowSpirit extends DirectableAlly {
     public BowSpirit(SpiritBow bow) {
         super();
 		BowSpirit.bow = bow;
+		heroAttacked = false;
     }
 	
 	@Override
@@ -71,6 +73,19 @@ public class BowSpirit extends DirectableAlly {
 		} else {
 			defendPos(spiritBowPos);
 		}
+	}
+
+	// if the hero attacks then we call this so that spirit doesnt attack as well
+	// for balancing reasons
+	public static void heroAttacked() {
+		heroAttacked = true;
+	}
+
+	@Override
+	protected boolean act() {
+		boolean b = super.act();
+		heroAttacked = false;
+		return b;
 	}
 
 	@Override
@@ -97,7 +112,7 @@ public class BowSpirit extends DirectableAlly {
 
 	@Override
 	public boolean canAttack(Char enemy) {
-        if (buff(ChampionEnemy.Paladin.class) != null){
+        if (heroAttacked || buff(ChampionEnemy.Paladin.class) != null){
             return false;
         }
 		return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos;
@@ -159,13 +174,15 @@ public class BowSpirit extends DirectableAlly {
 		if (bow != null) Dungeon.level.drop( bow, pos ).sprite.drop();
 		super.die(cause);
 	}
-	private static final String SPIRIT_BOW = "spirit_bow";  
+	private static final String SPIRIT_BOW = "spirit_bow";
+	private static final String HERO_ATTACKED = "hero_attacked";  
 
 	@Override  
 	public void storeInBundle(Bundle bundle) {  
 		super.storeInBundle(bundle);  
 		if (bow != null) {  
 			bundle.put(SPIRIT_BOW, bow); 
+			bundle.put(HERO_ATTACKED, heroAttacked);
 		}  
 	}  
 	
@@ -175,5 +192,6 @@ public class BowSpirit extends DirectableAlly {
 		if (bundle.contains(SPIRIT_BOW)) {  
 			bow = (SpiritBow) bundle.get(SPIRIT_BOW);   
 		}  
+		heroAttacked = bundle.getBoolean(HERO_ATTACKED);
 	}
 }
