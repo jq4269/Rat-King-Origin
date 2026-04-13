@@ -25,17 +25,20 @@ public class BowSpirit extends DirectableAlly {
 		spriteClass = HawkSprite.class;
 		
 		HP = HT = Dungeon.hero.lvl;
-		defenseSkill = 0;
+		defenseSkill = (Dungeon.hero.lvl+4);
 		viewDistance = Light.DISTANCE;
 
 		flying = true;
 
-		// this wont work because it makes the bow jump away from it
-        //properties.add(Property.IMMOVABLE);
-		baseSpeed = 0f; // instead we set the base speed to 0
+		baseSpeed = 1f;
 
-		//TODO: fix talent once i actually add it
-		baseSpeed = Dungeon.hero.pointsInTalent(Talent.FARSIGHT);
+		if (!Dungeon.hero.hasTalent(Talent.DRIFTING_SPIRIT)) {
+			rooted = true;
+		} else {
+			rooted = false;
+			baseSpeed = 1/(5 - (float) Dungeon.hero.pointsInTalent(Talent.DRIFTING_SPIRIT));
+		}
+
 	}
 
 	public BowSpirit() {
@@ -62,25 +65,12 @@ public class BowSpirit extends DirectableAlly {
 		}
 	}
 
-	private void updateBow(){
-		if (bow == null) {
-			bow = Dungeon.hero.belongings.getItem(SpiritBow.class);
+	public void setMovement(int spiritBowPos) {
+		if (Dungeon.hero.hasTalent(Talent.DRIFTING_SPIRIT)) {
+			followHero();
+		} else {
+			defendPos(spiritBowPos);
 		}
-		
-		//same dodge as the hero
-		defenseSkill = (Dungeon.hero.lvl+4);
-		if (bow == null) return;
-		HT = 20 + 8*(bow.level() + Math.max(0, Dungeon.hero.lvl-30));
-	}
-
-	@Override
-	protected boolean act() {
-		updateBow();
-		
-		if (!isAlive()) {
-			return true;
-		}
-		return super.act();
 	}
 
 	@Override
