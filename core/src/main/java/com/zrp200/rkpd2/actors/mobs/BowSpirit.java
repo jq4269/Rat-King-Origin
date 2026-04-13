@@ -20,14 +20,19 @@ public class BowSpirit extends DirectableAlly {
 
 	public static SpiritBow bow;
 	private static boolean heroAttacked;
+	private double dmgMultiplier;
 
     {
         //TODO: fix sprite
 		spriteClass = HawkSprite.class;
 		
-		HP = HT = Dungeon.hero.lvl;
+		int biggerBowPoints = Dungeon.hero.pointsInTalent(Talent.BIGGER_BOW);
+
+		HP = HT = (int) (Dungeon.hero.lvl * (1 + (0.5 * biggerBowPoints)));
 		defenseSkill = (Dungeon.hero.lvl+4);
 		viewDistance = Light.DISTANCE;
+
+		dmgMultiplier = 0.25 * (1 + biggerBowPoints);
 
 		flying = true;
 
@@ -54,7 +59,7 @@ public class BowSpirit extends DirectableAlly {
 	
 	@Override
 	public int damageRoll() {
-		return bow.damageRoll(this);
+		return (int) (bow.damageRoll(this) * dmgMultiplier);
 	}
 	
 	@Override
