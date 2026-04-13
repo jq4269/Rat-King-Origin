@@ -1,5 +1,6 @@
 package com.zrp200.rkpd2.actors.mobs;
 
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
@@ -17,6 +18,7 @@ import com.zrp200.rkpd2.items.wands.WandOfBlastWave;
 import com.zrp200.rkpd2.items.weapon.SpiritBow;
 import com.zrp200.rkpd2.mechanics.Ballistica;
 import com.zrp200.rkpd2.messages.Messages;
+import com.zrp200.rkpd2.scenes.GameScene;
 import com.zrp200.rkpd2.sprites.MissileSprite;
 import com.zrp200.rkpd2.utils.GLog;
 
@@ -36,7 +38,7 @@ public class BowSpirit extends DirectableAlly {
 
 		HP = HT = (int) (Dungeon.hero.lvl * (1 + (0.5 * biggerBowPoints)));
 		defenseSkill = (Dungeon.hero.lvl+4);
-		viewDistance = Light.DISTANCE;
+		viewDistance = Light.DISTANCE + Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT);
 
 		dmgMultiplier = 0.25 * (1 + biggerBowPoints);
 
@@ -78,8 +80,12 @@ public class BowSpirit extends DirectableAlly {
 	public void aggro(Char ch) {
 		//cannot be aggroed to something it can't see
 		//skip this check if FOV isn't initialized
-		if (ch == null || fieldOfView == null
-				|| fieldOfView.length != Dungeon.level.length() || fieldOfView[ch.pos]) {
+		boolean[] sharedFOV = fieldOfView;
+		if (fieldOfView != null && Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT) > 2) {
+			sharedFOV = BArray.or(fieldOfView, Dungeon.hero.fieldOfView, sharedFOV);
+		}
+		if (ch == null || sharedFOV == null
+				|| sharedFOV.length != Dungeon.level.length() || sharedFOV[ch.pos]) {
 			super.aggro(ch);
 		}
 	}
@@ -109,6 +115,14 @@ public class BowSpirit extends DirectableAlly {
 			if (HP < HT && Dungeon.hero.hasTalent(Talent.PATIENT_BOW)) {
 				Buff.affect(this, Healing.class).setHeal(1, 0, 1);
 			}
+		}
+		if (Dungeon.hero.hasTalent(Talent.CHANNELING_SIGHT)) {
+			
+			Dungeon.level.updateFieldOfView( this, fieldOfView );
+			GameScene.updateFog(pos, viewDistance+(int)Math.ceil(speed()));
+			// The spirit will share its FOV with the hero if the hero has enough points in channeling sight
+			// this is handled in the level.updateFieldOfView method
+			// The spirit can also see enemies in the hero's FOV if the talent is maxed, this is handled in Mob.act()
 		}
 		return b;
 	}
@@ -141,6 +155,17 @@ public class BowSpirit extends DirectableAlly {
             return false;
         }
 		return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos;
+	}
+
+	@Override
+	public boolean canSee(int pos) {
+		// If the hero has maxed Channeling Sight, allow the spirit to see targets in the hero's FOV
+		if (Dungeon.hero != null && Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT) > 2
+				&& Dungeon.hero.fieldOfView != null && Dungeon.hero.fieldOfView.length > pos
+				&& Dungeon.hero.fieldOfView[pos]) {
+			return true;
+		}
+		return super.canSee(pos);
 	}
 	
 	@Override

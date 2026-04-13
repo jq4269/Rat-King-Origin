@@ -327,7 +327,13 @@ public abstract class Mob extends Char {
 
 		enemy = chooseEnemy();
 
-		boolean enemyInFOV = enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
+		boolean enemyInFOV;
+		// BowSpirits with channeling sight can see enemies in hero FOV
+		if (this instanceof BowSpirit && Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT) > 2) {
+			enemyInFOV = enemy != null && enemy.isAlive() && (fieldOfView[enemy.pos] || Dungeon.hero.fieldOfView[enemy.pos]) && enemy.invisible <= 0;
+		} else {
+			enemyInFOV = enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
+		}
 
 		//prevents action, but still updates enemy seen status
 		if (buff(Feint.AfterImage.FeintConfusion.class) != null){

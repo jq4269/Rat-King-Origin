@@ -59,6 +59,7 @@ import com.zrp200.rkpd2.actors.hero.abilities.cleric.PowerOfMany;
 import com.zrp200.rkpd2.actors.hero.abilities.huntress.SpiritHawk;
 import com.zrp200.rkpd2.actors.hero.spells.DivineSense;
 import com.zrp200.rkpd2.actors.hero.spells.Stasis;
+import com.zrp200.rkpd2.actors.mobs.BowSpirit;
 import com.zrp200.rkpd2.actors.mobs.GnollGeomancer;
 import com.zrp200.rkpd2.actors.mobs.Mimic;
 import com.zrp200.rkpd2.actors.mobs.Mob;
@@ -1568,7 +1569,8 @@ public abstract class Level implements Bundlable {
 				if (m instanceof WandOfWarding.Ward
 						|| m instanceof WandOfRegrowth.Lotus
 						|| m instanceof SpiritHawk.HawkAlly
-						|| m.buff(PowerOfMany.PowerBuff.class) != null){
+						|| m.buff(PowerOfMany.PowerBuff.class) != null
+						|| (m instanceof BowSpirit && Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT) > 1)){
 					if (m.fieldOfView == null || m.fieldOfView.length != length()){
 						m.fieldOfView = new boolean[length()];
 						Dungeon.level.updateFieldOfView( m, m.fieldOfView );
