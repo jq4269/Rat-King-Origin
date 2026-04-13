@@ -155,7 +155,6 @@ public class SpiritBow extends Weapon implements BrawlerBuff.BrawlerWeapon {
 
 	@Override
 	protected void onThrow(int cell) {
-		super.onThrow(cell);
 		if (Dungeon.hero.isSubclassedLoosely(HeroSubClass.CHANNELER) && !Dungeon.level.pit[cell]) {
 			BowSpirit spirit = new BowSpirit(this);
 			spirit.pos = cell;
@@ -163,6 +162,8 @@ public class SpiritBow extends Weapon implements BrawlerBuff.BrawlerWeapon {
 			GameScene.add(spirit);
 			ScrollOfTeleportation.appear(spirit, spirit.pos);
 			spirit.setMovement(cell);
+		} else {
+			super.onThrow(cell);
 		}
 	}
 

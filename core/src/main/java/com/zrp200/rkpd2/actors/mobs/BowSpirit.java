@@ -156,7 +156,7 @@ public class BowSpirit extends DirectableAlly {
 
 	@Override
 	public void die(Object cause) {
-		
+		if (bow != null) Dungeon.level.drop( bow, pos ).sprite.drop();
 		super.die(cause);
 	}
 	private static final String SPIRIT_BOW = "spirit_bow";  
