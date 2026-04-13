@@ -38,9 +38,9 @@ public class BowSpirit extends DirectableAlly {
 
 		HP = HT = (int) (Dungeon.hero.lvl * (1 + (0.5 * biggerBowPoints)));
 		defenseSkill = (Dungeon.hero.lvl+4);
-		viewDistance = Light.DISTANCE + Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT);
+		viewDistance = Math.max(1, Light.DISTANCE - 2) + Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT);
 
-		dmgMultiplier = 0.25 * (1 + biggerBowPoints);
+		dmgMultiplier = 0.25 * (3 + biggerBowPoints);
 
 		flying = true;
 
