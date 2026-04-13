@@ -2,6 +2,7 @@ package com.zrp200.rkpd2.actors.mobs;
 
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.Random;
 import com.zrp200.rkpd2.Dungeon;
 import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.buffs.Buff;
@@ -12,6 +13,7 @@ import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.abilities.huntress.SpiritHawk.HawkSprite;
 import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
 import com.zrp200.rkpd2.items.Item;
+import com.zrp200.rkpd2.items.wands.WandOfBlastWave;
 import com.zrp200.rkpd2.items.weapon.SpiritBow;
 import com.zrp200.rkpd2.mechanics.Ballistica;
 import com.zrp200.rkpd2.messages.Messages;
@@ -23,6 +25,7 @@ public class BowSpirit extends DirectableAlly {
 	public static SpiritBow bow;
 	private static boolean heroAttacked;
 	private double dmgMultiplier;
+	private int turnsNotAttacked;
 
     {
         //TODO: fix sprite
@@ -57,11 +60,16 @@ public class BowSpirit extends DirectableAlly {
         super();
 		BowSpirit.bow = bow;
 		heroAttacked = false;
+		turnsNotAttacked = 0;
     }
 	
 	@Override
 	public int damageRoll() {
-		return (int) (bow.damageRoll(this) * dmgMultiplier);
+		int dmg = (int) (bow.damageRoll(this) * dmgMultiplier);
+		if (Dungeon.hero.pointsInTalent(Talent.PATIENT_BOW) > 2) {
+			dmg *= 1 + (turnsNotAttacked * 0.01);
+		}
+		return dmg;
 	}
 	
 	@Override
@@ -91,9 +99,14 @@ public class BowSpirit extends DirectableAlly {
 	@Override
 	protected boolean act() {
 		boolean b = super.act();
+		turnsNotAttacked++;
 		heroAttacked = false;
-		if (HP < HT && Dungeon.hero.hasTalent(Talent.PATIENT_BOW) && state != HUNTING) {
-			Buff.affect(this, Healing.class).setHeal(1, 0, 1);
+		GLog.i("Turns not Attacked: %d", turnsNotAttacked);
+		if (state != HUNTING) {
+			
+			if (HP < HT && Dungeon.hero.hasTalent(Talent.PATIENT_BOW)) {
+				Buff.affect(this, Healing.class).setHeal(1, 0, 1);
+			}
 		}
 		return b;
 	}
@@ -133,16 +146,39 @@ public class BowSpirit extends DirectableAlly {
 		damage = super.attackProc(enemy, damage);
 		if (bow != null) {
 			damage = bow.proc(this, enemy, damage);
+			int patientBowPoints = Dungeon.hero.pointsInTalent(Talent.PATIENT_BOW);
+			if (patientBowPoints > 1) {
+				float procChance = (float) ((patientBowPoints - 1) * 0.05 * turnsNotAttacked);
+				if (Random.Float() < procChance) {
+					GLog.i("Patient Bow proc'd! Knockback Chance: %.2f%%", procChance * 100);
+					// caps at 500% knockback
+					float powerMulti = (float) Math.min(5.0, Math.max(1.0, procChance));
+
+					//trace a ballistica to our target (which will also extend past them)
+					Ballistica trajectory = new Ballistica(this.pos, enemy.pos, Ballistica.STOP_TARGET);
+					//trim it to just be the part that goes past them
+					trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size()-1), Ballistica.PROJECTILE);
+					//knock them back along that ballistica
+					WandOfBlastWave.throwChar(enemy,
+							trajectory,
+							Math.round(2 * powerMulti),
+							false,
+							true,
+							this);
+				}
+			}
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
 				Dungeon.fail(this);
 				GLog.n(Messages.capitalize(Messages.get(Char.class, "kill", name())));
 			}
 		}
+		turnsNotAttacked = 0;
 		return damage;
 	}
 
 	@Override
 	protected boolean doAttack( Char enemy ) {
+		turnsNotAttacked--;
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 			((MissileSprite) sprite.parent.recycle(MissileSprite.class)).
 					reset(sprite,
@@ -185,7 +221,9 @@ public class BowSpirit extends DirectableAlly {
 		super.die(cause);
 	}
 	private static final String SPIRIT_BOW = "spirit_bow";
-	private static final String HERO_ATTACKED = "hero_attacked";  
+	private static final String HERO_ATTACKED = "hero_attacked";
+	private static final String TURNS_NOT_ATTACKED = "turns_not_attacked";
+	  
 
 	@Override  
 	public void storeInBundle(Bundle bundle) {  
@@ -193,6 +231,7 @@ public class BowSpirit extends DirectableAlly {
 		if (bow != null) {  
 			bundle.put(SPIRIT_BOW, bow); 
 			bundle.put(HERO_ATTACKED, heroAttacked);
+			bundle.put(TURNS_NOT_ATTACKED, turnsNotAttacked);
 		}  
 	}  
 	
@@ -203,5 +242,6 @@ public class BowSpirit extends DirectableAlly {
 			bow = (SpiritBow) bundle.get(SPIRIT_BOW);   
 		}  
 		heroAttacked = bundle.getBoolean(HERO_ATTACKED);
+		turnsNotAttacked = bundle.getInt(TURNS_NOT_ATTACKED);
 	}
 }
