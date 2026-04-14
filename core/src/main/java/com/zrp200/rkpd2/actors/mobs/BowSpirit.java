@@ -12,8 +12,9 @@ import com.zrp200.rkpd2.actors.buffs.ChampionEnemy;
 import com.zrp200.rkpd2.actors.buffs.Healing;
 import com.zrp200.rkpd2.actors.buffs.Light;
 import com.zrp200.rkpd2.actors.hero.Talent;
-import com.zrp200.rkpd2.actors.hero.abilities.huntress.SpiritHawk.HawkSprite;
 import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
+import com.zrp200.rkpd2.effects.Speck;
+import com.zrp200.rkpd2.effects.particles.ShaftParticle;
 import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.wands.WandOfBlastWave;
 import com.zrp200.rkpd2.items.wands.WandOfWarding;
@@ -21,6 +22,7 @@ import com.zrp200.rkpd2.items.weapon.SpiritBow;
 import com.zrp200.rkpd2.mechanics.Ballistica;
 import com.zrp200.rkpd2.messages.Messages;
 import com.zrp200.rkpd2.scenes.GameScene;
+import com.zrp200.rkpd2.sprites.BowSpiritSprite;
 import com.zrp200.rkpd2.sprites.CharSprite;
 import com.zrp200.rkpd2.sprites.MissileSprite;
 import com.zrp200.rkpd2.utils.GLog;
@@ -39,7 +41,7 @@ public class BowSpirit extends DirectableAlly {
 
     {
         //TODO: fix sprite
-		spriteClass = HawkSprite.class;
+		spriteClass = BowSpiritSprite.class;
 		
 		int biggerBowPoints = Dungeon.hero.pointsInTalent(Talent.BIGGER_BOW);
 
@@ -218,6 +220,7 @@ public class BowSpirit extends DirectableAlly {
 		turnsNotAttacked--; // we always increment by 1 in act, so we can just decrement by 1 here to account for the turn passing when attacking
 		boolean r = false;
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
+			sprite.attack(enemy.pos);
 			doSpiritArrowAttack(this, sprite, enemy);
 		} else {
 			super.doAttack(enemy);
@@ -240,9 +243,9 @@ public class BowSpirit extends DirectableAlly {
 				if (!linedUp) continue;
 				
 				if (ch.sprite != null && (ch.sprite.visible || enemy.sprite.visible)) {
-					BowSpirit.doSpiritArrowAttack(ch, ch.sprite, enemy, true, false);
+					BowSpirit.doSpiritArrowAttack(ch, ch.sprite, enemy, false, false);
 				} else {
-					BowSpirit.doSpiritArrowAttack(ch, null, enemy, true, false);
+					BowSpirit.doSpiritArrowAttack(ch, null, enemy, false, false);
 				}
 			}
 		}
@@ -282,10 +285,10 @@ public class BowSpirit extends DirectableAlly {
 		int bowDmg = useBowDmg ? new SpiritBow().damageRoll(c) : c.damageRoll();
 		if (sprite == null) {
 			// skip attack animation if no sprite (usually if sprite is outside FOV)
-			c.attack(enemy, 0, bowDmg, 1);
 			if (spendDelay) {
 				c.spend(c.attackDelay());
 			}
+			c.attack(enemy, 0, bowDmg, 1);
 			c.next();
 			return;
 		}
@@ -296,10 +299,10 @@ public class BowSpirit extends DirectableAlly {
 				new Callback() {
 					@Override
 					public void call() {
-						c.attack(enemy, 0, bowDmg, 1);
 						if (spendDelay) {
 							c.spend(c.attackDelay());
 						}
+						c.attack(enemy, 0, bowDmg, 1);
 						c.next();
 					}
 				});
@@ -326,6 +329,8 @@ public class BowSpirit extends DirectableAlly {
 	public void die(Object cause) {
 		if (bow != null) Dungeon.level.drop( bow, pos ).sprite.drop();
 		super.die(cause);
+		sprite.emitter().start( ShaftParticle.FACTORY, 0.3f, 4 );
+		sprite.emitter().start( Speck.factory( Speck.LIGHT ), 0.2f, 3 );
 	}
 	private static final String SPIRIT_BOW = "spirit_bow";
 	private static final String HERO_ATTACKED = "hero_attacked";
