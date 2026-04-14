@@ -5,6 +5,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 import com.zrp200.rkpd2.Dungeon;
+import com.zrp200.rkpd2.actors.Actor;
 import com.zrp200.rkpd2.actors.Char;
 import com.zrp200.rkpd2.actors.buffs.Buff;
 import com.zrp200.rkpd2.actors.buffs.ChampionEnemy;
@@ -15,10 +16,12 @@ import com.zrp200.rkpd2.actors.hero.abilities.huntress.SpiritHawk.HawkSprite;
 import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
 import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.wands.WandOfBlastWave;
+import com.zrp200.rkpd2.items.wands.WandOfWarding;
 import com.zrp200.rkpd2.items.weapon.SpiritBow;
 import com.zrp200.rkpd2.mechanics.Ballistica;
 import com.zrp200.rkpd2.messages.Messages;
 import com.zrp200.rkpd2.scenes.GameScene;
+import com.zrp200.rkpd2.sprites.CharSprite;
 import com.zrp200.rkpd2.sprites.MissileSprite;
 import com.zrp200.rkpd2.utils.GLog;
 
@@ -204,26 +207,73 @@ public class BowSpirit extends DirectableAlly {
 
 	@Override
 	protected boolean doAttack( Char enemy ) {
-		turnsNotAttacked--;
+		turnsNotAttacked--; // we always increment by 1 in act, so we can just decrement by 1 here to account for the turn passing when attacking
+		boolean r = false;
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
-			((MissileSprite) sprite.parent.recycle(MissileSprite.class)).
-					reset(sprite,
-							enemy.sprite,
-							new SpiritBow().knockArrow(),
-							new Callback() {
-								@Override
-								public void call() {
-									attack(enemy,
-											1,
-											0, 1);
-									spend(attackDelay());
-									next();
-								}
-							});
-			return false;
+			doSpiritArrowAttack(this, sprite, enemy);
 		} else {
-			return super.doAttack(enemy);
+			super.doAttack(enemy);
+			r = true;
 		}
+		if (Dungeon.hero.hasTalent(Talent.SENTRY_SPIRIT)) {
+			//for ward in bow spirit FOV, make ward shoot an arrow too
+			for (Char ch : Actor.chars()) {
+				// Only consider WandOfWarding.Ward instances
+				if (!(ch instanceof WandOfWarding.Ward)) continue;
+				
+				WandOfWarding.Ward ward = (WandOfWarding.Ward) ch;
+				boolean canShoot = Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 || Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 && ward.tier > 3;
+				if (!canShoot) continue;
+				
+				boolean inFov = fieldOfView != null && fieldOfView.length > ward.pos && fieldOfView[ward.pos];
+				if (!inFov) continue;
+				
+				boolean linedUp = new Ballistica(ward.pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos;
+				if (!linedUp) continue;
+				
+				if (ch.sprite != null && (ch.sprite.visible || enemy.sprite.visible)) {
+					BowSpirit.doSpiritArrowAttack(ch, ch.sprite, enemy, true, false);
+				} else {
+					BowSpirit.doSpiritArrowAttack(ch, null, enemy, true, false);
+				}
+			}
+		}
+		return r;
+	}
+
+	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy) {
+		doSpiritArrowAttack(c, sprite, enemy, true);
+	}
+
+	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg) {
+	    doSpiritArrowAttack(c, sprite, enemy, useBowDmg, true);
+	}
+
+	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg, boolean spendDelay) {
+		int bowDmg = useBowDmg ? new SpiritBow().damageRoll(c) : c.damageRoll();
+		if (sprite == null) {
+			// skip attack animation if no sprite (usually if sprite is outside FOV)
+			c.attack(enemy, 0, bowDmg, 1);
+			if (spendDelay) {
+				c.spend(c.attackDelay());
+			}
+			c.next();
+			return;
+		}
+		((MissileSprite) sprite.parent.recycle(MissileSprite.class)).
+			reset(sprite,
+				enemy.sprite,
+				new SpiritBow().knockArrow(),
+				new Callback() {
+					@Override
+					public void call() {
+						c.attack(enemy, 0, bowDmg, 1);
+						if (spendDelay) {
+							c.spend(c.attackDelay());
+						}
+						c.next();
+					}
+				});
 	}
 	
 	@Override
