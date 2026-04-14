@@ -318,16 +318,19 @@ public class BowSpirit extends DirectableAlly {
 
 	@Override
 	public boolean interact(Char c) {
+		// kills the bow spirit and automatically picks up the bow for the player
 		bow.doPickUp(Dungeon.hero, this.pos);
-		bow = null;
-		// kills the bow spirit so that the bow can be collected
-		die(c);
+		die(c, false);
 		return true;
 	}
 
 	@Override
 	public void die(Object cause) {
-		if (bow != null) Dungeon.level.drop( bow, pos ).sprite.drop();
+		die(cause, true);
+	}
+
+	public void die(Object cause, boolean dropBow) {
+		if (dropBow && bow != null) Dungeon.level.drop( bow, pos ).sprite.drop();
 		super.die(cause);
 		sprite.emitter().start( ShaftParticle.FACTORY, 0.3f, 4 );
 		sprite.emitter().start( Speck.factory( Speck.LIGHT ), 0.2f, 3 );

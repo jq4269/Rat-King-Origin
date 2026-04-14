@@ -33,7 +33,9 @@ import com.zrp200.rkpd2.actors.buffs.Sleep;
 import com.zrp200.rkpd2.actors.buffs.Terror;
 import com.zrp200.rkpd2.actors.buffs.Vertigo;
 import com.zrp200.rkpd2.actors.hero.Hero;
+import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.spells.Stasis;
+import com.zrp200.rkpd2.actors.mobs.BowSpirit;
 import com.zrp200.rkpd2.actors.mobs.npcs.NPC;
 import com.zrp200.rkpd2.effects.FloatingText;
 import com.zrp200.rkpd2.effects.MagicMissile;
@@ -93,6 +95,10 @@ public class WandOfWarding extends Wand {
 					maxWardEnergy += 2 + wand.level() + curUser.getBonus(wand);
 				}
 			}
+		}
+
+		if (Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) >= 3) {
+			maxWardEnergy += BowSpirit.bow != null ? BowSpirit.bow.buffedLvl() : 0;
 		}
 		
 		wardAvailable = (currentWardEnergy < maxWardEnergy);
