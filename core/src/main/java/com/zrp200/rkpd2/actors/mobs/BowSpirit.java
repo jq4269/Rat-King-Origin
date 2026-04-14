@@ -25,8 +25,12 @@ import com.zrp200.rkpd2.sprites.CharSprite;
 import com.zrp200.rkpd2.sprites.MissileSprite;
 import com.zrp200.rkpd2.utils.GLog;
 
+/**
+ * A Directable Ally version of the Spirit Bow. Used for the Channeler subclass.
+ */
 public class BowSpirit extends DirectableAlly {
 
+	// There should only be one Spirit bow in the game, so this is static
 	public static SpiritBow bow;
 	private static boolean heroAttacked;
 	private double dmgMultiplier;
@@ -62,6 +66,10 @@ public class BowSpirit extends DirectableAlly {
 		super();
 	}
 
+	/**
+	 * Constructor used when creating the bow spirit from the spirit bow item. 
+	 * @param bow - the spirit bow item that this spirit is associated with. This is needed so that the spirit can use the bow's damage and proc effects, and also so that the spirit can drop the bow on death and allow the player to pick it up.
+	 */
     public BowSpirit(SpiritBow bow) {
         super();
 		BowSpirit.bow = bow;
@@ -241,14 +249,35 @@ public class BowSpirit extends DirectableAlly {
 		return r;
 	}
 
+	/**
+	 * Helper method to perform the spirit arrow attack animation and damage application. 
+	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
+	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
+	 * @param enemy - the target character that will get hit by the arrow
+	 */
 	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy) {
 		doSpiritArrowAttack(c, sprite, enemy, true);
 	}
 
+	/**
+	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay.
+	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
+	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
+	 * @param enemy - the target character that will get hit by the arrow
+	 * @param useBowDmg - if true, the damage will be calculated using the bow's damageRoll; if false, it will use the character's normal damageRoll
+	 */
 	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg) {
 	    doSpiritArrowAttack(c, sprite, enemy, useBowDmg, true);
 	}
 
+	/**
+	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay.
+	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
+	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
+	 * @param enemy - the target character that will get hit by the arrow
+	 * @param useBowDmg - if true, the damage will be calculated using the bow's damageRoll; if false, it will use the character's normal damageRoll
+	 * @param spendDelay - if true, the character will spend time equal to attackDelay() after the attack; if false, no time will be spent
+	 */
 	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg, boolean spendDelay) {
 		int bowDmg = useBowDmg ? new SpiritBow().damageRoll(c) : c.damageRoll();
 		if (sprite == null) {
