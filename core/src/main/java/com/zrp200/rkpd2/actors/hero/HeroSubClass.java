@@ -71,6 +71,7 @@ public enum HeroSubClass {
 
 	SNIPER(HeroIcon.SNIPER),
 	WARDEN(HeroIcon.WARDEN),
+	CHANNELER(HeroIcon.CHANNELER),
 
 	SPIRITUALIST(HeroIcon.SPIRITUALIST),
 	BRAWLER(HeroIcon.BRAWLER),
@@ -186,8 +187,9 @@ public enum HeroSubClass {
 				return Badges.Badge.WON_SECRET_DUELIST;
             case CENOBITE:
                 return Badges.Badge.WON_CENOBITE;
+			default:
+				return null;
 		}
-		return null;
 	}
 
 }

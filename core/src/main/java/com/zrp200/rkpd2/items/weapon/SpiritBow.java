@@ -34,8 +34,10 @@ import com.zrp200.rkpd2.actors.buffs.RevealedArea;
 import com.zrp200.rkpd2.actors.buffs.Roots;
 import com.zrp200.rkpd2.actors.hero.Hero;
 import com.zrp200.rkpd2.actors.hero.HeroClass;
+import com.zrp200.rkpd2.actors.hero.HeroSubClass;
 import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.hero.abilities.huntress.NaturesPower;
+import com.zrp200.rkpd2.actors.mobs.BowSpirit;
 import com.zrp200.rkpd2.actors.mobs.Mob;
 import com.zrp200.rkpd2.effects.CellEmitter;
 import com.zrp200.rkpd2.effects.Splash;
@@ -44,6 +46,7 @@ import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.armor.ScoutArmor;
 import com.zrp200.rkpd2.items.bombs.Bomb;
 import com.zrp200.rkpd2.items.rings.RingOfSharpshooting;
+import com.zrp200.rkpd2.items.scrolls.ScrollOfTeleportation;
 import com.zrp200.rkpd2.items.scrolls.exotic.ScrollOfEnchantment;
 import com.zrp200.rkpd2.items.weapon.enchantments.Blocking;
 import com.zrp200.rkpd2.items.weapon.enchantments.Explosive;
@@ -86,7 +89,7 @@ public class SpiritBow extends Weapon implements BrawlerBuff.BrawlerWeapon {
 		defaultAction = AC_SHOOT;
 		usesTargeting = true;
 		
-		unique = true;
+		unique = false;
 		bones = false;
 	}
 
@@ -147,6 +150,20 @@ public class SpiritBow extends Weapon implements BrawlerBuff.BrawlerWeapon {
 			curItem = this;
 			GameScene.selectCell( shooter );
 			
+		}
+	}
+
+	@Override
+	protected void onThrow(int cell) {
+		if (Dungeon.hero.isSubclassedLoosely(HeroSubClass.CHANNELER) && !Dungeon.level.pit[cell]) {
+			BowSpirit spirit = new BowSpirit(this);
+			spirit.pos = cell;
+			Dungeon.level.mobs.add(spirit);  
+			GameScene.add(spirit);
+			ScrollOfTeleportation.appear(spirit, spirit.pos);
+			spirit.setMovement(cell);
+		} else {
+			super.onThrow(cell);
 		}
 	}
 

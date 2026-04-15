@@ -145,6 +145,9 @@ public class HeroIcon extends Image {
 	public static final int BLOCKING        = imageAt(2, 15);
 	public static final int HIGHNESS_STOP   = imageAt(3, 15);
 
+	// Rat King Origin hero icons
+	public static final int CHANNELER = imageAt(5, 15);
+
 
 	public HeroIcon(HeroSubClass subCls){
 		super( Assets.Interfaces.HERO_ICONS );
