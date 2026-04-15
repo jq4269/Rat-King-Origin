@@ -1,11 +1,15 @@
 # Rat King Origin
 
 Rat King Origin is a fork of [Rat King Adventure](https://github.com/TrashboxBobylev/Rat-King-Adventure/releases).
-For now, it is just a playground for me and I don't really know what I'll do with it. We'll see where this takes us...
 
 Here is a list of changes so far:
-- Reworked Warden's Nature's Better Aid talent to spawn corrupted Rot Lashers
-- Buffed Warden's Indirect Benefits talent to benefit corrupted Rot Lashers
+- Added a 3rd subclass for Huntress called **Channeler**
+  - Core Mechanic: The spirit bow can auto attack enemies if the Channeler throws it on the ground
+  - New Talents: Added 5 talents for Channeler to improve the bow's auto attacking abilities, and also provides some synergy with Wand of Warding
+  - New animations and icons: Added new animations for the spirit bow and icons for the new subclass and its talents
+- Warden Talent Rework
+  - Reworked Warden's Nature's Better Aid talent to spawn corrupted Rot Lashers
+  - Buffed Warden's Indirect Benefits talent to benefit corrupted Rot Lashers
 
 ---
 
