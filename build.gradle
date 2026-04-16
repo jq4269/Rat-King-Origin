@@ -15,11 +15,11 @@ buildscript {
 allprojects {
 
     ext {
-        appName = 'Rat King Adventures'
-        appPackageName = 'com.zrp200.rkpd2abyssal'
+        appName = 'Rat King Origin'
+        appPackageName = 'com.jq4269.ratkingorigin'
 
-        appVersionCode = 852
-        appVersionName = '2.3.1'
+        appVersionCode = 853
+        appVersionName = '2.3.1-rko.1'
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
