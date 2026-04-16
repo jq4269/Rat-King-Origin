@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace 'com.zrp200.rkpd2.android'
+    namespace 'com.jq4269.ratkingorigin.android'
     signingConfigs {
         release {
             if (System.getenv("RELEASE_KEYSTORE_CONTENTS")) {
