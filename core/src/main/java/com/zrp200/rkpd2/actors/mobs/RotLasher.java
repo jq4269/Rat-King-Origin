@@ -70,7 +70,7 @@ public class RotLasher extends Mob {
 
 		loot = Generator.Category.SEED;
 		lootChance = 0.75f;
-		if (Dungeon.hero.hasTalent(Talent.NATURES_BETTER_AID)) {
+		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.NATURES_BETTER_AID)) {
 			lootChance = 0.0f;
 		}
 

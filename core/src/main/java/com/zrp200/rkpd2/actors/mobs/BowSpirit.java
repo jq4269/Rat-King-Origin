@@ -43,11 +43,11 @@ public class BowSpirit extends DirectableAlly {
         //TODO: fix sprite
 		spriteClass = BowSpiritSprite.class;
 		
-		int biggerBowPoints = Dungeon.hero.pointsInTalent(Talent.BIGGER_BOW);
+		int biggerBowPoints = Dungeon.hero != null ? Dungeon.hero.pointsInTalent(Talent.BIGGER_BOW) : 0;
 
-		HP = HT = (int) (Dungeon.hero.lvl * (1 + (0.5 * biggerBowPoints)));
-		defenseSkill = (Dungeon.hero.lvl+4);
-		viewDistance = Math.max(1, Light.DISTANCE - 2) + Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT);
+		HP = HT = (int) (Dungeon.hero != null ? Dungeon.hero.lvl * (1 + (0.5 * biggerBowPoints)) : 1);
+		defenseSkill = (Dungeon.hero != null ? Dungeon.hero.lvl + 4 : 4);
+		viewDistance = Math.max(1, Light.DISTANCE - 2) + (Dungeon.hero != null ? Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT) : 0);
 
 		dmgMultiplier = 0.25 * (3 + biggerBowPoints);
 
@@ -55,7 +55,7 @@ public class BowSpirit extends DirectableAlly {
 
 		baseSpeed = 1f;
 
-		if (!Dungeon.hero.hasTalent(Talent.DRIFTING_SPIRIT)) {
+		if (Dungeon.hero == null || !Dungeon.hero.hasTalent(Talent.DRIFTING_SPIRIT)) {
 			rooted = true;
 		} else {
 			rooted = false;
