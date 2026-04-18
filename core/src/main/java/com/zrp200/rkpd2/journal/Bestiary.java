@@ -37,6 +37,7 @@ import com.zrp200.rkpd2.actors.mobs.Bandit;
 import com.zrp200.rkpd2.actors.mobs.Bat;
 import com.zrp200.rkpd2.actors.mobs.Bee;
 import com.zrp200.rkpd2.actors.mobs.BlinkingMan;
+import com.zrp200.rkpd2.actors.mobs.BowSpirit;
 import com.zrp200.rkpd2.actors.mobs.Brute;
 import com.zrp200.rkpd2.actors.mobs.CausticSlime;
 import com.zrp200.rkpd2.actors.mobs.Crab;
@@ -251,7 +252,7 @@ public enum Bestiary {
 				DriedRose.GhostHero.class,
 				WandOfWarding.Ward.class, WandOfWarding.Ward.WardSentry.class, WandOfLivingEarth.EarthGuardian.class,
 				ShadowClone.ShadowAlly.class, SmokeBomb.NinjaLog.class, SpiritHawk.HawkAlly.class, PowerOfMany.LightAlly.class,
-				Wrath.RatStatue.class);
+				Wrath.RatStatue.class, BowSpirit.class);
 
 		TRAP.addEntities(WornDartTrap.class, PoisonDartTrap.class, DisintegrationTrap.class, GatewayTrap.class,
 				ChillingTrap.class, BurningTrap.class, ShockingTrap.class, AlarmTrap.class, GrippingTrap.class, TeleportationTrap.class, OozeTrap.class,
