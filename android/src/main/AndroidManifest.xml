@@ -36,7 +36,7 @@
 		android:fullBackupOnly="true"
 		android:backupAgent=".AndroidBackupHandler">
 		<activity
-			android:name=".AndroidLauncher"
+			android:name="com.zrp200.rkpd2.android.AndroidLauncher"
 			android:screenOrientation="nosensor"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
 			android:exported="true">
@@ -46,7 +46,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".AndroidMissingNativesHandler">
+			android:name="com.zrp200.rkpd2.android.AndroidMissingNativesHandler">
 		</activity>
 	</application>
 
