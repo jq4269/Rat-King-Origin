@@ -237,7 +237,7 @@ public class BowSpirit extends DirectableAlly {
 				if (!(ch instanceof WandOfWarding.Ward)) continue;
 				
 				WandOfWarding.Ward ward = (WandOfWarding.Ward) ch;
-				boolean canShoot = Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 || Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 && ward.tier > 3;
+				boolean canShoot = Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 || Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) == 1 && ward.tier > 3;
 				if (!canShoot) continue;
 				
 				boolean inFov = fieldOfView != null && fieldOfView.length > ward.pos && fieldOfView[ward.pos];
