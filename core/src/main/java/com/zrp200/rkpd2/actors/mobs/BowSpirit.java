@@ -286,7 +286,7 @@ public class BowSpirit extends DirectableAlly {
 	 * @param spendDelay - if true, the character will spend time equal to attackDelay() after the attack; if false, no time will be spent
 	 */
 	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg, boolean spendDelay) {
-		int bowDmg = useBowDmg ? new SpiritBow().damageRoll(c) : c.damageRoll();
+		int bowDmg = useBowDmg ? bow.damageRoll(c) : c.damageRoll();
 		if (sprite == null) {
 			// skip attack animation if no sprite (usually if sprite is outside FOV)
 			if (spendDelay) {
@@ -299,7 +299,7 @@ public class BowSpirit extends DirectableAlly {
 		((MissileSprite) sprite.parent.recycle(MissileSprite.class)).
 			reset(sprite,
 				enemy.sprite,
-				new SpiritBow().knockArrow(),
+				bow.knockArrow(),
 				new Callback() {
 					@Override
 					public void call() {
