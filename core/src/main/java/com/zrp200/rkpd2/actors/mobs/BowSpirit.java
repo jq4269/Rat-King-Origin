@@ -39,6 +39,24 @@ public class BowSpirit extends DirectableAlly {
 	private float turnsNotAttacked;
 	private float lastActTime;
 
+	/**
+	 * Finds the hero's Spirit Bow
+	 * @return the SpiritBow, or null if not found
+	 */
+	private static SpiritBow activeBow() {
+		if (bow != null) {
+			return bow;
+		}
+		if (Dungeon.hero != null) {
+			SpiritBow heroBow = Dungeon.hero.belongings.getItem(SpiritBow.class);
+			if (heroBow == null && Dungeon.hero.belongings.weapon instanceof SpiritBow) {
+				heroBow = (SpiritBow) Dungeon.hero.belongings.weapon;
+			}
+			return heroBow;
+		}
+		return null;
+	}
+
     {
         //TODO: fix sprite
 		spriteClass = BowSpiritSprite.class;
@@ -66,23 +84,24 @@ public class BowSpirit extends DirectableAlly {
 
 	public BowSpirit() {
 		super();
+		heroAttacked = false;
+		turnsNotAttacked = 0f;
+		lastActTime = now();
 	}
 
 	/**
 	 * Constructor used when creating the bow spirit from the spirit bow item. 
-	 * @param bow - the spirit bow item that this spirit is associated with. This is needed so that the spirit can use the bow's damage and proc effects, and also so that the spirit can drop the bow on death and allow the player to pick it up.
+	 * @param bow - the spirit bow that this spirit is associated with. This is needed so that the spirit can use the bow's damage and proc effects, and also so that the spirit can drop the bow on death and allow the player to pick it up.
 	 */
     public BowSpirit(SpiritBow bow) {
-        super();
+		this();
 		BowSpirit.bow = bow;
-		heroAttacked = false;
-		turnsNotAttacked = 0f;
-		lastActTime = now();
     }
 	
 	@Override
 	public int damageRoll() {
-		int dmg = (int) (bow.damageRoll(this) * dmgMultiplier);
+		SpiritBow currentBow = activeBow();
+		int dmg = currentBow != null ? (int) (currentBow.damageRoll(this) * dmgMultiplier) : super.damageRoll();
 		if (Dungeon.hero.pointsInTalent(Talent.PATIENT_BOW) > 2) {
 			dmg *= 1 + (turnsNotAttacked * 0.01);
 		}
@@ -156,8 +175,9 @@ public class BowSpirit extends DirectableAlly {
 	@Override
 	public float attackDelay() {
 		float delay = super.attackDelay();
-		if (bow != null){
-			delay *= bow.delayFactor(this);
+		SpiritBow currentBow = activeBow();
+		if (currentBow != null){
+			delay *= currentBow.delayFactor(this);
 		}
 		return delay;
 	}
@@ -184,8 +204,9 @@ public class BowSpirit extends DirectableAlly {
 	@Override
 	public int attackProc(Char enemy, int damage) {
 		damage = super.attackProc(enemy, damage);
-		if (bow != null) {
-			damage = bow.proc(this, enemy, damage);
+		SpiritBow currentBow = activeBow();
+		if (currentBow != null) {
+			damage = currentBow.proc(this, enemy, damage);
 			int patientBowPoints = Dungeon.hero.pointsInTalent(Talent.PATIENT_BOW);
 			if (patientBowPoints > 1) {
 				float procChance = (float) ((patientBowPoints - 1) * 0.025 * turnsNotAttacked);
@@ -220,10 +241,14 @@ public class BowSpirit extends DirectableAlly {
 		turnsNotAttacked--; // we always increment by 1 in act, so we can just decrement by 1 here to account for the turn passing when attacking
 		boolean r = false;
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
-			sprite.attack(enemy.pos);
-			doSpiritArrowAttack(this, sprite, enemy);
+			sprite.attack(enemy.pos, new Callback() {
+				@Override
+				public void call() {
+					doSpiritArrowAttack(BowSpirit.this, sprite, enemy);
+				}
+			});
 		} else {
-			super.doAttack(enemy);
+			doSpiritArrowAttack(this, null, enemy);
 			r = true;
 		}
 		if (Dungeon.hero.hasTalent(Talent.SENTRY_SPIRIT)) {
@@ -233,7 +258,7 @@ public class BowSpirit extends DirectableAlly {
 				if (!(ch instanceof WandOfWarding.Ward)) continue;
 				
 				WandOfWarding.Ward ward = (WandOfWarding.Ward) ch;
-				boolean canShoot = Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 || Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 && ward.tier > 3;
+				boolean canShoot = Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) > 1 || Dungeon.hero.pointsInTalent(Talent.SENTRY_SPIRIT) == 1 && ward.tier > 3;
 				if (!canShoot) continue;
 				
 				boolean inFov = fieldOfView != null && fieldOfView.length > ward.pos && fieldOfView[ward.pos];
@@ -253,7 +278,7 @@ public class BowSpirit extends DirectableAlly {
 	}
 
 	/**
-	 * Helper method to perform the spirit arrow attack animation and damage application. 
+	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay, both true by default.
 	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
 	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
 	 * @param enemy - the target character that will get hit by the arrow
@@ -263,7 +288,7 @@ public class BowSpirit extends DirectableAlly {
 	}
 
 	/**
-	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay.
+	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay, both true by default.
 	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
 	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
 	 * @param enemy - the target character that will get hit by the arrow
@@ -274,7 +299,7 @@ public class BowSpirit extends DirectableAlly {
 	}
 
 	/**
-	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay.
+	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay, both true by default.
 	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
 	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
 	 * @param enemy - the target character that will get hit by the arrow
@@ -282,9 +307,9 @@ public class BowSpirit extends DirectableAlly {
 	 * @param spendDelay - if true, the character will spend time equal to attackDelay() after the attack; if false, no time will be spent
 	 */
 	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg, boolean spendDelay) {
-		int bowDmg = useBowDmg ? new SpiritBow().damageRoll(c) : c.damageRoll();
-		if (sprite == null) {
-			// skip attack animation if no sprite (usually if sprite is outside FOV)
+		SpiritBow currentBow = activeBow();
+		int bowDmg = useBowDmg && currentBow != null ? currentBow.damageRoll(c) : c.damageRoll();
+		if (currentBow == null || sprite == null) {
 			if (spendDelay) {
 				c.spend(c.attackDelay());
 			}
@@ -295,7 +320,7 @@ public class BowSpirit extends DirectableAlly {
 		((MissileSprite) sprite.parent.recycle(MissileSprite.class)).
 			reset(sprite,
 				enemy.sprite,
-				new SpiritBow().knockArrow(),
+				currentBow.knockArrow(),
 				new Callback() {
 					@Override
 					public void call() {
@@ -338,16 +363,19 @@ public class BowSpirit extends DirectableAlly {
 	private static final String SPIRIT_BOW = "spirit_bow";
 	private static final String HERO_ATTACKED = "hero_attacked";
 	private static final String TURNS_NOT_ATTACKED = "turns_not_attacked";
-	  
+	private static final String LAST_ACT_TIME = "last_act_time";	
 
 	@Override  
 	public void storeInBundle(Bundle bundle) {  
 		super.storeInBundle(bundle);  
-		if (bow != null) {  
-			bundle.put(SPIRIT_BOW, bow); 
-			bundle.put(HERO_ATTACKED, heroAttacked);
-			bundle.put(TURNS_NOT_ATTACKED, turnsNotAttacked);
-		}  
+		SpiritBow currentBow = activeBow();
+		if (currentBow != null) {
+			bundle.put(SPIRIT_BOW, currentBow);
+		}
+		bundle.put(HERO_ATTACKED, heroAttacked);
+		bundle.put(TURNS_NOT_ATTACKED, turnsNotAttacked);
+		bundle.put(LAST_ACT_TIME, lastActTime);
+		
 	}  
 	
 	@Override  
@@ -355,8 +383,11 @@ public class BowSpirit extends DirectableAlly {
 		super.restoreFromBundle(bundle);  
 		if (bundle.contains(SPIRIT_BOW)) {  
 			bow = (SpiritBow) bundle.get(SPIRIT_BOW);   
+		} else {
+			bow = activeBow();
 		}  
 		heroAttacked = bundle.getBoolean(HERO_ATTACKED);
-		turnsNotAttacked = bundle.getInt(TURNS_NOT_ATTACKED);
+		turnsNotAttacked = bundle.getFloat(TURNS_NOT_ATTACKED);
+		lastActTime = bundle.getFloat(LAST_ACT_TIME);
 	}
 }
