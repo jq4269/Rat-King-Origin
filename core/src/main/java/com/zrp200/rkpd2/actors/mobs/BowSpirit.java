@@ -220,8 +220,12 @@ public class BowSpirit extends DirectableAlly {
 		turnsNotAttacked--; // we always increment by 1 in act, so we can just decrement by 1 here to account for the turn passing when attacking
 		boolean r = false;
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
-			sprite.attack(enemy.pos);
-			doSpiritArrowAttack(this, sprite, enemy);
+			sprite.attack(enemy.pos, new Callback() {
+				@Override
+				public void call() {
+					doSpiritArrowAttack(BowSpirit.this, sprite, enemy);
+				}
+			});
 		} else {
 			super.doAttack(enemy);
 			r = true;
