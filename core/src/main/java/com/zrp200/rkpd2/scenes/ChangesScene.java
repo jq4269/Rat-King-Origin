@@ -34,7 +34,7 @@ import com.zrp200.rkpd2.ui.RenderedTextBlock;
 import com.zrp200.rkpd2.ui.ScrollPane;
 import com.zrp200.rkpd2.ui.StyledButton;
 import com.zrp200.rkpd2.ui.changelist.ChangeInfo;
-import com.zrp200.rkpd2.ui.changelist.RKPD2Changes;
+import com.zrp200.rkpd2.ui.changelist.RKOChanges;
 import com.zrp200.rkpd2.ui.changelist.WndChanges;
 import com.zrp200.rkpd2.ui.changelist.WndChangesTabbed;
 import com.zrp200.rkpd2.windows.IconTitle;
@@ -133,8 +133,8 @@ public class ChangesScene extends PixelScene {
 			changeInfos.add(langWarn);
 		}
 
-		if (changesSelected < RKPD2Changes.values().length) {
-			RKPD2Changes.values()[changesSelected].addAllChanges(changeInfos);
+		if (changesSelected < RKOChanges.values().length) {
+			RKOChanges.values()[changesSelected].addAllChanges(changeInfos);
 		}
 //		switch (changesSelected){
 //			case 2:
@@ -198,8 +198,8 @@ public class ChangesScene extends PixelScene {
 				panel.innerHeight() + 2);
 		list.scrollTo(0, 0);
 
-		String[] labels = new String[RKPD2Changes.values().length];
-		for (int i = 0; i < labels.length; i++) labels[i] = RKPD2Changes.values()[i].toString();
+		String[] labels = new String[RKOChanges.values().length];
+		for (int i = 0; i < labels.length; i++) labels[i] = RKOChanges.values()[i].toString();
 		float bx = list.left()-4f;
 		for (int n=0; n < labels.length; n++) {
 			final int N = n;
