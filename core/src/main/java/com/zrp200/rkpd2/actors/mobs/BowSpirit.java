@@ -15,7 +15,6 @@ import com.zrp200.rkpd2.actors.hero.Talent;
 import com.zrp200.rkpd2.actors.mobs.npcs.DirectableAlly;
 import com.zrp200.rkpd2.effects.Speck;
 import com.zrp200.rkpd2.effects.particles.ShaftParticle;
-import com.zrp200.rkpd2.items.Item;
 import com.zrp200.rkpd2.items.wands.WandOfBlastWave;
 import com.zrp200.rkpd2.items.wands.WandOfWarding;
 import com.zrp200.rkpd2.items.weapon.SpiritBow;
@@ -238,7 +237,7 @@ public class BowSpirit extends DirectableAlly {
 
 	@Override
 	protected boolean doAttack( Char enemy ) {
-		turnsNotAttacked--; // we always increment by 1 in act, so we can just decrement by 1 here to account for the turn passing when attacking
+		turnsNotAttacked = 0; 
 		boolean r = false;
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 			sprite.attack(enemy.pos, new Callback() {
@@ -331,14 +330,6 @@ public class BowSpirit extends DirectableAlly {
 						c.next();
 					}
 				});
-	}
-	
-	@Override
-	public void damage(int dmg, Object src) {
-		super.damage( dmg, src );
-		
-		//for the bow status indicator
-		Item.updateQuickslot();
 	}
 
 	@Override
