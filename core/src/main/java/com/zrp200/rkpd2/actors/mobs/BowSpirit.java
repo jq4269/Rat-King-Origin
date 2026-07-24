@@ -136,6 +136,15 @@ public class BowSpirit extends DirectableAlly {
 	}
 
 	@Override
+	protected boolean isEnemyInFOV(Char enemy) {
+		if (Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT) > 2) {
+			return enemy != null && enemy.isAlive() && (fieldOfView[enemy.pos] || Dungeon.hero.fieldOfView[enemy.pos]) && enemy.invisible <= 0;
+		} else {
+			return enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
+		}
+	}
+
+	@Override
 	protected boolean act() {
 		boolean b = super.act();
 		turnsNotAttacked += (now() - lastActTime);

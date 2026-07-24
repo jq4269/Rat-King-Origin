@@ -328,12 +328,8 @@ public abstract class Mob extends Char {
 		enemy = chooseEnemy();
 
 		boolean enemyInFOV;
-		// BowSpirits with channeling sight can see enemies in hero FOV
-		if (this instanceof BowSpirit && Dungeon.hero.pointsInTalent(Talent.CHANNELING_SIGHT) > 2) {
-			enemyInFOV = enemy != null && enemy.isAlive() && (fieldOfView[enemy.pos] || Dungeon.hero.fieldOfView[enemy.pos]) && enemy.invisible <= 0;
-		} else {
-			enemyInFOV = enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
-		}
+		
+		enemyInFOV = isEnemyInFOV(enemy);
 
 		//prevents action, but still updates enemy seen status
 		if (buff(Feint.AfterImage.FeintConfusion.class) != null){
@@ -351,6 +347,10 @@ public abstract class Mob extends Char {
 		}
 
 		return result;
+	}
+
+	protected boolean isEnemyInFOV(Char enemy) {
+		return enemy != null && enemy.isAlive() && fieldOfView[enemy.pos] && enemy.invisible <= 0;
 	}
 
 	//FIXME this is sort of a band-aid correction for allies needing more intelligent behaviour
