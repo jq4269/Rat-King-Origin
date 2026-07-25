@@ -162,7 +162,7 @@ public class BowSpirit extends DirectableAlly {
 			GameScene.updateFog(pos, viewDistance+(int)Math.ceil(speed()));
 			// The spirit will share its FOV with the hero if the hero has enough points in channeling sight
 			// this is handled in the level.updateFieldOfView method
-			// The spirit can also see enemies in the hero's FOV if the talent is maxed, this is handled in Mob.act()
+			// The spirit can also see enemies in the hero's FOV if the talent is maxed, this is handled in isEnemyInFOV()
 		}
 		return b;
 	}
@@ -246,7 +246,7 @@ public class BowSpirit extends DirectableAlly {
 
 	@Override
 	protected boolean doAttack( Char enemy ) {
-		turnsNotAttacked = 0; 
+		// removed turnsNotAttacked here cuz idk what it was doing here anyway
 		boolean r = false;
 		if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 			sprite.attack(enemy.pos, new Callback() {
@@ -276,9 +276,9 @@ public class BowSpirit extends DirectableAlly {
 				if (!linedUp) continue;
 				
 				if (ch.sprite != null && (ch.sprite.visible || enemy.sprite.visible)) {
-					BowSpirit.doSpiritArrowAttack(ch, ch.sprite, enemy, false, false);
+					BowSpirit.doSpiritArrowAttack(ch, ch.sprite, enemy, false);
 				} else {
-					BowSpirit.doSpiritArrowAttack(ch, null, enemy, false, false);
+					BowSpirit.doSpiritArrowAttack(ch, null, enemy, false);
 				}
 			}
 		}
@@ -286,9 +286,9 @@ public class BowSpirit extends DirectableAlly {
 	}
 
 	/**
-	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay, both true by default.
-	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
-	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
+	 * Helper method to perform the spirit arrow attack. This will spend time by default
+	 * @param c - the character performing the attack
+	 * @param sprite - the sprite representing the attacker. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
 	 * @param enemy - the target character that will get hit by the arrow
 	 */
 	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy) {
@@ -296,33 +296,21 @@ public class BowSpirit extends DirectableAlly {
 	}
 
 	/**
-	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay, both true by default.
-	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
-	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
-	 * @param enemy - the target character that will get hit by the arrow
-	 * @param useBowDmg - if true, the damage will be calculated using the bow's damageRoll; if false, it will use the character's normal damageRoll
+	 * Helper method to perform the spirit arrow attack, with an option to avoid spending time.
+	 * @param attacker - the character performing the attack
+	 * @param sprite - the attacker's sprite. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
+	 * @param enemy - the target that will get hit
+	 * @param spendDelay - happens instantly if false
 	 */
-	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg) {
-	    doSpiritArrowAttack(c, sprite, enemy, useBowDmg, true);
-	}
-
-	/**
-	 * Helper method to perform the spirit arrow attack animation and damage application, with options for using the bow's damage and whether to apply attack delay, both true by default.
-	 * @param c - the character performing the attack, used for damage calculation and applying attack delay
-	 * @param sprite - the sprite representing the attacker, used for the attack animation. If null, the attack will still occur but without animation (useful if the attacker is outside of FOV).
-	 * @param enemy - the target character that will get hit by the arrow
-	 * @param useBowDmg - if true, the damage will be calculated using the bow's damageRoll; if false, it will use the character's normal damageRoll
-	 * @param spendDelay - if true, the character will spend time equal to attackDelay() after the attack; if false, no time will be spent
-	 */
-	public static void doSpiritArrowAttack(Char c, CharSprite sprite, Char enemy, boolean useBowDmg, boolean spendDelay) {
+	public static void doSpiritArrowAttack(Char attacker, CharSprite sprite, Char enemy, boolean spendDelay) {
 		SpiritBow currentBow = activeBow();
-		int bowDmg = useBowDmg && currentBow != null ? currentBow.damageRoll(c) : c.damageRoll();
-		if (currentBow == null || sprite == null) {
+		int bowDmg = currentBow != null ? currentBow.damageRoll(enemy) : attacker.damageRoll();
+		if (sprite == null) {
 			if (spendDelay) {
-				c.spend(c.attackDelay());
+				attacker.spend(attacker.attackDelay());
 			}
-			c.attack(enemy, 0, bowDmg, 1);
-			c.next();
+			attacker.attack(enemy, 0, bowDmg, 1);
+			attacker.next();
 			return;
 		}
 		((MissileSprite) sprite.parent.recycle(MissileSprite.class)).
@@ -333,10 +321,10 @@ public class BowSpirit extends DirectableAlly {
 					@Override
 					public void call() {
 						if (spendDelay) {
-							c.spend(c.attackDelay());
+							attacker.spend(attacker.attackDelay());
 						}
-						c.attack(enemy, 0, bowDmg, 1);
-						c.next();
+						attacker.attack(enemy, 0, bowDmg, 1);
+						attacker.next();
 					}
 				});
 	}
