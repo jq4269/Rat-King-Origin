@@ -64,9 +64,19 @@ public class AboutScene extends PixelScene {
 		Component content = list.content();
 		content.clear();
 
+		// RKO Credits
+		CreditsBlock jq = new CreditsBlock(false, Window.TITLE_COLOR,
+				"Rat King Origin",
+				new RatKingSprite(),
+				"Developed by: jq4269\n",
+				"RKO source code",
+				"https://github.com/jq4269/Rat-King-Origin");
+		jq.setRect((w - fullWidth)/2f, 6, 120, 0);
+		content.add(jq);
+
 		// RKPD2 Credits
 		CreditsBlock rkpd2 = new CreditsBlock(true, Window.TITLE_COLOR, "RKPD2", new RatKingSprite(), "All Thanks To _Rat King_!\nInspired by Evan's Rat King Dungeon", "RKPD2 Source Code", "https://github.com/zrp200/rkpd2");
-		rkpd2.setRect((w - fullWidth)/2f, 6, 120, 0);
+		rkpd2.setRect(jq.left(), jq.bottom() + 8, 120, 0);
 		content.add(rkpd2);
 
 		CreditsBlock zrp = new CreditsBlock(false, 0x9b57b6,"Development", new Image(Assets.Interfaces.ZRP200),"Zrp200",null,null);
