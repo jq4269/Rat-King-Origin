@@ -93,6 +93,7 @@ public class KromerCrown extends TengusMask {
 						heroSubClasses.remove(HeroSubClass.BATTLEMAGE);
 					if (!curUser.isClassedLoosely(HeroClass.HUNTRESS))
 						heroSubClasses.remove(HeroSubClass.SNIPER);
+						heroSubClasses.remove(HeroSubClass.CHANNELER);
 					if (!curUser.isClassedLoosely(HeroClass.ROGUE))
 						heroSubClasses.remove(HeroSubClass.ASSASSIN);
                     if (!curUser.isClassedLoosely(HeroClass.CLERIC)){
