@@ -29,6 +29,7 @@ public enum RKOChanges {
                                     list("Replaced Warlock with a new secret subclass for Huntress, _Channeler_!",
                                             "_Channeler_ can covert its Spirit Bow into a unique ally that attacks on its own, with new talents that support it in various ways.",
                                             "The spirit bow doesn't attack if the Channeler also attacked during the same turn for balancing reasons... for now.",
+                                            "Other classes cannot roll Channeler from Kromer Crown because it relies on the Spirit Bow.",
                                             "I'm expecting this subclass to be a bit more difficult to play than Sniper and the other subclasses, so I don't mind buffing it more once I get some feedback on it.",
                                             "The spawned spirit bow ally is internally called '_BowSpirit_', which is the name used in the Scroll Of Debug."
                                         )
@@ -37,7 +38,7 @@ public enum RKOChanges {
                     Changes(
                             
                             misc(list(
-                                    "Changed title banner and app name",
+                                    "Changed title banner and app name/icon",
                                     "Updated GitHub link to new repository",
                                     "Removed Cenobite from Kromer Crown's subclass list"
                             )),
